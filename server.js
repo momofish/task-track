@@ -1,6 +1,3 @@
-// Babel ES6/JSX Compiler
-require('babel-register');
-
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -17,9 +14,10 @@ var xml2js = require('xml2js');
 var _ = require('underscore');
 
 var config = require('./config');
-var routes = require('./app/routes');
+var authenticate = require('./middlewares/authenticate');
 
 var app = express();
+var production = process.env.NODE_ENV === 'production';
 
 
 // mongoose init
@@ -45,8 +43,9 @@ passport.deserializeUser(function(id, cb) {
 
 // server config
 app.set('port', process.env.PORT || 3000);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
+if (!production) swig.setDefaults({ cache: false });
+app.engine('html', swig.renderFile);
 app.use(require('compression')());
 app.use(require('morgan')('dev'));
 app.use(require('cookie-parser')());
@@ -60,31 +59,32 @@ app.use(passport.session());
 
 
 // router
-require('./controllers/routes.js')(app);
+require('./controllers/routes')(app);
 
 app.get('/login', function(req, res) {
   res.render('login');
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), function(req, res) {
+  res.redirect('/');
+});
 
 app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
 
-app.use(function(req, res) {
-  Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      if (req.session) {
-        req.session.returnTo = req.originalUrl || req.url;
-      }
-      return res.redirect('/login');
-    }
+app.use(authenticate.ensureLoggedIn(), function(req, res) {
+  if (config.disableServerRender) {
+    res.render('index');
+    return;
+  }
 
+  // Babel ES6/JSX Compiler
+  require('babel-register');
+  var routes = require('./app/routes');
+
+  Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
     if (err) {
       res.status(500).send(err.message)
     } else if (redirectLocation) {
