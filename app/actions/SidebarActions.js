@@ -1,11 +1,11 @@
 import alt from '../alt';
 import {assign} from 'underscore';
 
-class NavbarActions {
+class SidebarActions {
   constructor() {
     this.generateActions(
     );
   }
 }
 
-export default alt.createActions(NavbarActions);
+export default alt.createActions(SidebarActions);

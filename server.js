@@ -33,7 +33,7 @@ passport.use(strategy);
 
 
 // server config
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 4000);
 app.set('view engine', 'html');
 if (!production) swig.setDefaults({ cache: false });
 app.engine('html', swig.renderFile);

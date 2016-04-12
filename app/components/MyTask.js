@@ -8,7 +8,6 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.props.history.pushState(null, '/tasks/my')
   }
 
   componentWillUnmount() {
@@ -21,6 +20,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+      mytask
       </div>
     );
   }
