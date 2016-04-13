@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <div className='app-content'>
         <Navbar history={this.props.history} />
         {this.props.children}
       </div>

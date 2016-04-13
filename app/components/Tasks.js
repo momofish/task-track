@@ -26,7 +26,7 @@ class Tasks extends React.Component {
   render() {
     return (
       <div className='main-container'>
-        <Sidebar />
+        <Sidebar data={this.state.sidebar} />
         <div className='main-content'>
           {this.props.children}
         </div>

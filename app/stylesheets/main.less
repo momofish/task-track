@@ -5,10 +5,9 @@
 /*
  * Bootstrap overrides.
  */
-@body-bg: #f0f3f4;
-@text-color: #58666f;
+@text-color: #6a6a6a;
 @font-family-base: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-@link-color: #363f34;
+@link-color: #4e545f;
 @link-hover-color: #141718;
 
 @navbar-default-bg: #fff;
@@ -45,61 +44,29 @@
 
 @screen-sm: 800px;
 
-html {
-  position: relative;
-  min-height: 100%;
+html, body {
+  height: 100%;
+  margin: 0px;
 }
 
-body {
+body{
+  display: flex;
   margin-left: 60px;
 }
 
-.form-signin {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
+.app-container,.app-content {
+  display: flex;
+  flex: 1;
 }
 
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 10px;
-}
-
-.form-signin .checkbox {
-  font-weight: normal;
-}
-
-.form-signin .form-control {
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+.glyphicon {
+  color: #b9b9b9;
 }
 
 /*nav bar*/
 .navbar-vertical-left {
   position: fixed;
-  left: 0;
-  top: 0;
+  left: 0px;
   height: 100%;
   width: 60px;
   border: none;
@@ -164,51 +131,57 @@ body {
   font-size: 28px;
 }
 
-@media(max-width: 768px) {
-  .navbar-vertical-left {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    height: auto;
-    width: 100%;
-  }
-  
-  .navbar-vertical-left > div {
-    display: inline-block;
-  }
-
-  .navbar-vertical-left ul.navbar-nav > li {
-    display: table-cell;
-  }
-
-  .navbar-vertical-left ul.navbar-nav > li > a {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    height: 50px;
-    line-height: 30px;
-  }
-
-  .navbar-vertical-left ul.navbar-nav > li > a > i {
-    font-size: 28px;
-  }
-
-  .navbar-vertical-left ul.navbar-nav > li > a > span {
-    display: none;
-  }
-}
-
 .main-container {
   display: -webkit-flex;
-  display: flex;
+  flex: 1;
 }
 
 .main-content {
   flex: 1;
 }
 
+.searchbar {
+  padding: 8px 12px;
+}
+
+.searchbar > i.glyphicon {
+  position: absolute;
+  top: 0px;
+}
+
 /* sidebar */
 .sidebar {
   width: 240px;
-  height: 100%;
+  background: #ecf0f1;
+  font-size: 14px;
+}
+
+.sidebar-header { 
+  line-height: 34px;
+  font-size: 18px;
+  padding: 0 12px;
+}
+
+/* section */
+.section-header {
+  padding: 0px 12px;
+  line-height: 40px;
+}
+ul.section-body {
+  list-style-type: none;
+  padding: 0px;
+}
+.section-item {
+  padding-left: 40px;
+  line-height: 40px;
+}
+.section-header:hover, .section-item.active, .section-item:hover {
+    background: #e6e6e6;
+    text-decoration: none;
+}
+.section a:hover {
+  text-decoration: none;
+}
+.section a {
+  display: block;
 }

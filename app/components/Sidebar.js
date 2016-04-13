@@ -1,21 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router';
-import SidebarStore from '../stores/SidebarStore';
-import SidebarActions from '../actions/SidebarActions';
 
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = SidebarStore.getState();
     this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
-    SidebarStore.listen(this.onChange);
   }
 
   componentWillUnmount() {
-    SidebarStore.unlisten(this.onChange);
   }
 
   onChange(state) {
@@ -23,14 +18,45 @@ class Sidebar extends React.Component {
   }
 
   render() {
+    var data = this.props.data;
+    var searchbar;
+    if (data.searchbar) {
+      searchbar = (
+        <div className='searchbar'>
+          <input type='text' className='form-control' placeholder='搜索' />
+        </div>
+      ); 
+    }
+    
+    var sections;
+    if (data.sections) {
+      sections = data.sections.map(section => (
+        <div className='section'>
+          <div className='section-header' data-toggle='collapse' aria-expanded='true'>
+            <i className='glyphicon glyphicon-triangle-bottom' /> {section.header.label}
+          </div>
+          <ul className='section-body'>
+            {section.body.map(item => (
+              <li className='section-item'>
+                <Link to={item.to}>
+                  <i className='glyphicon glyphicon-briefcase' /> {item.label}
+                </Link>
+              </li>
+            ))}            
+          </ul>
+        </div>
+      ));
+    }
+    
     return (
       <nav className='sidebar'>
         <div className='sidebar-header'>
-          sidebar
+          <span>{data.title}</span>
+          <button type="button" className="btn btn-link pull-right"><span className='glyphicon glyphicon-plus'></span></button>
         </div>
-        <div>
-          <ul className='nav sidebar-nav'>
-          </ul>
+        <div className='sidebar-body'>
+          {searchbar}
+          {sections}
         </div>
       </nav>
     );
