@@ -30,16 +30,16 @@ class Sidebar extends React.Component {
     
     var sections;
     if (data.sections) {
-      sections = data.sections.map(section => (
-        <div className='section'>
+      sections = data.sections.map((section, i) => (
+        <div className='section' key={`section_${i}`}>
           <div className='section-header' data-toggle='collapse' aria-expanded='true'>
             <i className='glyphicon glyphicon-triangle-bottom' /> {section.header.label}
           </div>
           <ul className='section-body'>
-            {section.body.map(item => (
-              <li className='section-item'>
-                <Link to={item.to}>
-                  <i className='glyphicon glyphicon-briefcase' /> {item.label}
+            {section.body.map((item, j) => (
+              <li key={`sectionItem_${i}_${j}`}>
+                <Link className='section-item' to={item.to} activeClassName='active'>
+                  <i className={`glyphicon glyphicon-${item.icon}`} /> {item.label}
                 </Link>
               </li>
             ))}            
