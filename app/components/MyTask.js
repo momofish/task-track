@@ -1,16 +1,25 @@
 import React from 'react';
 import {Link} from 'react-router';
+import EntryList from './EntryList';
+import MyTaskStore from '../stores/MyTaskStore';
+import MyTaskActions from '../actions/MyTaskActions';
 
-class Home extends React.Component {
+class MyTask extends React.Component {
   constructor(props) {
     super(props);
+    this.state = MyTaskStore.getState();
     this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
+    MyTaskStore.listen(this.onChange);
+    
+    // load data
+    MyTaskActions.getMyTasks();
   }
 
   componentWillUnmount() {
+    MyTaskStore.unlisten(this.onChange);
   }
 
   onChange(state) {
@@ -20,10 +29,13 @@ class Home extends React.Component {
   render() {
     return (
       <div className='container-fluid'>
-        <h4 className='page-header'><i className='glyphicon glyphicon-tasks' /> 我的任务</h4>
+        <h4 className='page-header'>
+          <i className='glyphicon glyphicon-tasks' /> 我的任务
+        </h4>
+        <EntryList data={this.state.data} />
       </div>
     );
   }
 }
 
-export default Home;
+export default MyTask;

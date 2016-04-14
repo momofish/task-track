@@ -1,10 +1,10 @@
 import alt from '../alt';
 
-class TasksActions {
+class CalendarActions {
   constructor() {
     this.generateActions(
     );
   }
 }
 
-export default alt.createActions(TasksActions);
+export default alt.createActions(CalendarActions);

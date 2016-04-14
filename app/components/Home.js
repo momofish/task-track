@@ -4,7 +4,6 @@ import {Link} from 'react-router';
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -12,10 +11,6 @@ class Home extends React.Component {
   }
 
   componentWillUnmount() {
-  }
-
-  onChange(state) {
-    this.setState(state);
   }
 
   render() {

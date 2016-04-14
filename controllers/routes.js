@@ -1,6 +1,6 @@
 module.exports = function(app) {
   var router = require("express").Router();
-  app.use('/api/characters', router);
+  app.use('/api', router);
   
-  require('./characterController')(router);
+  require('./taskController')(router);
 }
