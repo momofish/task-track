@@ -19,8 +19,8 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div>
-      mytask
+      <div className='container-fluid'>
+        <h4 className='page-header'><i className='glyphicon glyphicon-tasks' /> 我的任务</h4>
       </div>
     );
   }
