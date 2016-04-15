@@ -2,7 +2,7 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var Strategy = require('passport-authtkt').Strategy;
+var Strategy = require('passport-local').Strategy;
 var colors = require('colors');
 var mongoose = require('mongoose');
 var request = require('request');
@@ -14,6 +14,7 @@ var xml2js = require('xml2js');
 var _ = require('underscore');
 
 var config = require('./config');
+var models = require('./models');
 var authenticate = require('./middlewares/authenticate');
 
 var app = express();
@@ -28,8 +29,28 @@ mongoose.connection.on('error', function() {
 
 
 // passport
-var strategy = new Strategy('mysecret', { timeout: 60 * 60, encodeUserData: true, jsonUserData: true });
-passport.use(strategy);
+passport.use(new Strategy(
+  function(loginId, password, next) {
+    models.User.findOne({loginId: loginId}, function(err, user) {
+      if (err) { return next(err); }
+      if (!user) { return next(null, false); }
+      if (user.password != password) { return next(null, false); }
+      
+      return next(null, user);
+    });
+  }));
+  
+passport.serializeUser(function(user, next) {
+  next(null, user.id);
+});
+
+passport.deserializeUser(function(id, next) {
+  models.User.findOne({id: id}, function (err, user) {
+    if (err) { return next(err); }
+    
+    next(null, user);
+  });
+});
 
 
 // server config
@@ -42,22 +63,21 @@ app.use(require('morgan')('dev'));
 app.use(require('cookie-parser')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
+app.use(passport.session());
 
 
 // router
-require('./controllers/routes')(app);
+require('./controllers')(app);
 
 app.get('/login', function(req, res) {
   res.render('login');
 });
 
-app.post('/login', function(req, res) {
-  var user = { id: req.body.username, username: req.body.username };
-  var ticket = strategy.authtkt.createTicket(user.id, { userData: user });
-  res.cookie(strategy.key, strategy.authtkt.base64Encode(ticket));
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), function(req, res) {
   res.redirect('/');
 });
 
@@ -66,7 +86,7 @@ app.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-app.use(passport.authenticate('authtkt', { session: false, failureRedirect: '/login' }), function(req, res) {
+app.use(authenticate.ensureLoggedIn(), function(req, res) {
   if (config.disableServerRender) {
     res.render('index');
     return;

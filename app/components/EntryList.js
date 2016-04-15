@@ -25,8 +25,8 @@ class EntryList extends React.Component {
               {group.body.map((item, j) => (
                 <li className='entry-item' key={`entry_${i}_${j}`}>
                   <span className='entry-title'>{item.label}</span>
-                  <div className='entry-meta'>
-                    {item.meta.map((tag,k)=>(
+                  <div className='entry-tags'>
+                    {item.tags.filter(tag => tag.label).map((tag,k)=>(
                       <span key={`tag-${k}`} className={`tag tag-${tag.style}`}>{tag.label}</span>
                     ))}
                   </div>
