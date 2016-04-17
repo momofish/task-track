@@ -3,13 +3,17 @@ import React from 'react';
 class QuickAdd extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {title: ''}
+    this.state = {title: props.title}
   }
 
   componentDidMount() {
   }
 
   componentWillUnmount() {
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    this.state.title = nextProps.title;
   }
   
   handleChange(event) {
@@ -32,7 +36,7 @@ class QuickAdd extends React.Component {
         <div className='input-group'>
           <input type='text' className='form-control' placeholder='快速添加' value={this.state.title} onChange={this.handleChange.bind(this)} />
           <span className='input-group-btn'>
-            <button className='btn btn-default' onClick={this.handleSubmit.bind(this)}><span className='glyphicon glyphicon-search'></span></button>
+            <button className='btn btn-default' onClick={this.handleSubmit.bind(this)}><span className='glyphicon glyphicon-plus'></span></button>
           </span>
         </div>
       </form>

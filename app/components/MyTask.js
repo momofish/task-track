@@ -37,7 +37,7 @@ class MyTask extends React.Component {
         <h4 className='page-header'>
           <i className='glyphicon glyphicon-tasks' /> 我的任务
         </h4>
-        <QuickAdd onSubmit={this.addTask.bind(this)} />
+        <QuickAdd title={this.state.quickAddTitle} onSubmit={this.addTask.bind(this)} />
         <EntryList data={this.state.data} />
       </div>
     );

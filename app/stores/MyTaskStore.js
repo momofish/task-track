@@ -5,11 +5,16 @@ class MyTaskStore {
   constructor() {
     this.bindActions(MyTaskActions);
     
+    this.quickAddTitle = '';
     this.data = [];
   }
   
   onGetMyTasksSuccess(data) {
     this.data = data;
+  }
+  
+  onAddTaskSuccess() {
+    this.quickAddTitle = '';
   }
 }
 

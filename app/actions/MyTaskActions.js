@@ -4,7 +4,8 @@ import moment from 'moment';
 class MyTaskActions {
   constructor() {
     this.generateActions(
-      'getMyTasksSuccess'
+      'getMyTasksSuccess',
+      'addTaskSuccess'
     );
   }
   
@@ -15,7 +16,7 @@ class MyTaskActions {
             label:task.title,
             tags:[
               {label:(task.project || {}).projectName, type:"label", style:"success"},
-              {label:moment(task.dueDate).format('L'), type:"label", style:"danger"},
+              {label:task.dueDate && moment(task.dueDate).format('L'), type:"label", style:"danger"},
             ]
           }
         )
@@ -30,7 +31,8 @@ class MyTaskActions {
   }
   
   addTask(task) {
-    $.ajax({type: 'PUT', url: '/api/tasks', data: task}).done(function(){
+    $.ajax({type: 'PUT', url: '/api/tasks', data: task}).done(() => {
+      this.actions.addTaskSuccess();
       this.actions.getMyTasks();
     });
   }
