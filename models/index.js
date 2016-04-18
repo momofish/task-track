@@ -1,3 +1,5 @@
-module.exports.User = require('./user');
-module.exports.Project = require('./project');
-module.exports.Task = require('./task');
+module.exports = {
+  User: require('./user'),
+  Project: require('./project'),
+  Task: require('./task')
+}

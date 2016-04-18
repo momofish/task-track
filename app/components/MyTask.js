@@ -27,8 +27,8 @@ class MyTask extends React.Component {
     this.setState(state);
   }
   
-  addTask(quick) {
-    MyTaskActions.addTask({title: quick.title});
+  addTask(quick, form) {
+    MyTaskActions.addTask({title: quick.title}, form);
   }
 
   render() {
@@ -37,8 +37,8 @@ class MyTask extends React.Component {
         <h4 className='page-header'>
           <i className='glyphicon glyphicon-tasks' /> 我的任务
         </h4>
-        <QuickAdd title={this.state.quickAddTitle} onSubmit={this.addTask.bind(this)} />
-        <EntryList data={this.state.data} />
+        <QuickAdd title={this.state.quickAddTitle} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} />
+        <EntryList data={this.state.tasks} />
       </div>
     );
   }

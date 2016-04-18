@@ -66,8 +66,28 @@ body {
   color: #b9b9b9;
 }
 .page-header {
-    margin-top: 15px;
+    margin-top: 8px;
     margin-bottom: 8px;
+}
+
+/* ui animate */
+.animated {
+  animation-fill-mode: both;
+  animation-duration: 0.5s;
+}
+@keyframes shake {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  20%, 60% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 80% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+.shake {
+  animation-name: shake;
 }
 
 /* tool */
@@ -247,7 +267,7 @@ body {
   align-items: center;
   padding: 8px;
   border-bottom: solid 1px #e6e6e6;
-  border-left: solid 3px #fff;
+  border-left: solid 2px #fff;
   cursor: pointer;
 }
 .entry-item:hover {
@@ -257,6 +277,7 @@ body {
 .entry-title {
   flex: 1;
   line-height: 30px;
+  white-space: nowrap;
 }
 .entry-tags > span {
   background: #ecf0f1;

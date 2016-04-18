@@ -20,6 +20,6 @@ module.exports = function(router) {
       if (err) return next(err);
       
       res.sendStatus(204);
-    })
+    });
   })
 }
