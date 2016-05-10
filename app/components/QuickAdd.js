@@ -32,11 +32,11 @@ class QuickAdd extends React.Component {
 
   render() {
     return (
-      <form ref='form' onSubmit={this.props.onSubmit.bind(this)} className='animated'>
+      <form ref='form' onSubmit={this.handleSubmit.bind(this)} className='animated'>
         <div className='input-group'>
           <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange.bind(this)} />
           <span className='input-group-btn'>
-            <button className='btn btn-default' onClick={this.handleSubmit.bind(this)}><span className='glyphicon glyphicon-plus'></span></button>
+            <button className='btn btn-default'><span className='glyphicon glyphicon-plus'></span></button>
           </span>
         </div>
       </form>

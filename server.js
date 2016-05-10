@@ -44,10 +44,16 @@ passport.serializeUser(function(user, next) {
   next(null, user.id);
 });
 
-passport.deserializeUser(function(id, next) {
+passport.deserializeUser(function(req, id, next) {
+  if(req.session.user) {
+    next(null, req.session.user);
+    return;
+  }
+  
   models.User.findOne({id: id}, function (err, user) {
     if (err) { return next(err); }
     
+    req.session.user = user;
     next(null, user);
   });
 });

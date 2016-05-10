@@ -5,7 +5,8 @@ class MyTaskActions {
     this.generateActions(
       'getMyTasksSuccess',
       'addTaskSuccess',
-      'addTaskFail'
+      'addTaskFail',
+      'showTask'
     );
   }
   

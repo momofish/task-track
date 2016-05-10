@@ -12,6 +12,16 @@ module.exports = function(router) {
     });
   });
   
+  router.route('/tasks/:id').get(function (req, res, next) {
+    var user = req.user;
+    var id = req.params.id;
+    Task.findById(id).populate('assignee project').exec(function(err, task) {
+      if (err) return next(err);
+
+      res.send(task);
+    });
+  })
+  
   router.route('/tasks').put(function (req, res, next) {
     var user = req.user;
     var task = new Task(req.body);

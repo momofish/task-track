@@ -10,6 +10,10 @@ class EntryList extends React.Component {
 
   componentWillUnmount() {
   }
+  
+  handleSelect(item) {
+    this.props.onSelect(item)
+  }
 
   render() {
     var groups = this.props.data;
@@ -23,7 +27,7 @@ class EntryList extends React.Component {
             </div>
             <ul className='group-body'>
               {group.body.map((item, j) => (
-                <li className='entry-item' key={`entry_${i}_${j}`}>
+                <li className='entry-item' key={`entry_${i}_${j}`} onClick={this.handleSelect.bind(this, item.originData)}>
                   <span className='entry-title'>{item.label}</span>
                   <div className='entry-tags'>
                     {item.tags.filter(tag => tag.label).map((tag,k)=>(

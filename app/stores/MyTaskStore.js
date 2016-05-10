@@ -8,6 +8,7 @@ class MyTaskStore {
 
     this.quickAddTitle = '';
     this.tasks = [];
+    this.openedTask = null;
   }
   
   task2Entry(data) {
@@ -18,7 +19,8 @@ class MyTaskStore {
           tags: [
             { label: (task.project || {}).projectName, type: "label", style: "success" },
             { label: task.dueDate && moment(task.dueDate).format('L'), type: "label", style: "danger" },
-          ]
+          ],
+          originData: task
         }))
       }];
     return entries;
@@ -40,6 +42,10 @@ class MyTaskStore {
     setTimeout(() => {
       form.classList.remove('shake');
     }, 500);
+  }
+  
+  onShowTask(task) {
+    this.showingTask = task;
   }
 }
 
