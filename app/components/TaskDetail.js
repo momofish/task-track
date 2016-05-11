@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from './Modal';
+import moment from 'moment';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 
@@ -30,14 +31,33 @@ class TaskDetail extends React.Component {
   }
 
   render() {
+    var task = this.state;
+    var project = task.project || {projectName: '未分配项目'};
+    var assignee = task.assignee || {name: '未分配'};
     return (
       <Modal onHidden={this.props.onHidden.bind(this) }>
         <div className="modal-header">
           <button type='button' className='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span className='sr-only'>Close</span></button>
-          <span>{this.state.title}</span>
+          <span>{project.projectName}</span>
         </div>
-        <div className="modal-body">
-          {this.state.title}
+        <div className='modal-body smart-form'>
+          <div className='form-item'>
+            <div className='item-label'><input type='checkbox' /></div>
+            <div className='item-content'><span className='form-title'>{this.state.title}</span></div>
+          </div>
+          <div className='form-item'>
+            <div className='item-label'></div>
+            <div className='item-content'>
+              <i className='glyphicon glyphicon-user' /> {assignee.name}
+            </div>
+            <div className='item-content'>
+              <i className='glyphicon glyphicon-calendar' /> {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
+            </div>
+          </div>
+          <div className='form-item'>
+            <div className='item-label'></div>
+            <div className='item-content'><span>{task.desciption || '添加描述'}</span></div>
+          </div>
         </div>
       </Modal>
     );

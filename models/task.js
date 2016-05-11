@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
+var Types = mongoose.Schema.Types;
 
 var taskSchema = new mongoose.Schema({
   title: String,
-  project: {type: mongoose.Schema.Types.ObjectId, index: true, ref: 'Project'},
+  project: {type: Types.ObjectId, index: true, ref: 'Project'},
   dueDate: Date,
-  assignee: {type: mongoose.Schema.Types.ObjectId, index: true, ref: 'User'}
+  assignee: {type: Types.ObjectId, index: true, ref: 'User'}
 });
 
 module.exports = mongoose.model('Task', taskSchema);

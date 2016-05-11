@@ -1,6 +1,6 @@
 import React from 'react';
 
-class EntryList extends React.Component {
+class GroupList extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -19,7 +19,7 @@ class EntryList extends React.Component {
     var groups = this.props.data;
     
     return (
-      <div>
+      <div className='flex-scroll'>
         {groups.map((group, i) => (
           <div className='entry-group' key={`group_${i}`}>
             <div className='group-header' data-toggle='collapse' aria-expanded='true'>
@@ -44,4 +44,4 @@ class EntryList extends React.Component {
   }
 }
 
-export default EntryList;
+export default GroupList;

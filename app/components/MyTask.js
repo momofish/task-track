@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-import EntryList from './EntryList';
+import GroupList from './GroupList';
 import MyTaskStore from '../stores/MyTaskStore';
 import MyTaskActions from '../actions/MyTaskActions';
 import QuickAdd from './QuickAdd';
@@ -38,12 +38,12 @@ class MyTask extends React.Component {
 
   render() {
     return (
-      <div className='container-fluid'>
+      <div className='container-fluid flex-verticle'>
         <h4 className='page-header'>
           <i className='glyphicon glyphicon-tasks' /> 我的任务
         </h4>
         <QuickAdd title={this.state.quickAddTitle} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} />
-        <EntryList data={this.state.tasks} onSelect={this.showTask.bind(this)} />
+        <GroupList data={this.state.tasks} onSelect={this.showTask.bind(this)} />
         {this.state.showingTask && <TaskDetail task={this.state.showingTask} onHidden={() => this.showTask(null)} />}
       </div>
     );
