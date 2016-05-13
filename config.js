@@ -1,4 +1,4 @@
 module.exports = {
   disableServerRender: true,
-  database: process.env.MONGO_URI || 'localhost'
+  database: process.env.MONGO_URI || 'localhost/task-track'
 };
