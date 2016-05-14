@@ -8,7 +8,7 @@ class TaskDetailStore {
   }
   
   getTaskSuccess(task) {
-    assign(this, task);
+    this.task = task;
   }
 }
 
