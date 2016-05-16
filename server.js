@@ -10,8 +10,6 @@ var React = require('react');
 var ReactDOM = require('react-dom/server');
 var Router = require('react-router');
 var swig = require('swig');
-var xml2js = require('xml2js');
-var _ = require('underscore');
 
 var config = require('./config');
 var models = require('./models');
@@ -65,7 +63,7 @@ app.set('view engine', 'html');
 if (!production) swig.setDefaults({ cache: false });
 app.engine('html', swig.renderFile);
 app.use(require('compression')());
-app.use(require('morgan')('dev'));
+if (!production) app.use(require('morgan')('dev'));
 app.use(require('cookie-parser')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
