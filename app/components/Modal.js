@@ -8,7 +8,7 @@ class Modal extends React.Component {
   componentDidMount() {
     var that = this;
     $(this.refs.modal).modal().on('hidden.bs.modal', function (e) {
-      that.handleHidden();
+      that.hidden();
     });
   }
 
@@ -19,7 +19,7 @@ class Modal extends React.Component {
     $(this.refs.modal).modal('show');
   }
   
-  handleHidden() {
+  hidden() {
     var onHidden = this.props.onHidden;
     onHidden && onHidden();
   }

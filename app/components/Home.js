@@ -7,7 +7,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.props.history.pushState(null, '/tasks/my')
+    this.props.history.pushState(null, '/tasks/my');
   }
 
   componentWillUnmount() {

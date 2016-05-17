@@ -38,7 +38,7 @@ class MyTask extends React.Component {
 
   render() {
     return (
-      <div className='container-fluid flex-verticle'>
+      <div className='container-fluid flex flex-verticle'>
         <h4 className='page-header'>
           <i className='glyphicon glyphicon-tasks' /> 我的任务
         </h4>
