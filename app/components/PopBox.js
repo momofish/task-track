@@ -8,21 +8,27 @@ let containerDOM = null;
 class PopBox extends Component {
   constructor (props) {
     super(props);
-    
     this.close = this.close.bind(this);
   }
   
   close() {
-    
   }
+  
+  renderBox() {
+    let className = classnames(
+      this.props.className,
+      'popbox'
+    );
 
-  render () {
     return (
       <div className={className}>
         <Overlay onClick={this.close} />
-        <div>box</div>
+        {this.props.children}
       </div>
     );
+  }
+
+  render() {
   }
 }
 
@@ -37,3 +43,5 @@ function renderContainer() {
   }
   ReactDOM.render(<PopBox />, containerDOM);
 }
+
+export default PopBox;

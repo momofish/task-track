@@ -1,6 +1,7 @@
 import React from 'react';
-import Modal from './Modal';
 import moment from 'moment';
+import Modal from './Modal';
+import PopBox from './PopBox';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 
@@ -39,6 +40,7 @@ class TaskDetail extends React.Component {
         <div className="modal-header">
           <button type='button' className='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span className='sr-only'>Close</span></button>
           <span>{project.projectName}</span>
+          <PopBox>popbox content</PopBox>
         </div>
         <div className='modal-body smart-form'>
           <div className='form-item'>
