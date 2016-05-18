@@ -8,7 +8,7 @@ class MyTaskStore {
 
     this.quickAddTitle = '';
     this.tasks = [];
-    this.openedTask = null;
+    this.showingTask = null;
   }
   
   task2Entry(data) {
@@ -28,6 +28,8 @@ class MyTaskStore {
 
   onGetMyTasksSuccess(data) {
     this.tasks = this.task2Entry(data);
+    
+    this.showingTask = this.tasks[0].body[0].originData;
   }
 
   onAddTaskSuccess() {

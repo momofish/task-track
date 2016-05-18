@@ -4,14 +4,23 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
 class Overlay extends Component {
-  render () {
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+  }
+
+  render() {
     let className = classnames(
       this.props.className,
       'overlay'
     );
 
     return (
-      <div className={className} style={this.props.style} onClick={this.props.onClick} />
+      <div className={className} style={this.props.style} onClick={this.props.onClick} >
+        {this.props.children}
+      </div>
     );
   }
 }
@@ -23,7 +32,8 @@ Overlay.propTypes = {
 };
 
 Overlay.defaultProps = {
+  active: false,
   onClick: () => {}
 };
 
-module.exports = Overlay;
+export default Overlay;

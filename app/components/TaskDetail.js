@@ -10,6 +10,7 @@ class TaskDetail extends React.Component {
     super(props);
     this.state = TaskDetailStore.getState();
     this.onChange = this.onChange.bind(this);
+    this.selectProject = this.selectProject.bind(this);
   }
 
   componentDidMount() {
@@ -30,6 +31,10 @@ class TaskDetail extends React.Component {
     var onHidden = this.props.onHidden;
     onHidden && onHidden();
   }
+  
+  selectProject(ev) {
+    PopBox.open({trigger: ev.target});
+  }
 
   render() {
     var task = this.state.task || this.props.task;
@@ -39,8 +44,7 @@ class TaskDetail extends React.Component {
       <Modal onHidden={this.props.onHidden.bind(this) }>
         <div className="modal-header">
           <button type='button' className='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span className='sr-only'>Close</span></button>
-          <span>{project.projectName}</span>
-          <PopBox>popbox content</PopBox>
+          <span onClick={this.selectProject} >{project.projectName}</span>
         </div>
         <div className='modal-body smart-form'>
           <div className='form-item'>
