@@ -1,4 +1,5 @@
-import React, { Component, PropTypes, DOM } from 'react';
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import Overlay from './Overlay';
 
@@ -73,7 +74,7 @@ class PopBox extends Component {
     
     return (
       <div className={className}>
-        {this.props.children}
+        {this.props.children || this.props.content}
       </div>
     );
   }

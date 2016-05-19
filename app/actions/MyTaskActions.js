@@ -1,4 +1,5 @@
 import alt from '../alt';
+import {taskService} from '../services';
 
 class MyTaskActions {
   constructor() {
@@ -9,21 +10,20 @@ class MyTaskActions {
       'showTask'
     );
   }
-  
+
   getMyTasks() {
-    $.ajax({url: '/api/tasks/my'})
-      .done(data => {
-        this.actions.getMyTasksSuccess(data);
-      });
+    taskService.getMyTasks()
+      .then((tasks) => this.actions.getMyTasksSuccess(tasks));
   }
-  
+
   addTask(task, form) {
-    $.ajax({type: 'PUT', url: '/api/tasks', data: task}).done(() => {
-      this.actions.addTaskSuccess();
-      this.actions.getMyTasks();
-    }).fail(jqXhr => {
-      this.actions.addTaskFail({jqXhr, form});
-    });
+    taskService.addTask(task)
+      .then((tasks) => {
+        this.actions.addTaskSuccess();
+        this.actions.getMyTasks();
+      }, (jqXhr) => {
+        this.actions.addTaskFail({ jqXhr, form });
+      });
   }
 }
 

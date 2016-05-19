@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Modal from './Modal';
 import PopBox from './PopBox';
+import ProjectSelector from './ProjectSelector';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 
@@ -26,14 +27,9 @@ class TaskDetail extends React.Component {
   onChange(state) {
     this.setState(state);
   }
-
-  handleHidden() {
-    var onHidden = this.props.onHidden;
-    onHidden && onHidden();
-  }
   
   selectProject(ev) {
-    PopBox.open({trigger: ev.target});
+    PopBox.open({trigger: ev.target, content: <ProjectSelector />});
   }
 
   render() {

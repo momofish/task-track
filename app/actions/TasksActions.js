@@ -1,4 +1,5 @@
 import alt from '../alt';
+import {projectService} from '../services';
 
 class TasksActions {
   constructor() {
@@ -6,12 +7,10 @@ class TasksActions {
       'getMyProjectsSuccess'
     );
   }
-  
+
   getMyProjects() {
-    $.ajax({url: '/api/projects/my'})
-      .done(data => {
-        this.actions.getMyProjectsSuccess(data);
-      });
+    projectService.getMyProjects()
+      .then((projects) => this.actions.getMyProjectsSuccess(projects));
   }
 }
 

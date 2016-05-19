@@ -347,7 +347,50 @@ body {
 
 .popbox {
   position: absolute;
+  z-index: 1101;
   background: #fff;
   min-width: 240px;
   box-shadow: 0 0 24px rgba(0,0,0,.18);
+}
+
+/*tabs*/
+.nav-tabs.flat {
+  padding: 10px 0;
+  border: none;
+  display: flex;
+  flex-direction: row;
+}
+.nav-tabs.flat > li {
+  float: left;
+  margin-bottom: 0px;
+  flex: 1;
+}
+.nav-tabs.flat > li > a,
+.nav-tabs.flat > li > a:hover,
+.nav-tabs.flat > li > a:focus {
+  padding: 0 15px;
+  text-align: center;
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-right: solid 1px #b9b9b9;
+  color: #b9b9b9;
+}
+.nav-tabs.flat > li:last-child > a {
+  border-right: none;
+}
+.nav-tabs.flat > li.active > a, 
+.nav-tabs.flat > li.active > a:hover, 
+.nav-tabs.flat > li.active > a:focus {
+  border-color: transparent;
+  border-right: solid 1px #b9b9b9;
+  color: #000;
+}
+.nav-tabs.flat > li.active:last-child > a {
+  border-right: none;
+}
+
+/*selector*/
+.selector-container {
+  padding: 10px;
 }
