@@ -11,11 +11,19 @@ module.exports = function(router) {
       res.send(projects);
     });
   });
+
+  router.route('/projects/mypart').get(function(req, res, next) {
+    var user = req.user;
+    Project.where('members').in([user._id]).populate('pm').exec(function(err, projects) {
+      if (err) return next(err);
+
+      res.send(projects);
+    });
+  });
   
   router.route('/projects/:id').get(function (req, res, next) {
-    var user = req.user;
     var id = req.params.id;
-    Project.findById(id).populate('pm').exec(function(err, project) {
+    Project.findById(id).populate('pm,members').exec(function(err, project) {
       if (err) return next(err);
 
       res.send(project);

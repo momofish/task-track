@@ -2,9 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import Modal from './Modal';
 import PopBox from './PopBox';
-import ProjectSelector from './ProjectSelector';
+import Selector from './Selector';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
+import {projectService} from '../services';
 
 class TaskDetail extends React.Component {
   constructor(props) {
@@ -29,7 +30,51 @@ class TaskDetail extends React.Component {
   }
   
   selectProject(ev) {
-    PopBox.open({trigger: ev.target, content: <ProjectSelector />});
+    let task = this.state.task;
+    Selector.open({
+      trigger: ev.target, 
+      dataSources: [
+        {
+          name: '我的项目',
+          data: projectService.getMyProjects,
+          itemNameField: 'projectName'
+        },
+        {
+          name: '我参与的项目',
+          data: projectService.getMyPartProjects,
+          itemNameField: 'projectName'
+        }
+      ], 
+      selected: task.project,
+      onSelect: (project) => {
+        task.project = project;
+        this.setState({task: task})
+      }
+    });
+  }
+  
+  selectOwner(ev) {
+    let task = this.state.task;
+    Selector.open({
+      trigger: ev.target, 
+      dataSources: [
+        {
+          name: '项目',
+          data: projectService.getMyProjects,
+          itemNameField: 'projectName'
+        },
+        {
+          name: '团队',
+          data: projectService.getMyPartProjects,
+          itemNameField: 'projectName'
+        }
+      ], 
+      selected: task.project,
+      onSelect: (project) => {
+        task.project = project;
+        this.setState({task: task})
+      }
+    });
   }
 
   render() {
@@ -39,7 +84,10 @@ class TaskDetail extends React.Component {
     return (
       <Modal onHidden={this.props.onHidden.bind(this) }>
         <div className="modal-header">
-          <button type='button' className='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span className='sr-only'>Close</span></button>
+          <button type='button' className='close' data-dismiss='modal'>
+            <span aria-hidden='true'>×</span>
+            <span className='sr-only'>Close</span>
+          </button>
           <span onClick={this.selectProject} >{project.projectName}</span>
         </div>
         <div className='modal-body smart-form'>

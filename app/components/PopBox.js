@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import Overlay from './Overlay';
 
-let box = null;
+let options = null;
 let containerDOM = null;
 
 class PopBoxContainer extends Component {
@@ -13,7 +13,7 @@ class PopBoxContainer extends Component {
   }
   
   close() {
-    box = null;
+    options = null;
     renderContainer();
   }
 
@@ -27,7 +27,7 @@ class PopBoxContainer extends Component {
   }
 
   render() {
-    let active = box != null;
+    let active = options != null;
 
     let className = classnames(
       this.props.className,
@@ -36,8 +36,8 @@ class PopBoxContainer extends Component {
     );
     
     let position;
-    if (box) {
-      let $trigger = $(box.trigger);
+    if (options) {
+      let $trigger = $(options.trigger);
       let offset = $trigger.offset();
       let height = $trigger.height();
       position = {left: offset.left, top: offset.top + height + 5};
@@ -46,7 +46,7 @@ class PopBoxContainer extends Component {
     return (
       <div className={className} style={position && position}>
         <Overlay onClick={this.close} />
-        {box && <PopBox {...box} />}
+        {options && <PopBox {...options} />}
       </div>
     );
   }
@@ -67,14 +67,15 @@ class PopBox extends Component {
   }
 
   render() {
+    let options = this.props;
     let className = classnames(
-      this.props.className,
+      options.className,
       'popbox'
     );
     
     return (
       <div className={className}>
-        {this.props.children || this.props.content}
+        {this.props.children || options.content}
       </div>
     );
   }
@@ -88,12 +89,17 @@ function renderContainer() {
   ReactDOM.render(<PopBoxContainer />, containerDOM);
 }
 
-PopBox.open = function open(options) {
+PopBox.open = function open(boxOptions) {
   if (!containerDOM) {
     containerDOM = document.createElement('div');
     document.body.appendChild(containerDOM);
   }
-  box = options;
+  options = boxOptions;
+  renderContainer();
+}
+
+PopBox.close = function close() {
+  options = null;
   renderContainer();
 }
 

@@ -47,7 +47,7 @@
 /* layout */
 html, body {
   height: 100%;
-  margin: 0px;
+  margin: 0;
 }
 body {
   display: flex;
@@ -83,7 +83,7 @@ body {
   color: #b9b9b9;
 }
 .page-header {
-    margin: 10px 0px;
+    margin: 10px 0;
     padding-bottom: 10px;
 }
 
@@ -158,7 +158,7 @@ body {
 /*nav bar*/
 .navbar-vertical-left {
   position: fixed;
-  left: 0px;
+  left: 0;
   height: 100%;
   width: 60px;
   border: none;
@@ -218,7 +218,7 @@ body {
 }
 .searchbar > i.glyphicon {
   position: absolute;
-  top: 0px;
+  top: 0;
 }
 
 /* sidebar */
@@ -233,7 +233,7 @@ body {
   line-height: 40px;
   font-size: 18px;
   padding: 0 12px;
-  padding-right: 0px;
+  padding-right: 0;
 }
 .sidebar-body {
     flex: 1;
@@ -243,12 +243,12 @@ body {
 
 /* section */
 .section-header {
-  padding: 0px 12px;
+  padding: 0 12px;
   line-height: 40px;
 }
 .section-body {
   list-style-type: none;
-  padding: 0px;
+  padding: 0;
 }
 .section-item {
   padding-left: 40px;
@@ -273,11 +273,11 @@ body {
   padding: 12px 0;
 }
 .group-header {
-  padding: 5px 0px;
+  padding: 5px 0;
 }
 .group-body {
   list-style-type: none;
-  padding: 0px;
+  padding: 0;
 }
 .entry-item {
   display: flex;
@@ -312,7 +312,7 @@ body {
 }
 .smart-form .form-item {
   display: flex;
-  padding: 5px 0px;
+  padding: 5px 0;
 }
 .form-item > .item-label {
   width: 50px;
@@ -349,20 +349,20 @@ body {
   position: absolute;
   z-index: 1101;
   background: #fff;
-  min-width: 240px;
+  min-width: 280px;
   box-shadow: 0 0 24px rgba(0,0,0,.18);
 }
 
 /*tabs*/
 .nav-tabs.flat {
-  padding: 10px 0;
+  padding: 10px 0px;
   border: none;
   display: flex;
   flex-direction: row;
 }
 .nav-tabs.flat > li {
   float: left;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   flex: 1;
 }
 .nav-tabs.flat > li > a,
@@ -393,4 +393,30 @@ body {
 /*selector*/
 .selector-container {
   padding: 10px;
+}
+.selector-search {
+  padding: 5px 0px;
+}
+.selector-search .form-control {
+  border-color: #f3f3f3;
+  box-shadow: none;
+}
+.selector-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.selector-list > li {
+  background-color: transparent;
+}
+.selector-list > li.active,
+.selector-list > li:hover {
+  background-color: #f4f4f4;
+}
+.selector-list > li a,
+.selector-list > li a:hover,
+.selector-list > li a:active {
+  display: block;
+  padding: 10px 10px;
+  text-decoration: none;
 }

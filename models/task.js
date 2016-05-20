@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
-var Types = mongoose.Schema.Types;
+var Schema = mongoose.Schema;
+var Types = Schema.Types;
 
-var taskSchema = new mongoose.Schema({
+var taskSchema = new Schema({
   title: String,
   project: {type: Types.ObjectId, index: true, ref: 'Project'},
   dueDate: Date,
