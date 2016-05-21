@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
-var Project = require("../models/project");
-var _ = require('underscore');
+var Project = require("../models").Project;
 
 module.exports = function(router) {
   router.route('/projects/my').get(function(req, res, next) {
@@ -23,12 +22,12 @@ module.exports = function(router) {
   
   router.route('/projects/:id').get(function (req, res, next) {
     var id = req.params.id;
-    Project.findById(id).populate('pm,members').exec(function(err, project) {
+    Project.findById(id).populate('pm members').exec(function(err, project) {
       if (err) return next(err);
 
       res.send(project);
     });
-  })
+  });
   
   router.route('/projects').put(function (req, res, next) {
     var user = req.user;

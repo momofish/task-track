@@ -1,19 +1,13 @@
-const resourceUrl = '/api/projects';
+const resourceUrl = '/api/teams';
 
 export default {
-  getMyProjects() {
+  getMyTeams() {
     return new Promise((resolve, reject) =>
       $.ajax({ url: resourceUrl + '/my', success: resolve, error: reject })
     );
   },
   
-  getProject(id) {
-    return new Promise((resolve, reject) =>
-      $.ajax({ url: resourceUrl + '/' + id, success: resolve, error: reject })
-    );
-  },
-  
-  getMyPartProjects() {
+  getMyPartTeams() {
     return new Promise((resolve, reject) =>
       $.ajax({ url: resourceUrl + '/mypart', success: resolve, error: reject })
     );

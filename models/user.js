@@ -1,10 +1,12 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var Types = Schema.Types;
 
-var userSchema = new mongoose.Schema({
-  id: { type: String, unique: true, index: true },
+var schema = new Schema({
+  name: String,
+  dept: { type: Types.ObjectId, index: true, ref: 'Dept' },
   loginId: { type: String, unique: true, index: true },
   password: String,
-  name: String
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', schema);

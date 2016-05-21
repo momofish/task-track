@@ -6,6 +6,7 @@ import Selector from './Selector';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
+import select from '../utils/select';
 
 class TaskDetail extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class TaskDetail extends React.Component {
     this.state = TaskDetailStore.getState();
     this.onChange = this.onChange.bind(this);
     this.selectProject = this.selectProject.bind(this);
+    this.selectMember = this.selectMember.bind(this);
   }
 
   componentDidMount() {
@@ -30,51 +32,19 @@ class TaskDetail extends React.Component {
   }
   
   selectProject(ev) {
-    let task = this.state.task;
-    Selector.open({
-      trigger: ev.target, 
-      dataSources: [
-        {
-          name: '我的项目',
-          data: projectService.getMyProjects,
-          itemNameField: 'projectName'
-        },
-        {
-          name: '我参与的项目',
-          data: projectService.getMyPartProjects,
-          itemNameField: 'projectName'
-        }
-      ], 
-      selected: task.project,
-      onSelect: (project) => {
-        task.project = project;
-        this.setState({task: task})
-      }
-    });
+    ev.preventDefault();
+    select.selectProject(ev, this.state.task.project, (project) => {
+        this.state.task.project = project;
+        this.setState({task: this.state.task});
+      });
   }
   
-  selectOwner(ev) {
-    let task = this.state.task;
-    Selector.open({
-      trigger: ev.target, 
-      dataSources: [
-        {
-          name: '项目',
-          data: projectService.getMyProjects,
-          itemNameField: 'projectName'
-        },
-        {
-          name: '团队',
-          data: projectService.getMyPartProjects,
-          itemNameField: 'projectName'
-        }
-      ], 
-      selected: task.project,
-      onSelect: (project) => {
-        task.project = project;
-        this.setState({task: task})
-      }
-    });
+  selectMember(ev) {
+    ev.preventDefault();
+    select.selectMember(ev, this.state.task.assignee, (user) => {
+        this.state.task.assignee = user;
+        this.setState({task: this.state.task});
+      }, this.state.task.project);
   }
 
   render() {
@@ -88,7 +58,7 @@ class TaskDetail extends React.Component {
             <span aria-hidden='true'>×</span>
             <span className='sr-only'>Close</span>
           </button>
-          <span onClick={this.selectProject} >{project.projectName}</span>
+          <span onClick={this.selectProject}>{project.projectName}</span>
         </div>
         <div className='modal-body smart-form'>
           <div className='form-item'>
@@ -98,7 +68,7 @@ class TaskDetail extends React.Component {
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <i className='glyphicon glyphicon-user' /> {assignee.name}
+              <a href='#' onClick={this.selectMember}><i className='glyphicon glyphicon-user' /> {assignee.name}</a>
             </div>
             <div className='item-content'>
               <i className='glyphicon glyphicon-calendar' /> {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}

@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
-var Task = require("../models/task");
-var _ = require('underscore');
+var Task = require("../models").Task;
 
 module.exports = function(router) {
   router.route('/tasks/my').get(function(req, res, next) {
@@ -20,7 +19,7 @@ module.exports = function(router) {
 
       res.send(task);
     });
-  })
+  });
   
   router.route('/tasks').put(function (req, res, next) {
     var user = req.user;

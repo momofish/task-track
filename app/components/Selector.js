@@ -64,7 +64,7 @@ class Selector extends Component {
           <ul className='selector-list'>
             {items.map(item =>
               <li key={item._id} className={selected && item._id == selected._id ? 'active' : null}>
-                <a href='#' onClick={(ev) => { this.select(item); ev.preventDefault(); } }>{item[itemNameField]}</a>
+                <a href='#' onClick={(ev) => { this.select(item); ev.preventDefault(); } }>{item[itemNameField || 'name']}</a>
               </li>
             ) }
           </ul>

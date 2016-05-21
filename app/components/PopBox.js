@@ -40,6 +40,8 @@ class PopBoxContainer extends Component {
       let $trigger = $(options.trigger);
       let offset = $trigger.offset();
       let height = $trigger.height();
+      let left = offset.left > 0 ? offset.left : 0;
+      let top = offset.top > 0 ? offset.top : 0;
       position = {left: offset.left, top: offset.top + height + 5};
     }
 

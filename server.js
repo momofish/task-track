@@ -39,7 +39,7 @@ passport.use(new Strategy(
   }));
   
 passport.serializeUser(function(user, next) {
-  next(null, user.id);
+  next(null, user._id);
 });
 
 passport.deserializeUser(function(req, id, next) {
@@ -48,7 +48,7 @@ passport.deserializeUser(function(req, id, next) {
     return;
   }
   
-  models.User.findOne({id: id}, function (err, user) {
+  models.User.findById(id, function (err, user) {
     if (err) { return next(err); }
     
     req.session.user = user;
