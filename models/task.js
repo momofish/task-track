@@ -4,7 +4,7 @@ var Types = Schema.Types;
 
 var schema = new Schema({
   title: String,
-  project: {type: Types.ObjectId, index: true, required: true, ref: 'Project'},
+  project: {type: Types.ObjectId, index: true, ref: 'Project'},
   dueDate: Date,
   assignee: {type: Types.ObjectId, index: true, ref: 'User'}
 });

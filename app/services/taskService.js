@@ -3,13 +3,13 @@ const resourceUrl = '/api/tasks';
 export default {
   getMyTasks() {
     return new Promise((resolve, reject) =>
-      $.ajax({ url: resourceUrl + '/my', success: resolve, error: reject })
+      $.ajax({ url: `${resourceUrl}/my`, success: resolve, error: reject })
     );
   },
   
   getTaskDetail(id) {
     return new Promise((resolve, reject) =>
-      $.ajax({ url: resourceUrl + '/' + id, success: resolve, error: reject })
+      $.ajax({ url: `${resourceUrl}/${id}`, success: resolve, error: reject })
     );
   },
 

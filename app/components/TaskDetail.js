@@ -18,11 +18,11 @@ class TaskDetail extends React.Component {
     this.dismiss = this.dismiss.bind(this);
     this.selectProject = this.selectProject.bind(this);
     this.selectMember = this.selectMember.bind(this);
+    this.selectDueDate = this.selectDueDate.bind(this);
   }
 
   componentDidMount() {
     TaskDetailStore.listen(this.onChange);
-    // load data
     TaskDetailActions.getTaskDetail(this.props.task._id);
   }
 
@@ -38,23 +38,29 @@ class TaskDetail extends React.Component {
     this.props.onHidden(this.state.updated);
   }
   
-  selectProject(ev) {
-    ev.stopPropagation();
-    ev.preventDefault();
-    select.selectProject(ev, this.state.task.project, (project) => {
+  selectProject(event) {
+    event.preventDefault();
+    select.selectProject(event.currentTarget, this.state.task.project, (project) => {
         TaskDetailActions.updateTaskDetail({
           _id: this.state.task._id, project: project._id
         })
       });
   }
   
-  selectMember(ev) {
-    ev.preventDefault();
-    select.selectMember(ev, this.state.task.assignee, (user) => {
+  selectMember(event) {
+    select.selectMember(event.currentTarget, this.state.task.assignee, (user) => {
         TaskDetailActions.updateTaskDetail({
           _id: this.state.task._id, assignee: user._id
         })
       }, this.state.task.project);
+  }
+  
+  selectDueDate(event) {
+    select.selectDate(event.currentTarget, moment(this.state.task.dueDate), (date) =>{
+        TaskDetailActions.updateTaskDetail({
+          _id: this.state.task._id, dueDate: date.toString()
+        })
+      });
   }
 
   render() {
@@ -68,7 +74,7 @@ class TaskDetail extends React.Component {
             <span aria-hidden='true'>×</span>
             <span className='sr-only'>Close</span>
           </button>
-          <Link to={'/projects/' + project.projectId} onClick={this.dismiss}>
+          <Link to={`/projects/${project.projectId}`} onClick={(event) => {if(!project.projectId){event.preventDefault();this.selectProject(event)}}}>
             {project.projectName} <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
           </Link>
         </div>
@@ -80,10 +86,12 @@ class TaskDetail extends React.Component {
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <a href='#' onClick={this.selectMember}><i className='glyphicon glyphicon-user' /> {assignee.name}</a>
+              <a href='javascript:void(0)' onClick={this.selectMember}><i className='glyphicon glyphicon-user' /> {assignee.name}</a>
             </div>
             <div className='item-content'>
-              <i className='glyphicon glyphicon-calendar' /> {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
+              <a href='javascript:void(0)' onClick={this.selectDueDate}>
+                <i className='glyphicon glyphicon-calendar' /> {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
+              </a>
             </div>
           </div>
           <div className='form-item'>

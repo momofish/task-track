@@ -1,15 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import PopBox from './PopBox';
 
 class Selector extends Component {
   constructor(props) {
     super(props);
-    
-    this.changeTerm = this.changeTerm.bind(this);
-
     this.state = { dataSourceIndex: 0, items: [], term: '' };
     this.cache = {};
+    
+    this.changeTerm = this.changeTerm.bind(this);
   }
 
   componentDidMount() {
@@ -85,8 +83,8 @@ class Selector extends Component {
 }
 
 Selector.open = function open(options) {
-  let trigger = options.trigger;
-  let boxOptions = { trigger, content: <Selector {...options} /> };
+  let target = options.target;
+  let boxOptions = { target, content: <Selector {...options} /> };
   PopBox.open(boxOptions);
 }
 

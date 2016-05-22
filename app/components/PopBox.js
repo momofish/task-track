@@ -9,6 +9,7 @@ let containerDOM = null;
 class PopBoxContainer extends Component {
   constructor(props) {
     super(props);
+    
     this.close = this.close.bind(this);
   }
   
@@ -37,9 +38,9 @@ class PopBoxContainer extends Component {
     
     let position;
     if (options) {
-      let $trigger = $(options.trigger);
-      let offset = $trigger.offset();
-      let height = $trigger.height();
+      let $target = $(options.target);
+      let offset = $target.offset();
+      let height = $target.height();
       let left = offset.left > 0 ? offset.left : 0;
       let top = offset.top > 0 ? offset.top : 0;
       position = {left: offset.left, top: offset.top + height + 5};

@@ -1,10 +1,11 @@
 import Selector from '../components/Selector';
+import DatePicker from '../components/DatePicker';
 import {projectService, teamService, deptService} from '../services';
 
 export default {
-  selectProject(ev, selected, onSelect) {
+  selectProject(target, selected, onSelect) {
     Selector.open({
-      trigger: ev.currentTarget,
+      target,
       dataSources: [
         {
           name: '我的项目',
@@ -22,16 +23,24 @@ export default {
     });
   },
 
-  selectMember(ev, selected, onSelect, param) {
+  selectMember(target, selected, onSelect, param) {
     Selector.open({
-      trigger: ev.currentTarget,
+      target,
       dataSources: [
         {
           name: '项目',
-          data: () => projectService.getProject(param._id)
+          data: () => projectService.getProject(param && param._id)
             .then(project => project.members)
         }
       ],
+      selected,
+      onSelect
+    });
+  },
+  
+  selectDate(target, selected, onSelect) {
+    DatePicker.open({
+      target,
       selected,
       onSelect
     });
