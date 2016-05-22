@@ -5,10 +5,18 @@ import TaskDetailActions from '../actions/TaskDetailActions';
 class TaskDetailStore {
   constructor() {
     this.bindActions(TaskDetailActions);
+    
+    this.task = null;
+    this.updated = null;
   }
   
-  getTaskSuccess(task) {
+  getTaskDetailSuccess(task) {
     this.task = task;
+  }
+  
+  updateTaskDetailSuccess(task) {
+    this.task = task;
+    this.updated = true;
   }
 }
 

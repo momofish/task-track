@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router';
 import moment from 'moment';
 import Modal from './Modal';
 import PopBox from './PopBox';
@@ -12,7 +13,9 @@ class TaskDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = TaskDetailStore.getState();
+    
     this.onChange = this.onChange.bind(this);
+    this.dismiss = this.dismiss.bind(this);
     this.selectProject = this.selectProject.bind(this);
     this.selectMember = this.selectMember.bind(this);
   }
@@ -26,24 +29,31 @@ class TaskDetail extends React.Component {
   componentWillUnmount() {
     TaskDetailStore.unlisten(this.onChange);
   }
-
+  
   onChange(state) {
     this.setState(state);
   }
+
+  dismiss() {
+    this.props.onHidden(this.state.updated);
+  }
   
   selectProject(ev) {
+    ev.stopPropagation();
     ev.preventDefault();
     select.selectProject(ev, this.state.task.project, (project) => {
-        this.state.task.project = project;
-        this.setState({task: this.state.task});
+        TaskDetailActions.updateTaskDetail({
+          _id: this.state.task._id, project: project._id
+        })
       });
   }
   
   selectMember(ev) {
     ev.preventDefault();
     select.selectMember(ev, this.state.task.assignee, (user) => {
-        this.state.task.assignee = user;
-        this.setState({task: this.state.task});
+        TaskDetailActions.updateTaskDetail({
+          _id: this.state.task._id, assignee: user._id
+        })
       }, this.state.task.project);
   }
 
@@ -52,13 +62,15 @@ class TaskDetail extends React.Component {
     var project = task.project || {projectName: '未分配项目'};
     var assignee = task.assignee || {name: '未分配'};
     return (
-      <Modal onHidden={this.props.onHidden.bind(this) }>
+      <Modal onHidden={this.dismiss}>
         <div className="modal-header">
           <button type='button' className='close' data-dismiss='modal'>
             <span aria-hidden='true'>×</span>
             <span className='sr-only'>Close</span>
           </button>
-          <span onClick={this.selectProject}>{project.projectName}</span>
+          <Link to={'/projects/' + project.projectId} onClick={this.dismiss}>
+            {project.projectName} <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
+          </Link>
         </div>
         <div className='modal-body smart-form'>
           <div className='form-item'>

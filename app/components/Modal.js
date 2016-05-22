@@ -6,12 +6,13 @@ class Modal extends React.Component {
   }
 
   componentDidMount() {
-    $(this.refs.modal).modal().on('hidden.bs.modal', () => {
+    $(this.refs.modal).on('hidden.bs.modal', () => {
       this.hide();
     });
   }
 
   componentWillUnmount() {
+    $(this.refs.modal).modal('hide');
   }
 
   componentWillReceiveProps(nextProps) {

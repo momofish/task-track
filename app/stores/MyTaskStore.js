@@ -28,8 +28,6 @@ class MyTaskStore {
 
   onGetMyTasksSuccess(data) {
     this.tasks = this.task2Entry(data);
-    
-    this.showingTask = this.tasks[0].body[0].originData;
   }
 
   onAddTaskSuccess() {

@@ -4,6 +4,9 @@ class QuickAdd extends React.Component {
   constructor(props) {
     super(props);
     this.state = {title: props.title}
+    
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +37,7 @@ class QuickAdd extends React.Component {
     return (
       <form ref='form' onSubmit={this.handleSubmit.bind(this)} className='animated'>
         <div className='input-group'>
-          <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange.bind(this)} />
+          <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange} />
           <span className='input-group-btn'>
             <button className='btn btn-default'><span className='glyphicon glyphicon-plus'></span></button>
           </span>

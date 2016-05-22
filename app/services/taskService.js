@@ -17,5 +17,11 @@ export default {
     return new Promise((resolve, reject) =>
       $.ajax({ url: resourceUrl, type: 'PUT', data: task, success: resolve, error: reject })
     );
+  },
+  
+  updateTask(task) {
+    return new Promise((resolve, reject) =>
+      $.ajax({ url: resourceUrl, type: 'POST', data: task, success: resolve, error: reject })
+    );
   }
 }

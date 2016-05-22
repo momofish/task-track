@@ -11,6 +11,8 @@ class MyTask extends React.Component {
     super(props);
     this.state = MyTaskStore.getState();
     this.onChange = this.onChange.bind(this);
+    this.showTask = this.showTask.bind(this);
+    this.addTask = this.addTask.bind(this);
   }
 
   componentDidMount() {
@@ -42,9 +44,9 @@ class MyTask extends React.Component {
         <h4 className='page-header'>
           <i className='glyphicon glyphicon-tasks' /> 我的任务
         </h4>
-        <QuickAdd title={this.state.quickAddTitle} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} />
-        <GroupList data={this.state.tasks} onSelect={this.showTask.bind(this)} />
-        {this.state.showingTask && <TaskDetail task={this.state.showingTask} onHidden={() => this.showTask(null)} />}
+        <QuickAdd title={this.state.quickAddTitle} placeHolder='快速添加新任务' onSubmit={this.addTask} />
+        <GroupList data={this.state.tasks} onSelect={this.showTask} />
+        {this.state.showingTask && <TaskDetail task={this.state.showingTask} onHidden={(updated) => {this.showTask(null);MyTaskActions.getMyTasks();}} />}
       </div>
     );
   }

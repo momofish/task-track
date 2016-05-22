@@ -5,8 +5,10 @@ import PopBox from './PopBox';
 class Selector extends Component {
   constructor(props) {
     super(props);
+    
+    this.changeTerm = this.changeTerm.bind(this);
 
-    this.state = { dataSourceIndex: 0, items: [] };
+    this.state = { dataSourceIndex: 0, items: [], term: '' };
     this.cache = {};
   }
 
@@ -28,6 +30,10 @@ class Selector extends Component {
       this.setState({ items });
     });
   }
+  
+  changeTerm(ev) {
+    this.setState({term: ev.target.value});
+  }
 
   changeTab(i) {
     this.state.dataSourceIndex = i;
@@ -43,9 +49,11 @@ class Selector extends Component {
 
   render() {
     let {dataSources, selected} = this.props;
-    let {dataSourceIndex, items} = this.state;
+    let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
     let {itemNameField} = dataSource;
+    itemNameField = itemNameField || 'name';
+    let termReg = new RegExp(term, 'i')
     return (
       <div className='selector-container'>
         {dataSources.length > 1 ?
@@ -58,13 +66,15 @@ class Selector extends Component {
           </ul> : null
         }
         <div className='selector-search'>
-          <input type="text" className="form-control" placeholder="请输入关键字" />
+          <input type="text" className="form-control" placeholder="请输入关键字" onChange={this.changeTerm} />
         </div>
         <div className='tab-pane active'>
           <ul className='selector-list'>
-            {items.map(item =>
+            {items
+              .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
+              .map(item =>
               <li key={item._id} className={selected && item._id == selected._id ? 'active' : null}>
-                <a href='#' onClick={(ev) => { this.select(item); ev.preventDefault(); } }>{item[itemNameField || 'name']}</a>
+                <a href='#' onClick={(ev) => { this.select(item); ev.preventDefault(); } }>{item[itemNameField]}</a>
               </li>
             ) }
           </ul>
