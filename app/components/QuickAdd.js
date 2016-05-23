@@ -35,7 +35,7 @@ class QuickAdd extends React.Component {
 
   render() {
     return (
-      <form ref='form' onSubmit={this.handleSubmit.bind(this)} className='animated'>
+      <form ref='form' onSubmit={this.handleSubmit.bind(this)} className='animated quickadd'>
         <div className='input-group'>
           <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange} />
           <span className='input-group-btn'>

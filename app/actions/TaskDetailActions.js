@@ -16,9 +16,9 @@ class TaskDetailActions {
       });
   }
 
-  updateTaskDetail(task) {
+  updateTaskDetail(task, taskPopulated) {
     taskService.updateTask(task)
-      .then(newTask => this.actions.getTaskDetail(task._id));
+      .then(() => this.actions.updateTaskDetailSuccess(taskPopulated));
   }
 }
 

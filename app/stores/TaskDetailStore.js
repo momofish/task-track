@@ -15,8 +15,8 @@ class TaskDetailStore {
   }
   
   updateTaskDetailSuccess(task) {
-    this.task = task;
     this.updated = true;
+    assign(this.task, task);
   }
 }
 

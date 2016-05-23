@@ -10,11 +10,13 @@ export default {
         {
           name: '我的项目',
           data: projectService.getMyProjects,
+          searchable: true,
           itemNameField: 'projectName'
         },
         {
           name: '我参与的项目',
           data: projectService.getMyPartProjects,
+          searchable: true,
           itemNameField: 'projectName'
         }
       ],
@@ -30,7 +32,22 @@ export default {
         {
           name: '项目',
           data: () => projectService.getProject(param && param._id)
-            .then(project => project.members)
+            .then(project => project.members),
+          searchable: true
+        }
+      ],
+      selected,
+      onSelect
+    });
+  },
+  
+  selectMenu(target, selected, onSelect, data) {
+    Selector.open({
+      target,
+      dataSources: [
+        {
+          data: data,
+          searchable: false
         }
       ],
       selected,

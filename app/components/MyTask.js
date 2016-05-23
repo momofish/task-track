@@ -17,8 +17,6 @@ class MyTask extends React.Component {
 
   componentDidMount() {
     MyTaskStore.listen(this.onChange);
-    
-    // load data
     MyTaskActions.getMyTasks();
   }
 
@@ -29,11 +27,11 @@ class MyTask extends React.Component {
   onChange(state) {
     this.setState(state);
   }
-  
+
   addTask(quick, form) {
-    MyTaskActions.addTask({title: quick.title}, form);
+    MyTaskActions.addTask({ title: quick.title }, form);
   }
-  
+
   showTask(task) {
     MyTaskActions.showTask(task);
   }
@@ -41,12 +39,22 @@ class MyTask extends React.Component {
   render() {
     return (
       <div className='container-fluid flex flex-verticle'>
-        <h4 className='page-header'>
-          <i className='glyphicon glyphicon-tasks' /> 我的任务
-        </h4>
+        <div className='page-header'>
+          <h2>
+            <i className='glyphicon glyphicon-tasks' /> 我的任务
+          </h2>
+          <div className="btn-group pull-right">
+            <button type="button" className="btn btn-info" disabled>
+              <span className="glyphicon glyphicon-list-alt" />
+            </button>
+            <button type="button" className="btn btn-default">
+              按优先级 <i className="caret" />
+            </button>
+          </div>
+        </div>
         <QuickAdd title={this.state.quickAddTitle} placeHolder='快速添加新任务' onSubmit={this.addTask} />
         <GroupList data={this.state.tasks} onSelect={this.showTask} />
-        {this.state.showingTask && <TaskDetail task={this.state.showingTask} onHidden={(updated) => {this.showTask(null);MyTaskActions.getMyTasks();}} />}
+        {this.state.showingTask && <TaskDetail task={this.state.showingTask} onHidden={(updated) => { this.showTask(null); updated && MyTaskActions.getMyTasks(); } } />}
       </div>
     );
   }

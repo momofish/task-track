@@ -8,7 +8,7 @@
 @link-hover-decoration: none;
  
 @text-color: #6a6a6a;
-@font-family-base: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+@font-family-base: 'Helvetica Neue','Hiragino Sans GB',stheiti,'Microsoft Yahei','微软雅黑',tahoma,sans-serif;
 @link-color: #4e545f;
 @link-hover-color: #141718;
 
@@ -83,9 +83,23 @@ body {
 .glyphicon {
   color: #b9b9b9;
 }
+.btn .glyphicon {
+  color: #fff;
+}
+.btn-default .glyphicon, .btn-link .glyphicon  {
+  color: #b9b9b9;
+}
 .page-header {
-    margin: 10px 0;
-    padding-bottom: 10px;
+    padding: 10px 0;
+    margin: 0;
+}
+.page-header h2 {
+  font-size: 18px;
+  margin: 8px 0;
+  float: left;
+}
+.quickadd {
+  margin: 10px 0;
 }
 
 /* ui animate */
@@ -226,6 +240,7 @@ body {
   width: 240px;
   background: #ecf0f1;
   font-size: 14px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
 }
@@ -321,7 +336,8 @@ body {
   flex: 1;
 }
 .form-title {
-  font-weight: bolder;
+  display: block;
+  font-size: 18px;
 }
 
 /*overlay*/
@@ -419,4 +435,9 @@ body {
   display: block;
   padding: 10px 10px;
   text-decoration: none;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #b9b9b9;
 }

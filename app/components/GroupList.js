@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 class GroupList extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class GroupList extends React.Component {
             <ul className='group-body'>
               {group.body.map((item, j) => (
                 <li className='entry-item' key={`entry_${i}_${j}`} onClick={this.handleSelect.bind(this, item.originData)}>
-                  <span className='entry-title'>{item.label}</span>
+                  <span className={classnames('entry-title', {completed: item.completed})}>{item.label}</span>
                   <div className='entry-tags'>
                     {item.tags.filter(tag => tag.label).map((tag,k)=>(
                       <span key={`tag-${k}`} className={`tag tag-${tag.style}`}>{tag.label}</span>
