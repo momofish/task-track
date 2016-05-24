@@ -69,7 +69,7 @@ class TaskDetail extends React.Component {
 
   selectDueDate(event) {
     let task = this.state.task
-    select.selectDate(event.currentTarget, moment(task.dueDate), (date) => {
+    select.selectDate(event.currentTarget, moment(task.dueDate), date => {
       TaskDetailActions.updateTaskDetail({
         _id: task._id, dueDate: date.toString()
       }, {dueDate: date});

@@ -2,9 +2,15 @@ var mongoose = require("mongoose");
 var Task = require("../models").Task;
 
 module.exports = function (router) {
-  router.route('/tasks/my').get(function (req, res, next) {
+  router.route('/tasks/my/:filter').get(function (req, res, next) {
     var user = req.user;
-    Task.find({ assignee: user._id }).populate('assignee project').exec(function (err, tasks) {
+    var filter = req.params.filter;
+    var params = { assignee: user._id };
+    if (filter == 'uncompleted')
+      params.completed = false;
+    else if (filter == 'completed')
+      params.completed = true;
+    Task.find(params).populate('assignee project').exec(function (err, tasks) {
       if (err) return next(err);
 
       res.send(tasks);

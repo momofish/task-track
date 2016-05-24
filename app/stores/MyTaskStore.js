@@ -1,7 +1,19 @@
 import moment from 'moment';
 import alt from '../alt';
 import MyTaskActions from '../actions/MyTaskActions';
-import {myTaskFilterConfig} from '../models';
+import {myTaskFilters} from '../models';
+import _ from 'underscore';
+
+const task2Item = task => (
+  {
+    label: task.title,
+    completed: task.completed,
+    tags: [
+      { label: (task.project || {}).projectName, type: "label", style: "success" },
+      { label: task.dueDate && moment(task.dueDate).format('L'), type: "label", style: "danger" },
+    ],
+    originData: task
+  });
 
 class MyTaskStore {
   constructor() {
@@ -9,32 +21,25 @@ class MyTaskStore {
 
     this.quickAddTitle = '';
     this.tasks = [];
+    this.taskGroups = [];
     this.showingTask = null;
-    this.filters = [
-      {name: '按处理优先级', field: 'entry', fieldConfig: {0: '收件箱', 1: '正在做', 2: '下一步做'}}
-    ];
-    this.filter = {};
-  }
-  
-  task2Entry(data) {
-    alert(myTaskFilterConfig)
-    var entries = [{
-      header: { label: '收件箱' }, body: data.map(task => (
-        {
-          label: task.title,
-          completed: task.completed,
-          tags: [
-            { label: (task.project || {}).projectName, type: "label", style: "success" },
-            { label: task.dueDate && moment(task.dueDate).format('L'), type: "label", style: "danger" },
-          ],
-          originData: task
-        }))
-      }];
-    return entries;
+    this.filter = myTaskFilters[0];
   }
 
-  onGetMyTasksSuccess(data) {
-    this.tasks = this.task2Entry(data);
+  task2Groups() {
+    let {grouper, groupConfig} = this.filter;
+    let realGrouper = grouper instanceof Function ? grouper : task => task[grouper] || 0;
+    let groups = _.chain(this.tasks).groupBy(realGrouper)
+      .mapObject((value, key) => ({
+        header: { label: grouper ? groupConfig ? groupConfig[key] : key : this.filter.name }, body: value.map(task2Item)
+      })).toArray().value();
+
+    return groups;
+  }
+
+  onGetMyTasksSuccess(tasks) {
+    this.tasks = tasks;
+    this.taskGroups = this.task2Groups();
   }
 
   onAddTaskSuccess() {
@@ -43,16 +48,21 @@ class MyTaskStore {
 
   onAddTaskFail(payload) {
     toastr.error(payload.jqXhr.responseJSON.message);
-    
+
     var form = payload.form;
     form.classList.add('shake');
     setTimeout(() => {
       form.classList.remove('shake');
     }, 500);
   }
-  
-  onShowTask(task) {
+
+  onSetTask(task) {
     this.showingTask = task;
+  }
+
+  onSelectedFilter(filter) {
+    this.filter = filter;
+    this.taskGroups = this.task2Groups();
   }
 }
 

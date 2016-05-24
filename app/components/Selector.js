@@ -23,10 +23,14 @@ class Selector extends Component {
     }
 
     let dataSource = this.props.dataSources[dataSourceIndex];
-    dataSource.data().then(items => {
+    let setItems = items => {
       this.cache[dataSourceIndex] = items;
       this.setState({ items });
-    });
+    };
+    if (dataSource.data instanceof Function)
+      dataSource.data().then(setItems);
+    else if (dataSource.data instanceof Array)
+      setItems(dataSource.data);
   }
 
   changeTerm(ev) {
@@ -57,23 +61,23 @@ class Selector extends Component {
         {dataSources.length > 1 ?
           <ul ref='tabs' className='nav nav-tabs flat'>
             {dataSources.map((dataSource, i) =>
-              <li key={'t' + i} data-toggle="tab" className={dataSourceIndex == i ? 'active' : null}>
+              <li key={`t${i}`} data-toggle="tab" className={dataSourceIndex == i ? 'active' : null}>
                 <a href='#' onClick={() => this.changeTab(i) }>{dataSource.name}</a>
               </li>
             ) }
           </ul> : null
         }
         {searchable ?
-        <div className='selector-search'>
-          <input type="text" className="form-control" placeholder="请输入关键字" onChange={this.changeTerm} />
-        </div> : null
+          <div className='selector-search'>
+            <input type="text" className="form-control" placeholder="请输入关键字" onChange={this.changeTerm} />
+          </div> : null
         }
         <div className='tab-pane active'>
           <ul className='selector-list'>
             {(items && items.length) ? items
               .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
-              .map(item =>
-                <li key={item._id} className={selected && item._id == selected._id ? 'active' : null}>
+              .map((item, i) =>
+                <li key={`i${i}`} className={item === selected || selected && item._id && item._id === selected._id ? 'active' : null}>
                   <a href='javascript:void(0)' onClick={(ev) => this.select(item) }>{item[itemNameField]}</a>
                 </li>
               ) : <li className='active'><a href='javascript:void(0)'>无更多数据</a></li> }

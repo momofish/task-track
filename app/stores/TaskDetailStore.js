@@ -10,11 +10,12 @@ class TaskDetailStore {
     this.updated = null;
   }
   
-  getTaskDetailSuccess(task) {
+  onGetTaskDetailSuccess(task) {
     this.task = task;
+    this.updated = null;
   }
   
-  updateTaskDetailSuccess(task) {
+  onUpdateTaskDetailSuccess(task) {
     this.updated = true;
     assign(this.task, task);
   }

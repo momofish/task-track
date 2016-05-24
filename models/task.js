@@ -4,10 +4,12 @@ var Types = Schema.Types;
 
 var schema = new Schema({
   title: String,
-  project: {type: Types.ObjectId, index: true, ref: 'Project'},
+  project: { type: Types.ObjectId, index: true, ref: 'Project' },
   dueDate: Date,
-  assignee: {type: Types.ObjectId, index: true, ref: 'User'},
-  completed: Boolean
+  assignee: { type: Types.ObjectId, index: true, ref: 'User' },
+  completed: { type: Boolean, index: true, default: false }
+}, {
+    versionKey: false
 });
 
 module.exports = mongoose.model('Task', schema);

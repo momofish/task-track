@@ -1,5 +1,7 @@
 import alt from '../alt';
 import {taskService} from '../services';
+import {myTaskFilters} from '../models';
+import select from '../utils/select';
 
 class MyTaskActions {
   constructor() {
@@ -7,12 +9,13 @@ class MyTaskActions {
       'getMyTasksSuccess',
       'addTaskSuccess',
       'addTaskFail',
-      'showTask'
+      'setTask',
+      'selectedFilter'
     );
   }
 
-  getMyTasks() {
-    taskService.getMyTasks()
+  getMyTasks(filter = 'uncompleted') {
+    taskService.getMyTasks(filter)
       .then((tasks) => this.actions.getMyTasksSuccess(tasks));
   }
 
@@ -24,6 +27,15 @@ class MyTaskActions {
       }, (jqXhr) => {
         this.actions.addTaskFail({ jqXhr, form });
       });
+  }
+
+  selectFilter(target, filter) {
+    select.selectMenu(target, filter, (newFilter) => {
+      this.actions.selectedFilter(newFilter);
+      if (filter.query != newFilter.query) {
+        this.actions.getMyTasks(newFilter.query);
+      }
+    }, myTaskFilters);
   }
 }
 

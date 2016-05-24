@@ -1,9 +1,9 @@
 const resourceUrl = '/api/tasks';
 
 export default {
-  getMyTasks() {
+  getMyTasks(filter) {
     return new Promise((resolve, reject) =>
-      $.ajax({ url: `${resourceUrl}/my`, success: resolve, error: reject })
+      $.ajax({ url: `${resourceUrl}/my/${filter}`, success: resolve, error: reject })
     );
   },
   
