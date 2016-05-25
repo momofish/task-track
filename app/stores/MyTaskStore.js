@@ -19,7 +19,7 @@ class MyTaskStore {
   constructor() {
     this.bindActions(MyTaskActions);
 
-    this.quickAddTitle = '';
+    this.quickAdd = { title: '' };
     this.tasks = [];
     this.taskGroups = [];
     this.showingTask = null;
@@ -43,7 +43,7 @@ class MyTaskStore {
   }
 
   onAddTaskSuccess() {
-    this.quickAddTitle = '';
+    this.quickAdd.title = '';
   }
 
   onAddTaskFail(payload) {

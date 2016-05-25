@@ -44,7 +44,7 @@ class Selector extends Component {
 
   select(item) {
     let onSelect = this.props.onSelect;
-    if (onSelect(item) === false)
+    if (onSelect && onSelect(item) === false)
       return;
     PopBox.close();
   }
@@ -90,7 +90,8 @@ class Selector extends Component {
 
 Selector.open = function open(options) {
   let target = options.target;
-  let boxOptions = { target, content: <Selector {...options} /> };
+  let align = options.align;
+  let boxOptions = { target, align, content: <Selector {...options} /> };
   PopBox.open(boxOptions);
 }
 

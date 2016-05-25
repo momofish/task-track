@@ -8,14 +8,14 @@ export default {
       target,
       dataSources: [
         {
-          name: '我的项目',
-          data: projectService.getMyProjects,
+          name: '我参与的项目',
+          data: projectService.getMyPartProjects,
           searchable: true,
           itemNameField: 'projectName'
         },
         {
-          name: '我参与的项目',
-          data: projectService.getMyPartProjects,
+          name: '我的项目',
+          data: projectService.getMyProjects,
           searchable: true,
           itemNameField: 'projectName'
         }

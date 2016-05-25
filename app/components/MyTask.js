@@ -5,6 +5,7 @@ import MyTaskStore from '../stores/MyTaskStore';
 import MyTaskActions from '../actions/MyTaskActions';
 import QuickAdd from './QuickAdd';
 import TaskDetail from './TaskDetail';
+import select from '../utils/select';
 
 class MyTask extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class MyTask extends React.Component {
     this.setTask = this.setTask.bind(this);
     this.addTask = this.addTask.bind(this);
     this.selectFilter = this.selectFilter.bind(this);
+    this.quickAddSelect = this.quickAddSelect.bind(this);
   }
 
   componentDidMount() {
@@ -41,7 +43,14 @@ class MyTask extends React.Component {
     MyTaskActions.selectFilter(event.currentTarget, this.state.filter);
   }
 
+  quickAddSelect(event) {
+    let quickAdd = this.state.quickAdd;
+    select.selectProject(event.currentTarget, quickAdd.project, project => {
+    });
+  }
+
   render() {
+    var showingTask = this.state.showingTask;
     return (
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
@@ -52,14 +61,14 @@ class MyTask extends React.Component {
             <button type="button" className="btn btn-info" disabled>
               <span className="glyphicon glyphicon-list-alt" />
             </button>
-            <button type="button" className="btn btn-default" style={{width: 180}}>
+            <button type="button" className="btn btn-default" style={{ width: 180 }}>
               {this.state.filter.name} <i className="caret" />
             </button>
           </div>
         </div>
-        <QuickAdd title={this.state.quickAddTitle} placeHolder='快速添加新任务' onSubmit={this.addTask} />
+        <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={[{ key: 'project', onClick: this.quickAddSelect, label: '选择项目' }]} />
         <GroupList data={this.state.taskGroups} onSelect={this.setTask} />
-        {this.state.showingTask && <TaskDetail task={this.state.showingTask} onHidden={updated => { this.setTask(); updated && MyTaskActions.getMyTasks(this.state.filter.query); } } />}
+        {showingTask && <TaskDetail task={showingTask} onHidden={updated => { this.setTask(); updated && MyTaskActions.getMyTasks(this.state.filter.query); } } />}
       </div>
     );
   }

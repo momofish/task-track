@@ -14,7 +14,7 @@ class Tasks extends React.Component {
   componentDidMount() {
     TasksStore.listen(this.onChange);
     
-    TasksActions.getMyProjects();
+    TasksActions.getMyPartProjects();
   }
 
   componentWillUnmount() {

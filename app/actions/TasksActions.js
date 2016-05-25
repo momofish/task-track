@@ -4,13 +4,13 @@ import {projectService} from '../services';
 class TasksActions {
   constructor() {
     this.generateActions(
-      'getMyProjectsSuccess'
+      'getMyPartProjectsSuccess'
     );
   }
 
-  getMyProjects() {
-    projectService.getMyProjects()
-      .then((projects) => this.actions.getMyProjectsSuccess(projects));
+  getMyPartProjects() {
+    projectService.getMyPartProjects()
+      .then((projects) => this.actions.getMyPartProjectsSuccess(projects));
   }
 }
 

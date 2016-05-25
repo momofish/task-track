@@ -3,8 +3,8 @@ import React from 'react';
 class QuickAdd extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {title: props.title}
-    
+    this.state = props.data;
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -14,15 +14,15 @@ class QuickAdd extends React.Component {
 
   componentWillUnmount() {
   }
-  
+
   componentWillReceiveProps(nextProps) {
-    this.state.title = nextProps.title;
+    this.state = nextProps.data;
   }
-  
+
   handleChange(event) {
-    this.setState({title: event.target.value}); 
+    this.setState({ title: event.target.value });
   }
-  
+
   handleSubmit(event) {
     event.preventDefault();
 
@@ -34,11 +34,15 @@ class QuickAdd extends React.Component {
   }
 
   render() {
+    let selectors = this.props.selectors || [];
     return (
-      <form ref='form' onSubmit={this.handleSubmit.bind(this)} className='animated quickadd'>
+      <form ref='form' onSubmit={this.handleSubmit} className='animated quickadd'>
         <div className='input-group'>
           <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange} />
           <span className='input-group-btn'>
+            {selectors.map((selector, i) => (
+              <button key={`s${i}`} type="button" className="btn btn-default" onClick={selector.onClick}>{selector.label} <i className="caret" /></button>
+            )) }
             <button className='btn btn-default'><span className='glyphicon glyphicon-plus'></span></button>
           </span>
         </div>
