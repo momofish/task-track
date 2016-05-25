@@ -35,7 +35,7 @@ class MyTaskActions {
       if (filter.query != newFilter.query) {
         this.actions.getMyTasks(newFilter.query);
       }
-    }, myTaskFilters);
+    }, {align: 'right', data: myTaskFilters});
   }
 }
 

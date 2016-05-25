@@ -46,7 +46,7 @@ class MyTask extends React.Component {
   quickAddSelect(event) {
     let quickAdd = this.state.quickAdd;
     select.selectProject(event.currentTarget, quickAdd.project, project => {
-    });
+    }, {align: 'right'});
   }
 
   render() {

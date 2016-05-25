@@ -36,18 +36,19 @@ class PopBoxContainer extends Component {
       {active}
     );
     
-    let position;
+    let style;
     if (options) {
-      let $target = $(options.target);
-      let offset = $target.offset();
-      let height = $target.height();
-      let left = offset.left > 0 ? offset.left : 0;
-      let top = offset.top > 0 ? offset.top : 0;
-      position = {left: offset.left, top: offset.top + height + 5};
+      let rect = options.target.getClientRects()[0];
+      style = { top: rect.bottom + 5 };
+      options.style = style;
+      if(options.align == 'right')
+        style.right = document.documentElement.scrollWidth - rect.right;
+      else
+        style.left = rect.left;
     }
 
     return (
-      <div className={className} style={position && position}>
+      <div className={className}>
         <Overlay onClick={this.close} />
         {options && <PopBox {...options} />}
       </div>
@@ -77,7 +78,7 @@ class PopBox extends Component {
     );
     
     return (
-      <div className={className}>
+      <div className={className} style={options.style}>
         {this.props.children || options.content}
       </div>
     );

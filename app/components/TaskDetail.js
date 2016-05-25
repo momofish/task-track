@@ -64,7 +64,7 @@ class TaskDetail extends React.Component {
       TaskDetailActions.updateTaskDetail({
         _id: task._id, assignee: user._id
       }), {assignee: user};
-    }, this.state.task.project);
+    }, {id: task.project._id});
   }
 
   selectDueDate(event) {
