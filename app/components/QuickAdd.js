@@ -1,4 +1,5 @@
 import React from 'react';
+import select from '../utils/select';
 
 class QuickAdd extends React.Component {
   constructor(props) {
@@ -32,6 +33,13 @@ class QuickAdd extends React.Component {
       this.props.onSubmit(this.state, this.refs.form);
     }
   }
+  
+  select(selector, event) {
+    select[selector.type](event.currentTarget, this.state[selector.key], selection => {
+      this.state[selector.key] = selection;
+      this.forceUpdate();
+    }, {align: 'right'});
+  }
 
   render() {
     let selectors = this.props.selectors || [];
@@ -41,9 +49,9 @@ class QuickAdd extends React.Component {
           <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange} />
           <span className='input-group-btn'>
             {selectors.map((selector, i) => (
-              <button key={`s${i}`} type="button" className="btn btn-default" onClick={selector.onClick}>{selector.label} <i className="caret" /></button>
+              <button key={`s${i}`} type="button" className="btn btn-default" onClick={this.select.bind(this, selector)}>{this.state[selector.key] && selector.nameGetter(this.state[selector.key]) || selector.label} <i className="caret" /></button>
             )) }
-            <button className='btn btn-default'><span className='glyphicon glyphicon-plus'></span></button>
+            <button className='btn btn-default'><i className='glyphicon glyphicon-plus'/></button>
           </span>
         </div>
       </form>

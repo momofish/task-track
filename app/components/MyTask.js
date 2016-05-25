@@ -7,6 +7,8 @@ import QuickAdd from './QuickAdd';
 import TaskDetail from './TaskDetail';
 import select from '../utils/select';
 
+const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.projectName, type: 'selectProject', label: '选择项目' }];
+
 class MyTask extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +34,9 @@ class MyTask extends React.Component {
   }
 
   addTask(quick, form) {
-    MyTaskActions.addTask({ title: quick.title }, form);
+    let task = {title: quick.title};
+    selectors.forEach(selector => task[selector.key] = quick[selector.key] && selector.idGetter(quick[selector.key]));
+    MyTaskActions.addTask(task, form);
   }
 
   setTask(task) {
@@ -66,7 +70,7 @@ class MyTask extends React.Component {
             </button>
           </div>
         </div>
-        <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={[{ key: 'project', onClick: this.quickAddSelect, label: '选择项目' }]} />
+        <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />
         <GroupList data={this.state.taskGroups} onSelect={this.setTask} />
         {showingTask && <TaskDetail task={showingTask} onHidden={updated => { this.setTask(); updated && MyTaskActions.getMyTasks(this.state.filter.query); } } />}
       </div>
