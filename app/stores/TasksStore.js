@@ -12,7 +12,7 @@ class TasksStore {
           header: { label: '工作台' },
           body: [
             { label: '我的任务', icon: 'tasks', to: '/tasks/my' },
-            { label: '我参与的任务', icon: 'briefcase', to: '/tasks/follow' },
+            { label: '我参与的任务', icon: 'briefcase', to: '/tasks/part' },
             { label: '任务日历', icon: 'calendar', to: '/tasks/calendar' },
           ]
         },

@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import GroupList from './GroupList';
 import MyTaskStore from '../stores/MyTaskStore';
 import MyTaskActions from '../actions/MyTaskActions';
@@ -34,7 +33,7 @@ class MyTask extends React.Component {
   }
 
   addTask(quick, form) {
-    let task = {title: quick.title};
+    let task = { title: quick.title };
     selectors.forEach(selector => task[selector.key] = quick[selector.key] && selector.idGetter(quick[selector.key]));
     MyTaskActions.addTask(task, form);
   }
@@ -50,7 +49,7 @@ class MyTask extends React.Component {
   quickAddSelect(event) {
     let quickAdd = this.state.quickAdd;
     select.selectProject(event.currentTarget, quickAdd.project, project => {
-    }, {align: 'right'});
+    }, { align: 'right' });
   }
 
   render() {

@@ -1,10 +1,12 @@
 import React from 'react';
 import {Link} from 'react-router';
 import moment from 'moment';
+import {extend} from 'underscore';
 import classnames from 'classnames';
 import Modal from './Modal';
 import PopBox from './PopBox';
 import Selector from './Selector';
+import EditableText from './EditableText';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
@@ -40,12 +42,15 @@ class TaskDetail extends React.Component {
     this.props.onHidden(this.state.updated);
   }
 
+  saveTask(task) {
+    TaskDetailActions.updateTaskDetail(extend({
+      _id: this.state.task._id
+    }, task));
+  }
+
   completeTask(event) {
     let task = this.state.task;
     task.completed = event.currentTarget.checked;
-    TaskDetailActions.updateTaskDetail({
-      _id: this.state.task._id, completed: task.completed
-    });
   }
 
   selectProject(event) {
@@ -54,7 +59,7 @@ class TaskDetail extends React.Component {
     select.selectProject(event.currentTarget, task.project, (project) => {
       TaskDetailActions.updateTaskDetail({
         _id: task._id, project: project._id
-      }, {project});
+      }, { project });
     });
   }
 
@@ -63,8 +68,8 @@ class TaskDetail extends React.Component {
     select.selectMember(event.currentTarget, task.assignee, (user) => {
       TaskDetailActions.updateTaskDetail({
         _id: task._id, assignee: user._id
-      }), {assignee: user};
-    }, {id: task.project._id});
+      }), { assignee: user };
+    }, { id: task.project._id });
   }
 
   selectDueDate(event) {
@@ -72,7 +77,7 @@ class TaskDetail extends React.Component {
     select.selectDate(event.currentTarget, moment(task.dueDate), date => {
       TaskDetailActions.updateTaskDetail({
         _id: task._id, dueDate: date.toString()
-      }, {dueDate: date});
+      }, { dueDate: date });
     });
   }
 
@@ -100,7 +105,7 @@ class TaskDetail extends React.Component {
                 <input type='checkbox' checked={completed} onChange={this.completeTask} />
               </label>
             </div>
-            <div className='item-content'><span className={className}>{task.title}</span></div>
+            <div className='item-content'><EditableText className={className} text={task.title} onChange={(text) => this.saveTask({ title: text }) } /></div>
           </div>
           <div className='form-item'>
             <div className='item-label'></div>
@@ -115,7 +120,9 @@ class TaskDetail extends React.Component {
           </div>
           <div className='form-item'>
             <div className='item-label'></div>
-            <div className='item-content'><span>{task.desciption || '添加描述'}</span></div>
+            <div className='item-content'>
+              <EditableText multiline='true' text={task.description} placeHolder='添加描述' onChange={(text) => this.saveTask({ description: text }) } />
+            </div>
           </div>
         </div>
       </Modal>

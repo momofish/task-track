@@ -11,6 +11,7 @@ export default (
     <Route path='/' component={Home} />
     <Route component={Tasks}>
       <Route path='/tasks/my' component={MyTask} />
+      <Route path='/tasks/part' component={MyTask} />
       <Route path='/projects/:id' component={Project} />
     </Route>
   </Route>

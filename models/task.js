@@ -7,7 +7,8 @@ var schema = new Schema({
   project: { type: Types.ObjectId, index: true, ref: 'Project' },
   dueDate: Date,
   assignee: { type: Types.ObjectId, index: true, ref: 'User' },
-  completed: { type: Boolean, index: true, default: false }
+  completed: { type: Boolean, index: true, default: false },
+  description: String
 }, {
     versionKey: false
 });
