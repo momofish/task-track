@@ -42,10 +42,10 @@ class TaskDetail extends React.Component {
     this.props.onHidden(this.state.updated);
   }
 
-  saveTask(task) {
+  updateTaskDetail(task) {
     TaskDetailActions.updateTaskDetail(extend({
       _id: this.state.task._id
-    }, task));
+    }, task), task);
   }
 
   completeTask(event) {
@@ -105,7 +105,7 @@ class TaskDetail extends React.Component {
                 <input type='checkbox' checked={completed} onChange={this.completeTask} />
               </label>
             </div>
-            <div className='item-content'><EditableText className={className} text={task.title} onChange={(text) => this.saveTask({ title: text }) } /></div>
+            <div className='item-content'><EditableText className={className} text={task.title} onChange={(text) => this.updateTaskDetail({ title: text }) } /></div>
           </div>
           <div className='form-item'>
             <div className='item-label'></div>
@@ -121,7 +121,7 @@ class TaskDetail extends React.Component {
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <EditableText multiline='true' text={task.description} placeHolder='添加描述' onChange={(text) => this.saveTask({ description: text }) } />
+              <EditableText multiline='true' text={task.description} placeholder='添加描述' onChange={(text) => this.updateTaskDetail({ description: text }) } />
             </div>
           </div>
         </div>

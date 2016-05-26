@@ -30,14 +30,14 @@ class EditableText extends Component {
         <div className='form-group'>
           {
             this.props.multiline ?
-              <textarea className='form-control' onChange={this.changeText} value={text} /> :
-              <input type='text' className='form-control' onChange={this.changeText} value={text}/>
+              <textarea className='form-control' onChange={this.changeText} value={text} placeholder={this.props.placeholder} /> :
+              <input type='text' className='form-control' onChange={this.changeText} value={text} placeholder={this.props.placeholder} />
           }
         </div>
         <button type='button' className='btn btn-primary btn-sm' onClick={this.saveText}>保存</button>
         <button type='button' className='btn btn-link btn-sm' onClick={() => this.setState({ isEdit: false }) }>取消</button>
       </div> :
-      <span className={this.props.className} onClick={() => this.setState({ isEdit: true }) }>{text || this.props.placeHolder}</span>
+      <span className={this.props.className} onClick={() => this.setState({ isEdit: true }) }>{text || this.props.placeholder}</span>
   }
 }
 
