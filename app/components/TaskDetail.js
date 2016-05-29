@@ -10,7 +10,7 @@ import EditableText from './EditableText';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
-import select from '../utils/select';
+import {select} from '../utils';
 
 class TaskDetail extends React.Component {
   constructor(props) {

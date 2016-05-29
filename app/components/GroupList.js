@@ -13,7 +13,7 @@ class GroupList extends React.Component {
   }
   
   handleSelect(item) {
-    this.props.onSelect(item)
+    this.props.onSelect(item);
   }
 
   render() {

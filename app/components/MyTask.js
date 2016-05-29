@@ -4,7 +4,7 @@ import MyTaskStore from '../stores/MyTaskStore';
 import MyTaskActions from '../actions/MyTaskActions';
 import QuickAdd from './QuickAdd';
 import TaskDetail from './TaskDetail';
-import select from '../utils/select';
+import {select} from '../utils';
 
 const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.projectName, type: 'selectProject', label: '选择项目' }];
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import select from '../utils/select';
+import {select} from '../utils';
 
 class QuickAdd extends React.Component {
   constructor(props) {

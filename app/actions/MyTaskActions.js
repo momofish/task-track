@@ -1,7 +1,7 @@
 import alt from '../alt';
 import {taskService} from '../services';
 import {myTaskFilters} from '../models';
-import select from '../utils/select';
+import {select} from '../utils';
 
 class MyTaskActions {
   constructor() {
