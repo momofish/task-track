@@ -37,6 +37,11 @@ class MyTaskActions {
       }
     }, {align: 'right', data: myTaskFilters});
   }
+  
+  updateTaskDetail(task) {
+    taskService.updateTask(task)
+      .then(() => this.actions.getMyTasks());
+  }
 }
 
 export default alt.createActions(MyTaskActions);

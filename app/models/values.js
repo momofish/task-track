@@ -1,9 +1,18 @@
+export const taskTreat = {
+  0: { name: '收件箱' },
+  10: { name: '现在做' },
+  20: { name: '下一步做' },
+  30: { name: '将来做' },
+}
+
 export const myTaskFilters = [
   {
-    query: 'uncompleted', name: '按处理优先级', grouper: 'entry', groupConfig: { 0: '收件箱', 1: '正在做', 2: '下一步做' }
+    query: 'uncompleted', name: '按处理优先级', grouper: 'treat',
+    groupConfig: taskTreat
   },
   {
-    query: 'uncompleted', name: '按项目', grouper: task => task.project ? task.project.projectName : '未分配项目'
+    query: 'uncompleted', name: '按项目',
+    grouper: task => task.project ? task.project.projectName : '未分配项目'
   },
   {
     query: 'completed', name: '已完成任务'

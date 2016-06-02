@@ -51,6 +51,9 @@ class TaskDetail extends React.Component {
   completeTask(event) {
     let task = this.state.task;
     task.completed = event.currentTarget.checked;
+    TaskDetailActions.updateTaskDetail({
+      _id: task._id, completed: task.completed
+    });
   }
 
   selectProject(event) {

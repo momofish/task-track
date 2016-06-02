@@ -8,6 +8,7 @@ var schema = new Schema({
   dueDate: Date,
   assignee: { type: Types.ObjectId, index: true, ref: 'User' },
   completed: { type: Boolean, index: true, default: false },
+  treat: { type: Number, default: 0 },
   description: String
 }, {
     versionKey: false

@@ -5,6 +5,7 @@ import MyTaskActions from '../actions/MyTaskActions';
 import QuickAdd from './QuickAdd';
 import TaskDetail from './TaskDetail';
 import {select} from '../utils';
+import {taskTreat} from '../models';
 
 const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.projectName, type: 'selectProject', label: '选择项目' }];
 
@@ -13,7 +14,7 @@ class MyTask extends React.Component {
     super(props);
     this.state = MyTaskStore.getState();
     this.onChange = this.onChange.bind(this);
-    this.setTask = this.setTask.bind(this);
+    this.selectTask = this.selectTask.bind(this);
     this.addTask = this.addTask.bind(this);
     this.selectFilter = this.selectFilter.bind(this);
     this.quickAddSelect = this.quickAddSelect.bind(this);
@@ -38,8 +39,17 @@ class MyTask extends React.Component {
     MyTaskActions.addTask(task, form);
   }
 
-  setTask(task) {
+  selectTask(task, event) {
     MyTaskActions.setTask(task);
+  }
+
+  clickTag(task, tag, event) {
+    event.stopPropagation();
+    if (tag.code === 'treat') {
+      select.selectMenu(event.currentTarget, tag.data, treat => {
+        MyTaskActions.updateTaskDetail({_id: task._id, treat: treat.key});
+      }, {align: 'right', data: taskTreat});
+    }
   }
 
   selectFilter(event) {
@@ -70,8 +80,8 @@ class MyTask extends React.Component {
           </div>
         </div>
         <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />
-        <GroupList data={this.state.taskGroups} onSelect={this.setTask} />
-        {showingTask && <TaskDetail task={showingTask} onHidden={updated => { this.setTask(); updated && MyTaskActions.getMyTasks(this.state.filter.query); } } />}
+        <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
+        {showingTask && <TaskDetail task={showingTask} onHidden={updated => { MyTaskActions.setTask(); updated && MyTaskActions.getMyTasks(this.state.filter.query); } } />}
       </div>
     );
   }

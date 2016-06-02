@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PopBox from './PopBox';
+import _ from 'underscore';
 
 class Selector extends Component {
   constructor(props) {
@@ -31,6 +32,12 @@ class Selector extends Component {
       dataSource.data().then(setItems);
     else if (dataSource.data instanceof Array)
       setItems(dataSource.data);
+    else if (dataSource.data instanceof Object)
+      setItems(_.pairs(dataSource.data).map(pair => {
+        if (pair[1].key === undefined)
+          pair[1].key = pair[0];
+        return pair[1];
+      }));
   }
 
   changeTerm(ev) {
@@ -77,7 +84,7 @@ class Selector extends Component {
             {(items && items.length) ? items
               .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
               .map((item, i) =>
-                <li key={`i${i}`} className={item === selected || selected && item._id && item._id === selected._id ? 'active' : null}>
+                <li key={`i${i}`} className={item === selected || selected != undefined && (item.key == selected || item._id && item._id === selected._id) ? 'active' : null}>
                   <a href='javascript:void(0)' onClick={(ev) => this.select(item) }>{item[itemNameField]}</a>
                 </li>
               ) : <li className='active'><a href='javascript:void(0)'>无更多数据</a></li> }
