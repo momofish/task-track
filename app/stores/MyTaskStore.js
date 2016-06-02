@@ -29,10 +29,14 @@ class MyTaskStore {
 
   task2Groups() {
     let {grouper, groupConfig} = this.filter;
-    let realGrouper = grouper instanceof Function ? grouper : task => task[grouper] || 0;
+    let realGrouper = grouper instanceof Function ?
+      grouper : task => task[grouper] || 0;
     let groups = _.chain(this.tasks).groupBy(realGrouper)
       .mapObject((value, key) => ({
-        header: { label: grouper ? groupConfig ? groupConfig[key].name : key : this.filter.name }, body: value.map(task2Item)
+        header: {
+          label: grouper ? groupConfig ? groupConfig[key].name : key : this.filter.name
+        },
+        body: value.map(task2Item)
       })).toArray().value();
 
     return groups;
@@ -65,7 +69,7 @@ class MyTaskStore {
     this.filter = filter;
     this.taskGroups = this.task2Groups();
   }
-  
+
   onUpdateTaskDetailSuccess(task) {
     onSelectedFilter(this.filter);
   }

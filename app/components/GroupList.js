@@ -32,11 +32,15 @@ class GroupList extends React.Component {
             </div>
             <ul className='group-body'>
               {group.body.map((item, j) => (
-                <li className='entry-item' key={`entry_${i}_${j}`} onClick={this.handleSelect.bind(this, item.data) }>
-                  <span className={classnames('entry-title', { completed: item.completed }) }>{item.label}</span>
+                <li className='entry-item' key={`entry_${i}_${j}`}
+                  onClick={this.handleSelect.bind(this, item.data) }>
+                  <span className={classnames('entry-title', { completed: item.completed }) }>
+                    {item.label}
+                  </span>
                   <div className='entry-tags'>
                     {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (
-                      <span key={`tag-${k}`} className={`tag tag-${tag.style}`} onClick={this.handleClickTag.bind(this, item.data, tag)}>
+                      <span key={`tag-${k}`} className={`tag tag-${tag.style}`}
+                        onClick={this.handleClickTag.bind(this, item.data, tag) }>
                         {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
                         {tag.label}
                       </span>
