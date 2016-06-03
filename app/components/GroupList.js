@@ -27,10 +27,10 @@ class GroupList extends React.Component {
       <div className='flex-scroll'>
         {groups.map((group, i) => (
           <div className='entry-group' key={`group_${i}`}>
-            <div className='group-header' data-toggle='collapse' aria-expanded='true'>
-              <i className='glyphicon glyphicon-triangle-bottom' /> {group.header.label}
-            </div>
-            <ul className='group-body'>
+            <a className='group-header' data-toggle='collapse' href={`.entry-group:nth-child(${i+1}) > .group-body`}>
+              <i className='glyphicon glyphicon-triangle-bottom' /> {group.header.label + ` (${group.body.length})`}
+            </a>
+            <ul className={`group-body collapse ${!group.collapsed && 'in'}`}>
               {group.body.map((item, j) => (
                 <li className='entry-item' key={`entry_${i}_${j}`}
                   onClick={this.handleSelect.bind(this, item.data) }>

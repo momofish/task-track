@@ -4,18 +4,6 @@ import MyTaskActions from '../actions/MyTaskActions';
 import {myTaskFilters} from '../models';
 import _ from 'underscore';
 
-const task2Item = task => (
-  {
-    label: task.title,
-    completed: task.completed,
-    tags: [
-      { type: "label", label: (task.project || {}).projectName, style: "success" },
-      { type: "label", label: task.dueDate && moment(task.dueDate).format('L'), style: "danger" },
-      { code: 'treat', type: "label", icon: 'flag', style: 'default', data: task.treat || 0 },
-    ],
-    data: task
-  });
-
 class MyTaskStore {
   constructor() {
     this.bindActions(MyTaskActions);
@@ -28,7 +16,7 @@ class MyTaskStore {
   }
 
   task2Groups() {
-    let {grouper, groupConfig} = this.filter;
+    let {query, grouper, groupConfig} = this.filter;
     let realGrouper = grouper instanceof Function ?
       grouper : task => task[grouper] || 0;
     let groups = _.chain(this.tasks).groupBy(realGrouper)
@@ -36,7 +24,19 @@ class MyTaskStore {
         header: {
           label: grouper ? groupConfig ? groupConfig[key].name : key : this.filter.name
         },
-        body: value.map(task2Item)
+        collapsed: groupConfig && groupConfig[key].collapsed,
+        body: value.map(task => {
+          return {
+            label: task.title,
+            completed: task.completed,
+            tags: [
+              { type: "label", label: (task.project || {}).projectName, style: "success" },
+              { type: "label", label: task.dueDate && moment(task.dueDate).format('L'), style: "danger" },
+              grouper === 'treat' && { code: 'treat', type: "label", icon: 'flag', style: 'default', data: task.treat || 0 },
+            ],
+            data: task
+          }
+        })
       })).toArray().value();
 
     return groups;

@@ -1,13 +1,14 @@
 export const taskTreat = {
   0: { name: '收件箱' },
   10: { name: '现在做' },
-  20: { name: '下一步做' },
-  30: { name: '将来做' },
+  20: { name: '下一步做', collapsed: true },
+  30: { name: '将来做', collapsed: true },
 }
 
 export const myTaskFilters = [
   {
-    query: 'uncompleted', name: '按处理优先级', grouper: 'treat',
+    query: 'uncompleted', name: '按处理优先级', 
+    grouper: 'treat',
     groupConfig: taskTreat
   },
   {

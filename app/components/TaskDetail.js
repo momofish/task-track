@@ -72,7 +72,7 @@ class TaskDetail extends React.Component {
       TaskDetailActions.updateTaskDetail({
         _id: task._id, assignee: user._id
       }), { assignee: user };
-    }, { _id: task.project._id });
+    }, { _id: task.project && task.project._id });
   }
 
   selectDueDate(event) {
@@ -113,10 +113,10 @@ class TaskDetail extends React.Component {
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <a href='javascript:void(0)' onClick={this.selectMember}><i className='glyphicon glyphicon-user' /> {assignee.name}</a>
+              <a href='javascript:' onClick={this.selectMember}><i className='glyphicon glyphicon-user' /> {assignee.name}</a>
             </div>
             <div className='item-content'>
-              <a href='javascript:void(0)' onClick={this.selectDueDate}>
+              <a href='javascript:' onClick={this.selectDueDate}>
                 <i className='glyphicon glyphicon-calendar' /> {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
               </a>
             </div>

@@ -6,6 +6,7 @@ class EditableText extends Component {
     this.state = { isEdit: false, text: props.text };
     this.changeText = this.changeText.bind(this);
     this.saveText = this.saveText.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
   componentWillReceiveProps(nextProps) {
@@ -21,12 +22,17 @@ class EditableText extends Component {
     onChange && onChange(this.state.text);
     this.setState({ isEdit: false });
   }
+  
+  handleSubmit(event) {
+    event.preventDefault();
+    this.saveText();
+  }
 
   render() {
     let text = this.state.text;
     let isEdit = this.state.isEdit;
     return isEdit ?
-      <div>
+      <form onSubmit={this.handleSubmit}>
         <div className='form-group'>
           {
             this.props.multiline ?
@@ -36,7 +42,7 @@ class EditableText extends Component {
         </div>
         <button type='button' className='btn btn-primary btn-sm' onClick={this.saveText}>保存</button>
         <button type='button' className='btn btn-link btn-sm' onClick={() => this.setState({ isEdit: false }) }>取消</button>
-      </div> :
+      </form> :
       <span className={this.props.className} onClick={() => this.setState({ isEdit: true }) }>{text || this.props.placeholder}</span>
   }
 }

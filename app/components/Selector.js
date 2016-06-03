@@ -85,9 +85,9 @@ class Selector extends Component {
               .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
               .map((item, i) =>
                 <li key={`i${i}`} className={item === selected || selected != undefined && (item.key == selected || item._id && item._id === selected._id) ? 'active' : null}>
-                  <a href='javascript:void(0)' onClick={(ev) => this.select(item) }>{item[itemNameField]}</a>
+                  <a href='javascript:' onClick={(ev) => this.select(item) }>{item[itemNameField]}</a>
                 </li>
-              ) : <li className='active'><a href='javascript:void(0)'>无更多数据</a></li> }
+              ) : <li className='active'><a href='javascript:'>无更多数据</a></li> }
           </ul>
         </div>
       </div>
