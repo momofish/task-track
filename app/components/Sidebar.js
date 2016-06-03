@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-class Sidebar extends React.Component {
+class Sidebar extends Component {
   constructor(props) {
     super(props);
   }
@@ -10,6 +10,13 @@ class Sidebar extends React.Component {
   }
 
   componentWillUnmount() {
+  }
+
+  handleCollapse(section, event) {
+    section.collapsed = !section.collapsed;
+    event.currentTarget
+      .querySelector('.glyphicon')
+      .className = `glyphicon glyphicon-triangle-${section.collapsed ? 'right' : 'bottom'}`
   }
 
   render() {
@@ -27,10 +34,10 @@ class Sidebar extends React.Component {
     if (data.sections) {
       sections = data.sections.map((section, i) => (
         <div className='section' key={`section_${i}`}>
-          <div className='section-header' data-toggle='collapse' aria-expanded='true'>
+          <a className='section-header' data-toggle='collapse' onClick={this.handleCollapse.bind(this, section) } href={`.section:nth-child(${i + 2}) > .section-body`}>
             <i className='glyphicon glyphicon-triangle-bottom' /> {section.header.label}
-          </div>
-          <ul className='section-body'>
+          </a>
+          <ul className='section-body collapse in'>
             {section.body.map((item, j) => (
               <li key={`sectionItem_${i}_${j}`}>
                 <Link className='section-item' to={item.to} activeClassName='active'>

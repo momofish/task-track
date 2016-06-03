@@ -68,7 +68,7 @@ class MyTask extends React.Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> 我的任务
+            <i className='glyphicon glyphicon-tasks' /> 我的任务 <span className="badge">{this.state.tasks.length}</span>
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter}>
             <button type="button" className="btn btn-info" disabled>

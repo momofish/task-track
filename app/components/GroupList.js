@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import classnames from 'classnames';
 
-class GroupList extends React.Component {
+class GroupList extends Component {
   constructor(props) {
     super(props);
   }
@@ -20,6 +20,13 @@ class GroupList extends React.Component {
     this.props.onClickTag(...arguments);
   }
 
+  handleCollapse(group, event) {
+    group.collapsed = !group.collapsed;
+    event.currentTarget
+      .querySelector('.glyphicon')
+      .className = `glyphicon glyphicon-triangle-${group.collapsed ? 'right' : 'bottom'}`
+  }
+
   render() {
     var groups = this.props.data;
 
@@ -27,10 +34,10 @@ class GroupList extends React.Component {
       <div className='flex-scroll'>
         {groups.map((group, i) => (
           <div className='entry-group' key={`group_${i}`}>
-            <a className='group-header' data-toggle='collapse' href={`.entry-group:nth-child(${i+1}) > .group-body`}>
-              <i className='glyphicon glyphicon-triangle-bottom' /> {group.header.label + ` (${group.body.length})`}
+            <a className='group-header' data-toggle='collapse' onClick={this.handleCollapse.bind(this, group) } href={`.entry-group:nth-child(${i + 1}) > .group-body`}>
+              <i className={`glyphicon glyphicon-triangle-${group.collapsed ? 'right' : 'bottom'}`} /> {group.header.label + ` (${group.body.length})`}
             </a>
-            <ul className={`group-body collapse ${!group.collapsed && 'in'}`}>
+            <ul className={`group-body collapse ${!group.collapsed ? 'in' : ''}`}>
               {group.body.map((item, j) => (
                 <li className='entry-item' key={`entry_${i}_${j}`}
                   onClick={this.handleSelect.bind(this, item.data) }>
