@@ -10,7 +10,7 @@ module.exports = function (router) {
     if (category == 'my')
       params.assignee = user._id;
     else if (category == 'part')
-      params.members = { $elemMatch: { $in: [user._id] } };
+      params.parts = { $elemMatch: { $in: [user._id] } };
     if (filter == 'uncompleted')
       params.completed = false;
     else if (filter == 'completed')

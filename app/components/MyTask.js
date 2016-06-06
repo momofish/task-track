@@ -87,7 +87,10 @@ class MyTask extends Component {
         </div>
         <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />
         <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
-        {showingTask && <TaskDetail task={showingTask} onHidden={updated => { MyTaskActions.setTask(); updated && MyTaskActions.getMyTasks(this.state.filter.query); } } />}
+        {showingTask && <TaskDetail task={showingTask} onHidden={updated => {
+          MyTaskActions.setTask();
+          updated && MyTaskActions.getMyTasks(undefined, this.state.filter.query);
+        } } />}
       </div>
     );
   }
