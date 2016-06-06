@@ -27,7 +27,7 @@ class TasksStore {
   onGetMyPartProjectsSuccess(projects) {
     this.sidebar.sections[1].body = projects.map(project => ({
       label: project.projectName,
-      icon: 'file', to: '/projects/' + project.projectId
+      icon: 'file', to: '/tasks/projects/' + project.projectId
     }));
   }
 }

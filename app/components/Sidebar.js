@@ -34,7 +34,9 @@ class Sidebar extends Component {
     if (data.sections) {
       sections = data.sections.map((section, i) => (
         <div className='section' key={`section_${i}`}>
-          <a className='section-header' data-toggle='collapse' onClick={this.handleCollapse.bind(this, section) } href={`.section:nth-child(${i + 2}) > .section-body`}>
+          <a className='section-header' data-toggle='collapse'
+           onClick={this.handleCollapse.bind(this, section) }
+           href={`.section:nth-child(${i + 2}) > .section-body`}>
             <i className='glyphicon glyphicon-triangle-bottom' /> {section.header.label}
           </a>
           <ul className='section-body collapse in'>
@@ -54,7 +56,9 @@ class Sidebar extends Component {
       <nav className='sidebar'>
         <div className='sidebar-header'>
           <span>{data.title}</span>
-          <button type="button" className="btn btn-link pull-right"><span className='glyphicon glyphicon-plus'></span></button>
+          <button type="button" className="btn btn-link pull-right">
+            <span className='glyphicon glyphicon-plus'></span>
+          </button>
         </div>
         <div className='sidebar-body'>
           {searchbar}

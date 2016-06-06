@@ -50,7 +50,9 @@ class Selector extends Component {
   }
 
   select(item) {
-    let onSelect = this.props.onSelect;
+    let {onSelect, selected} = this.props;
+    let multiple = selected instanceof Array;
+    
     if (onSelect && onSelect(item) === false)
       return;
     PopBox.close();
@@ -60,9 +62,23 @@ class Selector extends Component {
     let {dataSources, selected} = this.props;
     let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
-    let {itemNameField, searchable} = dataSource;
-    itemNameField = itemNameField || 'name';
-    let termReg = new RegExp(term, 'i')
+    let {itemNameField = 'name', searchable} = dataSource;
+    let termReg = new RegExp(term, 'i');
+    let multiple = selected instanceof Array;
+    
+    let checkSelected = (item, selected) => {
+      let checkSelectedInner = (sel) => {
+        if (selected == null ) return false;
+        return sel == item ||
+          item.key == selected ||
+          item._id && item._id == selected._id;
+      }
+      
+      if (multiple)
+        return !!_.find(selected, checkSelectedInner);
+      return checkSelectedInner(selected);
+    }
+    
     return (
       <div className='selector-container'>
         {dataSources.length > 1 ?
@@ -84,8 +100,8 @@ class Selector extends Component {
             {(items && items.length) ? items
               .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
               .map((item, i) =>
-                <li key={`i${i}`} className={item === selected || selected != undefined && (item.key == selected || item._id && item._id === selected._id) ? 'active' : null}>
-                  <a href='javascript:' onClick={(ev) => this.select(item) }>{item[itemNameField]}</a>
+                <li key={`i${i}`} className={checkSelected(item, selected) ? 'active' : null}>
+                  <a href='javascript:' onClick={ev => this.select(item) }>{item[itemNameField]}</a>
                 </li>
               ) : <li className='active'><a href='javascript:'>无更多数据</a></li> }
           </ul>

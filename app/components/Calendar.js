@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import CalendarStore from '../stores/CalendarStore';
 import CalendarActions from '../actions/CalendarActions'
 
-class Calendar extends React.Component {
+class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = CalendarStore.getState();

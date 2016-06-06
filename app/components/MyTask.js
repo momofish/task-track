@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import GroupList from './GroupList';
 import MyTaskStore from '../stores/MyTaskStore';
 import MyTaskActions from '../actions/MyTaskActions';
@@ -9,7 +9,7 @@ import {taskTreat} from '../models';
 
 const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.projectName, type: 'selectProject', label: '选择项目' }];
 
-class MyTask extends React.Component {
+class MyTask extends Component {
   constructor(props) {
     super(props);
     this.state = MyTaskStore.getState();
@@ -22,11 +22,17 @@ class MyTask extends React.Component {
 
   componentDidMount() {
     MyTaskStore.listen(this.onChange);
-    MyTaskActions.getMyTasks(this.state.filter.query);
+    MyTaskActions.getMyTasks(this.props.params.category || 'my',
+      this.state.filter.query);
   }
 
   componentWillUnmount() {
     MyTaskStore.unlisten(this.onChange);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    MyTaskActions.getMyTasks(nextProps.params.category || 'my',
+      this.state.filter.query);
   }
 
   onChange(state) {
@@ -47,8 +53,8 @@ class MyTask extends React.Component {
     event.stopPropagation();
     if (tag.code === 'treat') {
       select.selectMenu(event.currentTarget, tag.data, treat => {
-        MyTaskActions.updateTaskDetail({_id: task._id, treat: treat.key});
-      }, {align: 'right', data: taskTreat});
+        MyTaskActions.updateTaskDetail({ _id: task._id, treat: treat.key });
+      }, { align: 'right', data: taskTreat });
     }
   }
 
@@ -68,7 +74,7 @@ class MyTask extends React.Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> 我的任务 <span className="badge">{this.state.tasks.length}</span>
+            <i className='glyphicon glyphicon-tasks' /> {`我${this.props.params.category == 'part' ? '参与' : ''}的任务`} <span className="badge">{this.state.tasks.length}</span>
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter}>
             <button type="button" className="btn btn-info" disabled>

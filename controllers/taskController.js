@@ -2,10 +2,15 @@ var mongoose = require("mongoose");
 var Task = require("../models").Task;
 
 module.exports = function (router) {
-  router.route('/tasks/my/:filter').get(function (req, res, next) {
+  router.route('/tasks/:category/:filter').get(function (req, res, next) {
     var user = req.user;
+    var category = req.params.category;
     var filter = req.params.filter;
-    var params = { assignee: user._id };
+    var params = { };
+    if (category == 'my')
+      params.assignee = user._id;
+    else if (category == 'part')
+      params.members = { $elemMatch: { $in: [user._id] } };
     if (filter == 'uncompleted')
       params.completed = false;
     else if (filter == 'completed')
@@ -20,7 +25,7 @@ module.exports = function (router) {
   router.route('/tasks/:id').get(function (req, res, next) {
     var user = req.user;
     var id = req.params.id;
-    Task.findById(id).populate('assignee project').exec(function (err, task) {
+    Task.findById(id).populate('assignee parts project').exec(function (err, task) {
       if (err) return next(err);
 
       res.send(task);
@@ -31,6 +36,7 @@ module.exports = function (router) {
     var user = req.user;
     var task = new Task(req.body);
     task.assignee = user._id;
+    task.parts = [user._id];
     task.save(function (err) {
       if (err) return next(err);
 

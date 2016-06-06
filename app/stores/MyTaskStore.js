@@ -13,6 +13,7 @@ class MyTaskStore {
     this.taskGroups = [];
     this.showingTask = null;
     this.filter = myTaskFilters[0];
+    this.category = 'my';
   }
 
   task2Groups() {
@@ -42,7 +43,8 @@ class MyTaskStore {
     return groups;
   }
 
-  onGetMyTasksSuccess(tasks) {
+  onGetMyTasksSuccess({category, tasks}) {
+    this.category = category;
     this.tasks = tasks;
     this.taskGroups = this.task2Groups();
   }

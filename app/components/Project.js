@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-class Project extends React.Component {
+class Project extends Component {
   constructor(props) {
     super(props);
   }

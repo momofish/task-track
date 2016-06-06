@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-class Navbar extends React.Component {
+class Navbar extends Component {
   constructor(props) {
     super(props);
   }
@@ -22,8 +22,8 @@ class Navbar extends React.Component {
         </div>
         <div>
           <ul className='nav navbar-nav'>
-            <li><Link to='/tasks/my' activeClassName='active'><i className='glyphicon glyphicon-tasks' /></Link></li>
-            <li><Link to='/calendar/my'><i className='glyphicon glyphicon-calendar' /></Link></li>
+            <li><Link to='/tasks' activeClassName='active'><i className='glyphicon glyphicon-tasks' /></Link></li>
+            <li><Link to='/calendar'><i className='glyphicon glyphicon-calendar' /></Link></li>
           </ul>
         </div>
       </nav>

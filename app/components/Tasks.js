@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
 import Sidebar from './Sidebar';
 import TasksStore from '../stores/TasksStore'
 import TasksActions from '../actions/TasksActions';
 
-class Tasks extends React.Component {
+class Tasks extends Component {
   constructor(props) {
     super(props);
     this.state = TasksStore.getState();

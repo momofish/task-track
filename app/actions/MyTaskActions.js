@@ -14,9 +14,11 @@ class MyTaskActions {
     );
   }
 
-  getMyTasks(filter = 'uncompleted') {
-    taskService.getMyTasks(filter)
-      .then((tasks) => this.actions.getMyTasksSuccess(tasks));
+  getMyTasks(category, filter = 'uncompleted') {
+    if (category == undefined)
+      category = this.alt.stores.MyTaskStore.state.category;
+    taskService.getMyTasks(category, filter)
+      .then(tasks => this.actions.getMyTasksSuccess({category, tasks}));
   }
 
   addTask(task, form) {
@@ -33,7 +35,7 @@ class MyTaskActions {
     select.selectMenu(target, filter, (newFilter) => {
       this.actions.selectedFilter(newFilter);
       if (filter.query != newFilter.query) {
-        this.actions.getMyTasks(newFilter.query);
+        this.actions.getMyTasks(undefined, newFilter.query);
       }
     }, {align: 'right', data: myTaskFilters});
   }

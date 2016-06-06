@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router';
 import moment from 'moment';
 import {extend} from 'underscore';
@@ -12,7 +12,7 @@ import TaskDetailActions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
 import {select} from '../utils';
 
-class TaskDetail extends React.Component {
+class TaskDetail extends Component {
   constructor(props) {
     super(props);
     this.state = TaskDetailStore.getState();
@@ -21,7 +21,6 @@ class TaskDetail extends React.Component {
     this.dismiss = this.dismiss.bind(this);
     this.completeTask = this.completeTask.bind(this);
     this.selectProject = this.selectProject.bind(this);
-    this.selectMember = this.selectMember.bind(this);
     this.selectDueDate = this.selectDueDate.bind(this);
   }
 
@@ -66,12 +65,13 @@ class TaskDetail extends React.Component {
     });
   }
 
-  selectMember(event) {
+  selectMember(selected, field, event) {
     let task = this.state.task
-    select.selectMember(event.currentTarget, task.assignee, (user) => {
-      TaskDetailActions.updateTaskDetail({
-        _id: task._id, assignee: user._id
-      }), { assignee: user };
+    select.selectMember(event.currentTarget, selected, selecting => {
+      let newTask =  { _id: task._id };
+      newTask[field] = selected instanceof Array ? 
+        selecting.map(m => m._id) : selecting._id;
+      TaskDetailActions.updateTaskDetail(newTask, selecting);
     }, { _id: task.project && task.project._id });
   }
 
@@ -97,7 +97,7 @@ class TaskDetail extends React.Component {
             <span aria-hidden='true'>×</span>
             <span className='sr-only'>Close</span>
           </button>
-          <Link to={`/projects/${project.projectId}`} onClick={(event) => { if (!project.projectId) { event.preventDefault(); this.selectProject(event) } } }>
+          <Link to={`/tasks/projects/${project.projectId}`} onClick={(event) => { if (!project.projectId) { event.preventDefault(); this.selectProject(event) } } }>
             {project.projectName} <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
           </Link>
         </div>
@@ -113,7 +113,7 @@ class TaskDetail extends React.Component {
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <a href='javascript:' onClick={this.selectMember}><i className='glyphicon glyphicon-user' /> {assignee.name}</a>
+              <button className='btn btn-link' onClick={this.selectMember.bind(this, task.assignee, 'assignee')}><i className='glyphicon glyphicon-user' /> {assignee.name}</button>
             </div>
             <div className='item-content'>
               <a href='javascript:' onClick={this.selectDueDate}>
@@ -125,6 +125,17 @@ class TaskDetail extends React.Component {
             <div className='item-label'></div>
             <div className='item-content'>
               <EditableText multiline='true' text={task.description} placeholder='添加描述' onChange={(text) => this.updateTaskDetail({ description: text }) } />
+            </div>
+          </div>
+          <div className='form-item'>
+            <div className='item-label'>参与</div>
+            <div className='item-content'>
+              {task.parts.map((member, i) => (
+                <button key={i} className="btn btn-link"><i className='glyphicon glyphicon-user' /> {member.name}</button>
+              ))}
+              <button type="button" className="btn btn-default" onClick={this.selectMember.bind(this, task.parts, 'parts')}>
+                <span className="glyphicon glyphicon-plus"></span>
+              </button>
             </div>
           </div>
         </div>
