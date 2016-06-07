@@ -11,7 +11,7 @@ module.exports = function(router) {
     });
   });
 
-  router.route('/projects/mypart').get(function(req, res, next) {
+  router.route('/projects/part').get(function(req, res, next) {
     var user = req.user;
     Project.where('members').in([user._id]).populate('pm').exec(function(err, projects) {
       if (err) return next(err);

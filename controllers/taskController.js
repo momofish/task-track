@@ -11,6 +11,8 @@ module.exports = function (router) {
       params.assignee = user._id;
     else if (category == 'part')
       params.parts = { $elemMatch: { $in: [user._id] } };
+    else
+      params.project = category;
     if (filter == 'uncompleted')
       params.completed = false;
     else if (filter == 'completed')

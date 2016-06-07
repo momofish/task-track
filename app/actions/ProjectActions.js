@@ -1,11 +1,13 @@
 import alt from '../alt';
-import {taskService} from '../services';
-import {myTaskFilters} from '../models';
+import {taskService, projectService} from '../services';
+import {taskFilters} from '../models';
 import {select} from '../utils';
 
-class MyTaskActions {
+class ProjectActions {
   constructor() {
     this.generateActions(
+      'beforeGetProject',
+      'getProjectSuccess',
       'getTasksSuccess',
       'addTaskSuccess',
       'addTaskFail',
@@ -14,11 +16,17 @@ class MyTaskActions {
     );
   }
 
-  getTasks(category, filter = 'uncompleted') {
-    if (category == undefined)
-      category = this.alt.stores.MyTaskStore.state.category;
-    taskService.getTasks(category, filter)
-      .then(tasks => this.actions.getTasksSuccess({category, tasks}));
+  getProject(id, filter) {
+    this.actions.beforeGetProject(id);
+    this.actions.getTasks();
+    projectService.getProject(id)
+      .then(project => this.actions.getProjectSuccess(project));
+  }
+
+  getTasks() {
+    let state = this.alt.stores.ProjectStore.state;
+    taskService.getTasks(state.project._id, state.filter.query)
+      .then(tasks => this.actions.getTasksSuccess({tasks}));
   }
 
   addTask(task, form) {
@@ -37,7 +45,7 @@ class MyTaskActions {
       if (filter.query != newFilter.query) {
         this.actions.getTasks(undefined, newFilter.query);
       }
-    }, {align: 'right', data: myTaskFilters});
+    }, {align: 'right', data: taskFilters});
   }
   
   updateTaskDetail(task) {
@@ -46,4 +54,4 @@ class MyTaskActions {
   }
 }
 
-export default alt.createActions(MyTaskActions);
+export default alt.createActions(ProjectActions);

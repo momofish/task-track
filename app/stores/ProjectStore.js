@@ -1,19 +1,18 @@
 import moment from 'moment';
 import alt from '../alt';
-import MyTaskActions from '../actions/MyTaskActions';
-import {myTaskFilters} from '../models';
+import ProjectActions from '../actions/ProjectActions';
+import {taskFilters} from '../models';
 import _ from 'underscore';
 
-class MyTaskStore {
+class ProjectStore {
   constructor() {
-    this.bindActions(MyTaskActions);
+    this.bindActions(ProjectActions);
 
-    this.quickAdd = { title: '' };
+    this.project = {};
     this.tasks = [];
     this.taskGroups = [];
     this.selectedTask = null;
-    this.filter = myTaskFilters[0];
-    this.category = 'my';
+    this.filter = taskFilters[0];
   }
 
   task2Groups() {
@@ -43,8 +42,15 @@ class MyTaskStore {
     return groups;
   }
 
-  getTasksSuccess({category, tasks}) {
-    this.category = category;
+  beforeGetProject(id) {
+    this.project._id = id;
+  }
+
+  getProjectSuccess(project) {
+    this.project = project;
+  }
+
+  getTasksSuccess({id, tasks}) {
     this.tasks = tasks;
     this.taskGroups = this.task2Groups();
   }
@@ -56,7 +62,7 @@ class MyTaskStore {
   addTaskFail(payload) {
     toastr.error(payload.jqXhr.responseJSON.message);
 
-    let form = payload.form;
+    var form = payload.form;
     form.classList.add('shake');
     setTimeout(() => {
       form.classList.remove('shake');
@@ -77,4 +83,4 @@ class MyTaskStore {
   }
 }
 
-export default alt.createStore(MyTaskStore);
+export default alt.createStore(ProjectStore);

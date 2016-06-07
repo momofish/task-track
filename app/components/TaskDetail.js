@@ -104,7 +104,7 @@ class TaskDetail extends Component {
             <span aria-hidden='true'>×</span>
             <span className='sr-only'>Close</span>
           </button>
-          <Link to={`/tasks/projects/${project.projectId}`} onClick={(event) => { if (!project.projectId) { event.preventDefault(); this.selectProject(event) } } }>
+          <Link to={`/tasks/projects/${project._id}`} onClick={(event) => { if (!project.projectId) { event.preventDefault(); this.selectProject(event) } } }>
             {project.projectName} <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
           </Link>
         </div>

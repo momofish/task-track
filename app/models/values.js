@@ -22,3 +22,21 @@ export const myTaskFilters = [
     query: 'all', name: '所有任务'
   }
 ]
+
+export const taskFilters = [
+  {
+    query: 'uncompleted', name: '按处理优先级', 
+    grouper: 'treat',
+    groupConfig: taskTreat
+  },
+  {
+    query: 'uncompleted', name: '按项目',
+    grouper: task => task.project ? task.project.projectName : '未分配项目'
+  },
+  {
+    query: 'completed', name: '已完成任务'
+  },
+  {
+    query: 'all', name: '所有任务'
+  }
+]

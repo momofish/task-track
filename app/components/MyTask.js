@@ -13,6 +13,7 @@ class MyTask extends Component {
   constructor(props) {
     super(props);
     this.state = MyTaskStore.getState();
+    
     this.onChange = this.onChange.bind(this);
     this.selectTask = this.selectTask.bind(this);
     this.addTask = this.addTask.bind(this);
@@ -22,7 +23,7 @@ class MyTask extends Component {
 
   componentDidMount() {
     MyTaskStore.listen(this.onChange);
-    MyTaskActions.getMyTasks(this.props.params.category || 'my',
+    MyTaskActions.getTasks(this.props.params.category || 'my',
       this.state.filter.query);
   }
 
@@ -31,7 +32,7 @@ class MyTask extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    MyTaskActions.getMyTasks(nextProps.params.category || 'my',
+    MyTaskActions.getTasks(nextProps.params.category || 'my',
       this.state.filter.query);
   }
 
@@ -46,7 +47,7 @@ class MyTask extends Component {
   }
 
   selectTask(task, event) {
-    MyTaskActions.setTask(task);
+    MyTaskActions.selectTask(task);
   }
 
   clickTag(task, tag, event) {
@@ -69,7 +70,7 @@ class MyTask extends Component {
   }
 
   render() {
-    var showingTask = this.state.showingTask;
+    var selectedTask = this.state.selectedTask;
     var isPart = this.props.params.category == 'part';
     return (
       <div className='container-fluid flex flex-verticle'>
@@ -88,9 +89,9 @@ class MyTask extends Component {
         </div>
         {!isPart && <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />}
         <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
-        {showingTask && <TaskDetail task={showingTask} onHidden={updated => {
-          MyTaskActions.setTask();
-          updated && MyTaskActions.getMyTasks(undefined, this.state.filter.query);
+        {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
+          MyTaskActions.selectTask();
+          updated && MyTaskActions.getTasks(undefined, this.state.filter.query);
         } } />}
       </div>
     );

@@ -24,10 +24,10 @@ class TasksStore {
     };
   }
 
-  onGetMyPartProjectsSuccess(projects) {
+  getMyPartProjectsSuccess(projects) {
     this.sidebar.sections[1].body = projects.map(project => ({
       label: project.projectName,
-      icon: 'file', to: '/tasks/projects/' + project.projectId
+      icon: 'file', to: '/tasks/projects/' + project._id
     }));
   }
 }

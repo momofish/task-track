@@ -15,7 +15,7 @@ export default {
   
   getMyPartProjects() {
     return new Promise((resolve, reject) =>
-      $.ajax({ url: `${resourceUrl}/mypart`, success: resolve, error: reject })
+      $.ajax({ url: `${resourceUrl}/part`, success: resolve, error: reject })
     );
   }
 }
