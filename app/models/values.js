@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const taskTreat = {
   0: { name: '收件箱' },
   10: { name: '现在做', style: 'success' },
@@ -8,8 +10,7 @@ export const taskTreat = {
 export const myTaskFilters = [
   {
     query: 'uncompleted', name: '按处理优先级', 
-    grouper: 'treat',
-    groupConfig: taskTreat
+    grouper: 'treat', groupConfig: taskTreat
   },
   {
     query: 'uncompleted', name: '按项目',
@@ -26,12 +27,15 @@ export const myTaskFilters = [
 export const taskFilters = [
   {
     query: 'uncompleted', name: '按处理优先级', 
-    grouper: 'treat',
-    groupConfig: taskTreat
+    grouper: 'treat', groupConfig: taskTreat
   },
   {
-    query: 'uncompleted', name: '按项目',
-    grouper: task => task.project ? task.project.projectName : '未分配项目'
+    query: 'uncompleted', name: '按分配',
+    grouper: task => task.assignee ? task.assignee.name : '未分配人员'
+  },
+  {
+    query: 'uncompleted', name: '按截止日期',
+    grouper: task => task.dueDate ? moment(task.dueDate).fromNow() : '无截止日期'
   },
   {
     query: 'completed', name: '已完成任务'

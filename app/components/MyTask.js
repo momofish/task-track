@@ -23,8 +23,7 @@ class MyTask extends Component {
 
   componentDidMount() {
     MyTaskStore.listen(this.onChange);
-    MyTaskActions.getTasks(this.props.params.category || 'my',
-      this.state.filter.query);
+    MyTaskActions.getTasks(this.props.params.category);
   }
 
   componentWillUnmount() {
@@ -91,7 +90,7 @@ class MyTask extends Component {
         <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           MyTaskActions.selectTask();
-          updated && MyTaskActions.getTasks(undefined, this.state.filter.query);
+          updated && MyTaskActions.getTasks();
         } } />}
       </div>
     );

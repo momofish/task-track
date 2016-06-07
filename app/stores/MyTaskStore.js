@@ -43,8 +43,11 @@ class MyTaskStore {
     return groups;
   }
 
-  getTasksSuccess({category, tasks}) {
+  beforeGetTasks(category) {
     this.category = category;
+  }
+
+  getTasksSuccess(tasks) {
     this.tasks = tasks;
     this.taskGroups = this.task2Groups();
   }

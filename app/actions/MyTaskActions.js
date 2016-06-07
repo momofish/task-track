@@ -6,6 +6,7 @@ import {select} from '../utils';
 class MyTaskActions {
   constructor() {
     this.generateActions(
+      'beforeGetTasks',
       'getTasksSuccess',
       'addTaskSuccess',
       'addTaskFail',
@@ -14,11 +15,13 @@ class MyTaskActions {
     );
   }
 
-  getTasks(category, filter = 'uncompleted') {
-    if (category == undefined)
-      category = this.alt.stores.MyTaskStore.state.category;
-    taskService.getTasks(category, filter)
-      .then(tasks => this.actions.getTasksSuccess({category, tasks}));
+  getTasks(category) {
+    if (category != null)
+      this.actions.beforeGetTasks(category);
+
+    let state = alt.stores.MyTaskStore.state;
+    taskService.getTasks(state.category, state.filter.query)
+      .then(tasks => this.actions.getTasksSuccess(tasks));
   }
 
   addTask(task, form) {

@@ -80,7 +80,7 @@ class Project extends Component {
         <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           ProjectActions.selectTask();
-          updated && ProjectActions.getTasks(undefined, this.state.filter.query);
+          updated && ProjectActions.getTasks();
         } } />}
       </div>
     );
