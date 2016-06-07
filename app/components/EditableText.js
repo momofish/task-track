@@ -43,7 +43,7 @@ class EditableText extends Component {
         <button type='button' className='btn btn-primary btn-sm' onClick={this.saveText}>保存</button>
         <button type='button' className='btn btn-link btn-sm' onClick={() => this.setState({ isEdit: false }) }>取消</button>
       </form> :
-      <span className={this.props.className} onClick={() => this.setState({ isEdit: true }) }>{text || this.props.placeholder}</span>
+      <a href='javascript:' className={this.props.className} onClick={() => this.setState({ isEdit: true }) }>{text || this.props.placeholder}</a>
   }
 }
 

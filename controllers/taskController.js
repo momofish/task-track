@@ -49,6 +49,11 @@ module.exports = function (router) {
     Task.findById(req.body._id, function (err, task) {
       if (err) return next(err);
 
+      if (!task) {
+        res.sendStatus(500, 'task not found');
+        return;
+      }
+
       Object.assign(task, req.body);
       task.save(function (err) {
         if (err) return next(err);

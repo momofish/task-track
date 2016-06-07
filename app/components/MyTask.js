@@ -70,11 +70,12 @@ class MyTask extends Component {
 
   render() {
     var showingTask = this.state.showingTask;
+    var isPart = this.props.params.category == 'part';
     return (
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> {`我${this.props.params.category == 'part' ? '参与' : ''}的任务`} <span className="badge">{this.state.tasks.length}</span>
+            <i className='glyphicon glyphicon-tasks' /> {`我${isPart ? '参与' : ''}的任务`} <span className="badge">{this.state.tasks.length}</span>
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter}>
             <button type="button" className="btn btn-info" disabled>
@@ -85,7 +86,7 @@ class MyTask extends Component {
             </button>
           </div>
         </div>
-        <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />
+        {!isPart && <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />}
         <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
         {showingTask && <TaskDetail task={showingTask} onHidden={updated => {
           MyTaskActions.setTask();

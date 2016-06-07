@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import PopBox from './PopBox';
 import _ from 'underscore';
 
+let selecting = null;
+
 class Selector extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ class Selector extends Component {
     this.cache = {};
 
     this.changeTerm = this.changeTerm.bind(this);
+    this.select = this.select.bind(this);
   }
 
   componentDidMount() {
@@ -48,43 +51,61 @@ class Selector extends Component {
     this.state.dataSourceIndex = i;
     this.initData();
   }
-
-  select(item) {
-    let {onSelect, selected} = this.props;
-    let multiple = selected instanceof Array;
     
-    if (onSelect && onSelect(item) === false)
+  getSelected(item, selected) {
+    let multiple = selected instanceof Array;
+    let checkSelected = (sel) => {
+      if (selected == null ) return false;
+      return sel == item ||
+        item.key == sel ||
+        item._id && item._id == sel._id;
+    }
+    
+    if (multiple)
+      return _.find(selected, checkSelected);
+    else
+      return checkSelected(selected) ? item : null;
+  }
+
+  clickItem(item) {
+    let multiple = selecting instanceof Array;
+    
+    if (multiple){
+      var selectedItem = this.getSelected(item, selecting);
+      if (selectedItem != null)
+        selecting.splice(_.indexOf(selecting, selectedItem), 1);
+      else
+        selecting.push(item);
+      this.forceUpdate();
+    }
+    else {
+      selecting = item;
+      this.select();
+    }
+  }
+
+  select() {
+    let {onSelect} = this.props;
+    if (onSelect && onSelect(selecting) === false)
       return;
     PopBox.close();
   }
 
   render() {
-    let {dataSources, selected} = this.props;
+    let {dataSources} = this.props;
     let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
     let {itemNameField = 'name', searchable} = dataSource;
     let termReg = new RegExp(term, 'i');
-    let multiple = selected instanceof Array;
-    
-    let checkSelected = (item, selected) => {
-      let checkSelectedInner = (sel) => {
-        if (selected == null ) return false;
-        return sel == item ||
-          item.key == selected ||
-          item._id && item._id == selected._id;
-      }
-      
-      if (multiple)
-        return !!_.find(selected, checkSelectedInner);
-      return checkSelectedInner(selected);
-    }
+    let multiple = selecting instanceof Array;
     
     return (
       <div className='selector-container'>
         {dataSources.length > 1 ?
           <ul ref='tabs' className='nav nav-tabs flat'>
             {dataSources.map((dataSource, i) =>
-              <li key={`t${i}`} data-toggle="tab" className={dataSourceIndex == i ? 'active' : null}>
+              <li key={`t${i}`} data-toggle="tab"
+                className={dataSourceIndex == i ? 'active' : null}>
                 <a href='#' onClick={() => this.changeTab(i) }>{dataSource.name}</a>
               </li>
             ) }
@@ -92,19 +113,30 @@ class Selector extends Component {
         }
         {searchable ?
           <div className='selector-search'>
-            <input type="text" className="form-control" placeholder="请输入关键字" onChange={this.changeTerm} />
+            <input type="text" className="form-control" placeholder="请输入关键字"
+              onChange={this.changeTerm} />
           </div> : null
         }
         <div className='tab-pane active'>
           <ul className='selector-list'>
             {(items && items.length) ? items
               .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
-              .map((item, i) =>
-                <li key={`i${i}`} className={checkSelected(item, selected) ? 'active' : null}>
-                  <a href='javascript:' onClick={ev => this.select(item) }>{item[itemNameField]}</a>
-                </li>
-              ) : <li className='active'><a href='javascript:'>无更多数据</a></li> }
+              .map((item, i) => {
+                let isSelected = this.getSelected(item, selecting) != null;
+                return (<li key={`i${i}`} className={isSelected ? 'active' : null}>
+                  <a href='javascript:' onClick={ev => this.clickItem(item) }>
+                    {item[itemNameField]}
+                    {multiple && isSelected && <i className='pull-right glyphicon glyphicon-ok' />}
+                  </a>
+                </li>);
+              }) : <li className='active'><a href='javascript:'>无更多数据</a></li> }
           </ul>
+          {multiple && 
+            <div className='button-group'>
+              <button className='btn btn-primary btn-sm' onClick={this.select}>确定</button>
+              <button className='btn btn-link btn-sm' onClick={PopBox.close}>取消</button>
+            </div>
+          }
         </div>
       </div>
     );
@@ -114,6 +146,8 @@ class Selector extends Component {
 Selector.open = function open(options) {
   let target = options.target;
   let align = options.align;
+  selecting = options.selected;
+  if (selecting instanceof Array) selecting = selecting.concat();
   let boxOptions = { target, align, content: <Selector {...options} /> };
   PopBox.open(boxOptions);
 }

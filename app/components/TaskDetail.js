@@ -67,11 +67,18 @@ class TaskDetail extends Component {
 
   selectMember(selected, field, event) {
     let task = this.state.task
+    if(!task.project)
+    {
+      toastr.error('请先选择项目');
+      return;
+    }
     select.selectMember(event.currentTarget, selected, selecting => {
       let newTask =  { _id: task._id };
       newTask[field] = selected instanceof Array ? 
         selecting.map(m => m._id) : selecting._id;
-      TaskDetailActions.updateTaskDetail(newTask, selecting);
+      let populated = {};
+      populated[field] = selecting;
+      TaskDetailActions.updateTaskDetail(newTask, populated);
     }, { _id: task.project && task.project._id });
   }
 
