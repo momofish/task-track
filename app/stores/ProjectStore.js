@@ -62,7 +62,7 @@ class ProjectStore {
   addTaskFail(payload) {
     toastr.error(payload.jqXhr.responseJSON.message);
 
-    var form = payload.form;
+    let form = payload.form;
     form.classList.add('shake');
     setTimeout(() => {
       form.classList.remove('shake');

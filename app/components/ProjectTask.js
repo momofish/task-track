@@ -8,7 +8,7 @@ import {taskTreat} from '../models';
 
 const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.projectName, type: 'selectProject', label: '选择项目' }];
 
-class Project extends Component {
+class ProjectTask extends Component {
   constructor(props) {
     super(props);
     this.state = ProjectStore.getState();
@@ -66,7 +66,8 @@ class Project extends Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-file' />{project.projectName} <span className="badge">{tasks.length}</span>
+            <i className='glyphicon glyphicon-file' />&nbsp;
+            {project.projectName} <span className="badge">{tasks.length}</span>
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter}>
             <button type="button" className="btn btn-info" disabled>
@@ -87,4 +88,4 @@ class Project extends Component {
   }
 }
 
-export default Project;
+export default ProjectTask;

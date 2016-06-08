@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Markdown from 'markdown-it'
 
 class EditableText extends Component {
   constructor(props) {
@@ -7,6 +8,8 @@ class EditableText extends Component {
     this.changeText = this.changeText.bind(this);
     this.saveText = this.saveText.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.md = new Markdown();
   }
   
   componentWillReceiveProps(nextProps) {
@@ -43,7 +46,10 @@ class EditableText extends Component {
         <button type='button' className='btn btn-primary btn-sm' onClick={this.saveText}>保存</button>
         <button type='button' className='btn btn-link btn-sm' onClick={() => this.setState({ isEdit: false }) }>取消</button>
       </form> :
-      <a href='javascript:' className={this.props.className} onClick={() => this.setState({ isEdit: true }) }>{text || this.props.placeholder}</a>
+      <a href='javascript:' className={this.props.className}
+        onClick={() => this.setState({ isEdit: true }) }
+        dangerouslySetInnerHTML={{__html: text && this.md.render(text) || this.props.placeholder}}>
+      </a>
   }
 }
 

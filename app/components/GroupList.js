@@ -28,7 +28,7 @@ class GroupList extends Component {
   }
 
   render() {
-    var groups = this.props.data;
+    let groups = this.props.data;
 
     return (
       <div className='flex-scroll'>

@@ -20,8 +20,8 @@ class Sidebar extends Component {
   }
 
   render() {
-    var data = this.props.data;
-    var searchbar;
+    let data = this.props.data;
+    let searchbar;
     if (data.searchbar) {
       searchbar = (
         <div className='searchbar'>
@@ -30,7 +30,7 @@ class Sidebar extends Component {
       ); 
     }
     
-    var sections;
+    let sections;
     if (data.sections) {
       sections = data.sections.map((section, i) => (
         <div className='section' key={`section_${i}`}>

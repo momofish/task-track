@@ -20,7 +20,7 @@ class Modal extends Component {
   }
   
   hide() {
-    var onHidden = this.props.onHidden;
+    let onHidden = this.props.onHidden;
     onHidden && onHidden();
   }
 

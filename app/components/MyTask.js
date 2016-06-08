@@ -69,8 +69,8 @@ class MyTask extends Component {
   }
 
   render() {
-    var selectedTask = this.state.selectedTask;
-    var isPart = this.props.params.category == 'part';
+    let selectedTask = this.state.selectedTask;
+    let isPart = this.props.params.category == 'part';
     return (
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>

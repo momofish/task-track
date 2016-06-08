@@ -71,7 +71,7 @@ class Selector extends Component {
     let multiple = selecting instanceof Array;
     
     if (multiple){
-      var selectedItem = this.getSelected(item, selecting);
+      let selectedItem = this.getSelected(item, selecting);
       if (selectedItem != null)
         selecting.splice(_.indexOf(selecting, selectedItem), 1);
       else

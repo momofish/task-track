@@ -30,7 +30,7 @@ class TasksStore {
 
   getMyPartProjectsSuccess(projects) {
     let sections = _.chain(projects)
-      .groupBy(project => (project.team || { name: '未知' }).name)
+      .groupBy(project => (project.team || { name: '未指派团队' }).name)
       .mapObject((teamProjects, team) => ({
         header: { label: team, icon: 'th-large' },
         body: teamProjects.map(project => ({
