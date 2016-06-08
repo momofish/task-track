@@ -37,7 +37,9 @@ class Sidebar extends Component {
           <a className='section-header' data-toggle='collapse'
            onClick={this.handleCollapse.bind(this, section) }
            href={`.section:nth-child(${i + 2}) > .section-body`}>
-            <i className='glyphicon glyphicon-triangle-bottom' /> {section.header.label}
+            <i className='glyphicon glyphicon-triangle-bottom' />&nbsp;
+            {section.header.icon && <i className={`glyphicon glyphicon-${section.header.icon}`} />}&nbsp;
+            {section.header.label}
           </a>
           <ul className='section-body collapse in'>
             {section.body.map((item, j) => (

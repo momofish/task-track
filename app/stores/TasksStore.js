@@ -1,9 +1,17 @@
 import alt from '../alt';
 import TasksActions from '../actions/TasksActions';
+import _ from 'underscore';
 
 class TasksStore {
   constructor() {
     this.bindActions(TasksActions);
+    this.buildSidebar();
+  }
+
+  buildSidebar(...sectionsArray) {
+    let sectionsAll = [];
+    sectionsArray.map(sections => sectionsAll.push(...sections));
+
     this.sidebar = {
       title: "任务",
       searchbar: { onSearch: () => { } },
@@ -15,20 +23,23 @@ class TasksStore {
             { label: '我参与的任务', icon: 'briefcase', to: '/tasks/part' },
             { label: '任务日历', icon: 'calendar', to: '/tasks/calendar' },
           ]
-        },
-        {
-          header: { label: '项目' },
-          body: []
-        },
+        }, ...sectionsAll
       ]
     };
   }
 
   getMyPartProjectsSuccess(projects) {
-    this.sidebar.sections[1].body = projects.map(project => ({
-      label: project.projectName,
-      icon: 'file', to: '/tasks/projects/' + project._id
-    }));
+    let sections = _.chain(projects)
+      .groupBy(project => (project.team || { name: '未知' }).name)
+      .mapObject((teamProjects, team) => ({
+        header: { label: team, icon: 'th-large' },
+        body: teamProjects.map(project => ({
+          label: project.projectName,
+          icon: 'file', to: `/tasks/projects/${project._id}`
+        }))
+      })).toArray().value();
+
+    this.buildSidebar(sections);
   }
 }
 
