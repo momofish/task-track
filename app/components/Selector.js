@@ -43,24 +43,24 @@ class Selector extends Component {
       }));
   }
 
-  changeTerm(ev) {
-    this.setState({ term: ev.target.value });
+  changeTerm(event) {
+    this.setState({ term: event.target.value });
   }
 
   changeTab(i) {
     this.state.dataSourceIndex = i;
     this.initData();
   }
-    
+
   getSelected(item, selected) {
     let multiple = selected instanceof Array;
     let checkSelected = (sel) => {
-      if (selected == null ) return false;
+      if (selected == null) return false;
       return sel == item ||
         item.key == sel ||
         item._id && item._id == sel._id;
     }
-    
+
     if (multiple)
       return _.find(selected, checkSelected);
     else
@@ -69,8 +69,8 @@ class Selector extends Component {
 
   clickItem(item) {
     let multiple = selecting instanceof Array;
-    
-    if (multiple){
+
+    if (multiple) {
       let selectedItem = this.getSelected(item, selecting);
       if (selectedItem != null)
         selecting.splice(_.indexOf(selecting, selectedItem), 1);
@@ -98,7 +98,7 @@ class Selector extends Component {
     let {itemNameField = 'name', searchable} = dataSource;
     let termReg = new RegExp(term, 'i');
     let multiple = selecting instanceof Array;
-    
+
     return (
       <div className='selector-container'>
         {dataSources.length > 1 ?
@@ -131,7 +131,7 @@ class Selector extends Component {
                 </li>);
               }) : <li className='active'><a href='javascript:'>无更多数据</a></li> }
           </ul>
-          {multiple && 
+          {multiple &&
             <div className='button-group'>
               <button className='btn btn-primary btn-sm' onClick={this.select}>确定</button>
               <button className='btn btn-link btn-sm' onClick={PopBox.close}>取消</button>
@@ -146,9 +146,11 @@ class Selector extends Component {
 Selector.open = function open(options) {
   let target = options.target;
   let align = options.align;
+  let style = options.style;
   selecting = options.selected;
-  if (selecting instanceof Array) selecting = selecting.concat();
-  let boxOptions = { target, align, content: <Selector {...options} /> };
+  if (selecting instanceof Array)
+    selecting = selecting.concat();
+  let boxOptions = { target, align, style, content: <Selector {...options} /> };
   PopBox.open(boxOptions);
 }
 

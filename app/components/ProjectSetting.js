@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import FormItem from './FormItem';
 
 class ProjectSetting extends Component {
-  render () {
+  render() {
     return (
-    <div>
-    </div>
+      <div className='smart-form'>
+        <FormItem label='名称' />
+      </div>
     )
   }
 }

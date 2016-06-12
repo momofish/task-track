@@ -20,23 +20,23 @@ class Sidebar extends Component {
   }
 
   render() {
-    let data = this.props.data;
+    let {onAdd, data} = this.props;
     let searchbar;
     if (data.searchbar) {
       searchbar = (
         <div className='searchbar'>
           <input type='text' className='form-control' placeholder='搜索' />
         </div>
-      ); 
+      );
     }
-    
+
     let sections;
     if (data.sections) {
       sections = data.sections.map((section, i) => (
         <div className='section' key={`section_${i}`}>
           <a className='section-header' data-toggle='collapse'
-           onClick={this.handleCollapse.bind(this, section) }
-           href={`.section:nth-child(${i + 2}) > .section-body`}>
+            onClick={this.handleCollapse.bind(this, section) }
+            href={`.section:nth-child(${i + 2}) > .section-body`}>
             <i className='glyphicon glyphicon-triangle-bottom' />&nbsp;
             {section.header.icon && <i className={`glyphicon glyphicon-${section.header.icon}`} />}&nbsp;
             {section.header.label}
@@ -48,17 +48,18 @@ class Sidebar extends Component {
                   <i className={`glyphicon glyphicon-${item.icon}`} /> {item.label}
                 </Link>
               </li>
-            ))}            
+            )) }
           </ul>
         </div>
       ));
     }
-    
+
     return (
       <nav className='sidebar'>
         <div className='sidebar-header'>
           <span>{data.title}</span>
-          <button type="button" className="btn btn-link pull-right">
+          <button type="button" className="btn btn-link pull-right"
+            onClick={event => onAdd(event)}>
             <span className='glyphicon glyphicon-plus'></span>
           </button>
         </div>

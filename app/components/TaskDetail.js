@@ -5,6 +5,7 @@ import {extend} from 'underscore';
 import classnames from 'classnames';
 import Modal from './Modal';
 import PopBox from './PopBox';
+import FormItem from './FormItem';
 import Selector from './Selector';
 import EditableText from './EditableText';
 import TaskDetailStore from '../stores/TaskDetailStore';
@@ -93,69 +94,48 @@ class TaskDetail extends Component {
   render() {
     let task = this.state.task || this.props.task;
     let project = task.project || { name: '未分配项目' };
-    let assignee = task.assignee || { name: '未分配' };
+    let assignee = task.assignee || { name: '未分配人员' };
     let completed = task.completed;
     let className = classnames('form-title', { completed });
     return (
-      <Modal onHidden={this.dismiss}>
-        <div className="modal-header">
-          <button type='button' className='close' data-dismiss='modal'>
-            <span aria-hidden='true'>×</span>
-            <span className='sr-only'>Close</span>
-          </button>
-          <Link to={`/tasks/projects/${project._id}`}
-            onClick={(event) => { if (!project.id) { event.preventDefault(); this.selectProject(event) } } }>
-            {project.name}&nbsp;
-            <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
-          </Link>
-        </div>
-        <div className='modal-body smart-form'>
-          <div className='form-item'>
-            <div className='item-label'>
-              <label className='form-title'>
-                <input type='checkbox' checked={completed} onChange={this.completeTask} />
-              </label>
-            </div>
-            <div className='item-content'><EditableText className={className} text={task.title}
-              onChange={(text) => this.updateTaskDetail({ title: text }) } /></div>
-          </div>
-          <div className='form-item'>
-            <div className='item-label'></div>
-            <div className='item-content'>
+      <Modal onHidden={this.dismiss}
+        header={<Link to={`/tasks/projects/${project._id}`}
+          onClick={(event) => { if (!project.id) { event.preventDefault(); this.selectProject(event) } } }>
+          {project.name}&nbsp;
+          <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
+        </Link>}
+        body={
+          <div className='smart-form'>
+            <FormItem
+              label={<input type='checkbox' checked={completed} onChange={this.completeTask} />}
+              content={<EditableText className={className} text={task.title}
+                onChange={(text) => this.updateTaskDetail({ title: text }) } />}
+              />
+            <FormItem content={[
               <button className='btn btn-link'
                 onClick={this.selectMember.bind(this, task.assignee, 'assignee') }>
                 <i className='glyphicon glyphicon-user' /> {assignee.name}&nbsp;
-              </button>
-            </div>
-            <div className='item-content'>
+              </button>,
               <a href='javascript:' onClick={this.selectDueDate}>
                 <i className='glyphicon glyphicon-calendar' />&nbsp;
                 {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
               </a>
-            </div>
-          </div>
-          <div className='form-item'>
-            <div className='item-label'></div>
-            <div className='item-content'>
-              <EditableText multiline='true' text={task.description} placeholder='添加描述'
-                onChange={(text) => this.updateTaskDetail({ description: text }) } />
-            </div>
-          </div>
-          <div className='form-item'>
-            <div className='item-label'>参与</div>
-            <div className='item-content'>
-              {task.parts.map((member, i) => (
-                <button key={i} className="btn btn-link"><i className='glyphicon glyphicon-user' />
-                  {member.name}
+            ]} />
+            <FormItem content={<EditableText multiline='true' text={task.description} placeholder='添加描述'
+              onChange={(text) => this.updateTaskDetail({ description: text }) } />} />
+            <FormItem label='参与' content={
+              <div>
+                {task.parts.map((member, i) => (
+                  <button key={i} className="btn btn-link"><i className='glyphicon glyphicon-user' />
+                    {member.name}
+                  </button>
+                )) }
+                <button type="button" className="btn btn-default"
+                  onClick={this.selectMember.bind(this, task.parts, 'parts') }>
+                  <span className="glyphicon glyphicon-plus"></span>
                 </button>
-              )) }
-              <button type="button" className="btn btn-default"
-                onClick={this.selectMember.bind(this, task.parts, 'parts') }>
-                <span className="glyphicon glyphicon-plus"></span>
-              </button>
-            </div>
-          </div>
-        </div>
+              </div>} />
+          </div>}>
       </Modal>
     );
   }

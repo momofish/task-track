@@ -9,22 +9,13 @@ let containerDOM = null;
 class PopBoxContainer extends Component {
   constructor(props) {
     super(props);
-    
+
     this.close = this.close.bind(this);
   }
-  
+
   close() {
     options = null;
     renderContainer();
-  }
-
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
-  componentWillReceiveProps(nextProps) {
   }
 
   render() {
@@ -33,15 +24,14 @@ class PopBoxContainer extends Component {
     let className = classnames(
       this.props.className,
       'popbox-container',
-      {active}
+      { active }
     );
-    
-    let style;
+
     if (options) {
       let rect = options.target.getClientRects()[0];
-      style = { top: rect.bottom + 5 };
-      options.style = style;
-      if(options.align == 'right')
+      let style = options.style = options.style || {};
+      style.top = rect.bottom + 5;
+      if (options.align == 'right')
         style.right = document.documentElement.scrollWidth - rect.right;
       else
         style.left = rect.left;
@@ -61,22 +51,13 @@ class PopBox extends Component {
     super(props);
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
-  componentWillReceiveProps(nextProps) {
-  }
-
   render() {
     let options = this.props;
     let className = classnames(
       options.className,
       'popbox'
     );
-    
+
     return (
       <div className={className} style={options.style}>
         {this.props.children || options.content}

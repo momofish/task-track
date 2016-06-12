@@ -11,7 +11,7 @@ class EditableText extends Component {
 
     this.md = new Markdown();
   }
-  
+
   componentWillReceiveProps(nextProps) {
     this.state.text = nextProps.text;
   }
@@ -25,20 +25,21 @@ class EditableText extends Component {
     onChange && onChange(this.state.text);
     this.setState({ isEdit: false });
   }
-  
+
   handleSubmit(event) {
     event.preventDefault();
     this.saveText();
   }
 
   render() {
+    let multiline = this.props.multiline;
     let text = this.state.text;
     let isEdit = this.state.isEdit;
     return isEdit ?
       <form onSubmit={this.handleSubmit}>
         <div className='form-group'>
           {
-            this.props.multiline ?
+            multiline ?
               <textarea className='form-control' onChange={this.changeText} value={text} placeholder={this.props.placeholder} /> :
               <input type='text' className='form-control' onChange={this.changeText} value={text} placeholder={this.props.placeholder} />
           }
@@ -46,9 +47,9 @@ class EditableText extends Component {
         <button type='button' className='btn btn-primary btn-sm' onClick={this.saveText}>保存</button>
         <button type='button' className='btn btn-link btn-sm' onClick={() => this.setState({ isEdit: false }) }>取消</button>
       </form> :
-      <a href='javascript:' className={this.props.className}
+      <a href='javascript:' className={`{this.props.className} form-control-static`}
         onClick={() => this.setState({ isEdit: true }) }
-        dangerouslySetInnerHTML={{__html: text && this.md.render(text) || this.props.placeholder}}>
+        dangerouslySetInnerHTML={{ __html: (multiline && text ? this.md.render(text) : text) || this.props.placeholder }}>
       </a>
   }
 }

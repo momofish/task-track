@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import Sidebar from './Sidebar';
+import Modal from './Modal';
+import ProjectSetting from './ProjectSetting';
+import TeamSetting from './TeamSetting';
 import TasksStore from '../stores/TasksStore'
 import TasksActions from '../actions/TasksActions';
+import {select} from '../utils';
+import {assign} from 'underscore';
 
 class Tasks extends Component {
   constructor(props) {
@@ -13,7 +18,7 @@ class Tasks extends Component {
 
   componentDidMount() {
     TasksStore.listen(this.onChange);
-    
+
     TasksActions.getMyPartProjects();
   }
 
@@ -25,10 +30,36 @@ class Tasks extends Component {
     this.setState(state);
   }
 
+  handleAdd(event) {
+    select.selectMenu(event.currentTarget, null,
+      selecting => {
+        let modalOptions = {};
+        if (selecting.code == 'team')
+          assign(modalOptions, {
+            header: '团队设置',
+            body: <TeamSetting />
+          });
+        else if (selecting.code == 'project')
+          assign(modalOptions, {
+            header: '项目设置',
+            body: <ProjectSetting />
+          });
+
+        Modal.open(modalOptions);
+      }, {
+        align: 'right',
+        style: { width: 120 },
+        data: [
+          { code: 'project', name: '项目' },
+          { code: 'team', name: '团队' }
+        ]
+      });
+  }
+
   render() {
     return (
       <div className='main-container'>
-        <Sidebar data={this.state.sidebar} />
+        <Sidebar data={this.state.sidebar} onAdd={this.handleAdd.bind(this) } />
         <div className='main-content'>
           {this.props.children}
         </div>
