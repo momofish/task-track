@@ -14,7 +14,7 @@ export const myTaskFilters = [
   },
   {
     query: 'uncompleted', name: '按项目',
-    grouper: task => task.project ? task.project.projectName : '未分配项目'
+    grouper: task => task.project ? task.project.name : '未分配项目'
   },
   {
     query: 'completed', name: '已完成任务'

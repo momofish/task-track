@@ -21,7 +21,7 @@ class Selector extends Component {
   initData() {
     let {dataSourceIndex} = this.state;
     let items = this.cache[dataSourceIndex];
-    if (items) {
+    if (items !== undefined) {
       this.setState({ items });
       return;
     }

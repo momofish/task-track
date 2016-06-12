@@ -7,7 +7,7 @@ import TaskDetail from './TaskDetail';
 import {select} from '../utils';
 import {taskTreat} from '../models';
 
-const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.projectName, type: 'selectProject', label: '选择项目' }];
+const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.name, type: 'selectProject', label: '选择项目' }];
 
 class MyTask extends Component {
   constructor(props) {

@@ -34,7 +34,7 @@ class TasksStore {
       .mapObject((teamProjects, team) => ({
         header: { label: team, icon: 'th-large' },
         body: teamProjects.map(project => ({
-          label: project.projectName,
+          label: project.name,
           icon: 'file', to: `/tasks/projects/${project._id}`
         }))
       })).toArray().value();

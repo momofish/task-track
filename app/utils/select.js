@@ -9,16 +9,9 @@ export default {
       target,
       dataSources: [
         {
-          name: '我参与的项目',
+          name: '项目',
           data: projectService.getMyPartProjects,
-          searchable: true,
-          itemNameField: 'projectName'
-        },
-        {
-          name: '我的项目',
-          data: projectService.getMyProjects,
-          searchable: true,
-          itemNameField: 'projectName'
+          searchable: true
         }
       ],
       selected,
@@ -35,13 +28,19 @@ export default {
           data: () => projectService.getProject(options._id)
             .then(project => project.members),
           searchable: true
+        },
+        {
+          name: '团队',
+          data: () => projectService.getProject(options._id)
+            .then(project => (project.team || {}).members || []),
+          searchable: true
         }
       ],
       selected,
       onSelect
     }, options));
   },
-  
+
   selectMenu(target, selected, onSelect, options) {
     Selector.open(extend({
       target,
@@ -55,7 +54,7 @@ export default {
       onSelect
     }, options));
   },
-  
+
   selectDate(target, selected, onSelect, options) {
     DatePicker.open(extend({
       target,

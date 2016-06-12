@@ -67,14 +67,13 @@ class TaskDetail extends Component {
 
   selectMember(selected, field, event) {
     let task = this.state.task
-    if(!task.project)
-    {
+    if (!task.project) {
       toastr.error('请先选择项目');
       return;
     }
     select.selectMember(event.currentTarget, selected, selecting => {
-      let newTask =  { _id: task._id };
-      newTask[field] = selected instanceof Array ? 
+      let newTask = { _id: task._id };
+      newTask[field] = selected instanceof Array ?
         selecting.map(m => m._id) : selecting._id;
       let populated = {};
       populated[field] = selecting;
@@ -93,7 +92,7 @@ class TaskDetail extends Component {
 
   render() {
     let task = this.state.task || this.props.task;
-    let project = task.project || { projectName: '未分配项目' };
+    let project = task.project || { name: '未分配项目' };
     let assignee = task.assignee || { name: '未分配' };
     let completed = task.completed;
     let className = classnames('form-title', { completed });
@@ -104,8 +103,10 @@ class TaskDetail extends Component {
             <span aria-hidden='true'>×</span>
             <span className='sr-only'>Close</span>
           </button>
-          <Link to={`/tasks/projects/${project._id}`} onClick={(event) => { if (!project.projectId) { event.preventDefault(); this.selectProject(event) } } }>
-            {project.projectName} <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
+          <Link to={`/tasks/projects/${project._id}`}
+            onClick={(event) => { if (!project.id) { event.preventDefault(); this.selectProject(event) } } }>
+            {project.name}&nbsp;
+            <i className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
           </Link>
         </div>
         <div className='modal-body smart-form'>
@@ -115,32 +116,41 @@ class TaskDetail extends Component {
                 <input type='checkbox' checked={completed} onChange={this.completeTask} />
               </label>
             </div>
-            <div className='item-content'><EditableText className={className} text={task.title} onChange={(text) => this.updateTaskDetail({ title: text }) } /></div>
+            <div className='item-content'><EditableText className={className} text={task.title}
+              onChange={(text) => this.updateTaskDetail({ title: text }) } /></div>
           </div>
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <button className='btn btn-link' onClick={this.selectMember.bind(this, task.assignee, 'assignee')}><i className='glyphicon glyphicon-user' /> {assignee.name}</button>
+              <button className='btn btn-link'
+                onClick={this.selectMember.bind(this, task.assignee, 'assignee') }>
+                <i className='glyphicon glyphicon-user' /> {assignee.name}&nbsp;
+              </button>
             </div>
             <div className='item-content'>
               <a href='javascript:' onClick={this.selectDueDate}>
-                <i className='glyphicon glyphicon-calendar' /> {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
+                <i className='glyphicon glyphicon-calendar' />&nbsp;
+                {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
               </a>
             </div>
           </div>
           <div className='form-item'>
             <div className='item-label'></div>
             <div className='item-content'>
-              <EditableText multiline='true' text={task.description} placeholder='添加描述' onChange={(text) => this.updateTaskDetail({ description: text }) } />
+              <EditableText multiline='true' text={task.description} placeholder='添加描述'
+                onChange={(text) => this.updateTaskDetail({ description: text }) } />
             </div>
           </div>
           <div className='form-item'>
             <div className='item-label'>参与</div>
             <div className='item-content'>
               {task.parts.map((member, i) => (
-                <button key={i} className="btn btn-link"><i className='glyphicon glyphicon-user' /> {member.name}</button>
-              ))}
-              <button type="button" className="btn btn-default" onClick={this.selectMember.bind(this, task.parts, 'parts')}>
+                <button key={i} className="btn btn-link"><i className='glyphicon glyphicon-user' />
+                  {member.name}
+                </button>
+              )) }
+              <button type="button" className="btn btn-default"
+                onClick={this.selectMember.bind(this, task.parts, 'parts') }>
                 <span className="glyphicon glyphicon-plus"></span>
               </button>
             </div>

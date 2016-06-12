@@ -31,7 +31,7 @@ class MyTaskStore {
             label: task.title,
             completed: task.completed,
             tags: [
-              { type: "label", label: (task.project || {}).projectName, style: "success" },
+              { type: "label", label: (task.project || {}).name, style: "success" },
               { type: "label", label: task.dueDate && moment(task.dueDate).format('L'), style: "danger" },
               grouper === 'treat' && { code: 'treat', type: "label", icon: 'flag', style: groupConfig[key].style || 'default', data: task.treat || 0 },
             ],

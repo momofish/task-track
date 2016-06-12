@@ -3,11 +3,11 @@ var Schema = mongoose.Schema;
 var Types = Schema.Types;
 
 var schema = new Schema({
-  projectId: { type: String, unique: true, index: true },
-  projectName: String,
+  id: { type: String, unique: true, index: true },
+  name: String,
   type: { type: Number, required: true },
   team: { type: Types.ObjectId, index: true, ref: 'Team' },
-  pm: { type: Types.ObjectId, index: true, ref: 'User' },
+  owner: { type: Types.ObjectId, index: true, ref: 'User' },
   members: [{ type: Types.ObjectId, ref: 'User' }]
 });
 
