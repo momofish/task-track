@@ -31,7 +31,7 @@ export const taskFilters = [
   },
   {
     query: 'uncompleted', name: '按分配',
-    grouper: task => task.assignee ? task.assignee.name : '未分配人员'
+    grouper: task => task.owner ? task.owner.name : '未分配人员'
   },
   {
     query: 'uncompleted', name: '按截止日期',

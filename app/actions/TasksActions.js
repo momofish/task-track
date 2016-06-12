@@ -1,16 +1,19 @@
 import alt from '../alt';
-import {projectService} from '../services';
+import {teamService, projectService} from '../services';
 
 class TasksActions {
   constructor() {
     this.generateActions(
-      'getMyPartProjectsSuccess'
+      'getProjectsSuccess'
     );
   }
 
-  getMyPartProjects() {
-    projectService.getMyPartProjects()
-      .then((projects) => this.actions.getMyPartProjectsSuccess(projects));
+  getProjects() {
+    teamService.getMyPartTeams()
+      .then(teams => {
+        projectService.getMyPartProjects()
+          .then(projects => this.actions.getProjectsSuccess({teams, projects}));
+      });
   }
 }
 

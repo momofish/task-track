@@ -94,7 +94,7 @@ class TaskDetail extends Component {
   render() {
     let task = this.state.task || this.props.task;
     let project = task.project || { name: '未分配项目' };
-    let assignee = task.assignee || { name: '未分配人员' };
+    let owner = task.owner || { name: '未分配人员' };
     let completed = task.completed;
     let className = classnames('form-title', { completed });
     return (
@@ -113,8 +113,8 @@ class TaskDetail extends Component {
               />
             <FormItem content={[
               <button className='btn btn-link'
-                onClick={this.selectMember.bind(this, task.assignee, 'assignee') }>
-                <i className='glyphicon glyphicon-user' /> {assignee.name}&nbsp;
+                onClick={this.selectMember.bind(this, task.owner, 'owner') }>
+                <i className='glyphicon glyphicon-user' /> {owner.name}&nbsp;
               </button>,
               <a href='javascript:' onClick={this.selectDueDate}>
                 <i className='glyphicon glyphicon-calendar' />&nbsp;
@@ -125,13 +125,14 @@ class TaskDetail extends Component {
               onChange={(text) => this.updateTaskDetail({ description: text }) } />} />
             <FormItem label='参与' content={
               <div>
-                {task.parts.map((member, i) => (
-                  <button key={i} className="btn btn-link"><i className='glyphicon glyphicon-user' />
+                {task.members.map((member, i) => (
+                  <button key={i} className="btn btn-link">
+                    <i className='glyphicon glyphicon-user' />&nbsp;
                     {member.name}
                   </button>
                 )) }
                 <button type="button" className="btn btn-default"
-                  onClick={this.selectMember.bind(this, task.parts, 'parts') }>
+                  onClick={this.selectMember.bind(this, task.members, 'members') }>
                   <span className="glyphicon glyphicon-plus"></span>
                 </button>
               </div>} />

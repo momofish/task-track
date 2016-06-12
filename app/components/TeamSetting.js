@@ -16,30 +16,41 @@ class TeamSetting extends Component {
         .then(team => this.setState({ team }));
   }
 
-  updateEntity(entity, field, event) {
+  dismiss() {
+    Modal.close();
+  }
+
+  changeEntity(entity, field, event) {
     entity[field] = event.currentTarget.value;
   }
 
-  saveEntity() {
+  saveEntity(entity) {
+    teamService.saveTeam(entity)
+      .then(this.dismiss);
+  }
+
+  handleSubmit(team, event) {
+    event.preventDefault();
+    this.saveEntity(team);
   }
 
   render() {
     let team = this.state.team;
     return (
-      <div className='smart-form'>
+      <form className='smart-form' onSubmit={this.handleSubmit.bind(this, team)}>
         <FormItem label='名称' content={
           <input type='text' className='form-control'
-            value={team.name} onChange={this.updateEntity.bind(this, team, 'name') } />
+            value={team.name} onChange={this.changeEntity.bind(this, team, 'name') } />
         } />
         <FormItem label='负责人' />
         <FormItem label='成员' />
         <FormItem content={
           <div>
-            <button className='btn btn-primary btn-sm' onClick={this.saveEntity.bind(this)}>确定</button>
-            <button className='btn btn-link btn-sm' onClick={() => Modal.close()}>取消</button>
+            <button type='submit' className='btn btn-primary btn-sm'>确定</button>
+            <button className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
         } />
-      </div>
+      </form>
     );
   }
 }

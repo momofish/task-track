@@ -28,7 +28,7 @@ class TasksStore {
     };
   }
 
-  getMyPartProjectsSuccess(projects) {
+  getProjectsSuccess({teams, projects}) {
     let sections = _.chain(projects)
       .groupBy(project => (project.team || { name: '未指派团队' }).name)
       .mapObject((teamProjects, team) => ({

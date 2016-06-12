@@ -19,7 +19,7 @@ class Tasks extends Component {
   componentDidMount() {
     TasksStore.listen(this.onChange);
 
-    TasksActions.getMyPartProjects();
+    TasksActions.getProjects();
   }
 
   componentWillUnmount() {

@@ -1,15 +1,21 @@
+import {get, save} from './commonService';
+
 const resourceUrl = '/api/teams';
 
 export default {
-  getMyTeams() {
-    return new Promise((resolve, reject) =>
-      $.ajax({ url: `${resourceUrl}/my`, success: resolve, error: reject })
-    );
+  getTeam(id) {
+    return get(resourceUrl, id);
   },
-  
+
+  getMyTeams() {
+    return get(resourceUrl, 'my');
+  },
+
   getMyPartTeams() {
-    return new Promise((resolve, reject) =>
-      $.ajax({ url: `${resourceUrl}/mypart`, success: resolve, error: reject })
-    );
+    return get(resourceUrl, 'part');
+  },
+
+  saveTeam(team) {
+    return save(resourceUrl, team);
   }
 }

@@ -40,7 +40,7 @@ module.exports = function (router) {
   router.route('/projects').put(function (req, res, next) {
     var user = req.user;
     var project = new Project(req.body);
-    project.assignee = user._id;
+    project.owner = user._id;
     project.save(function (err) {
       if (err) return next(err);
 

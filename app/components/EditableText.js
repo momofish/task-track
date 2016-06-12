@@ -40,16 +40,28 @@ class EditableText extends Component {
         <div className='form-group'>
           {
             multiline ?
-              <textarea className='form-control' onChange={this.changeText} value={text} placeholder={this.props.placeholder} /> :
-              <input type='text' className='form-control' onChange={this.changeText} value={text} placeholder={this.props.placeholder} />
+              <textarea className='form-control'
+                onChange={this.changeText}
+                value={text} placeholder={this.props.placeholder} /> :
+              <input type='text' className='form-control'
+                onChange={this.changeText}
+                value={text} placeholder={this.props.placeholder} />
           }
         </div>
-        <button type='button' className='btn btn-primary btn-sm' onClick={this.saveText}>保存</button>
-        <button type='button' className='btn btn-link btn-sm' onClick={() => this.setState({ isEdit: false }) }>取消</button>
+        <button type='button' className='btn btn-primary btn-sm'
+          onClick={this.saveText}>
+          保存
+        </button>
+        <button type='button' className='btn btn-link btn-sm'
+          onClick={() => this.setState({ isEdit: false }) }>
+          取消
+        </button>
       </form> :
-      <a href='javascript:' className={`{this.props.className} form-control-static`}
+      <a href='javascript:' className={`${this.props.className} form-control-static`}
         onClick={() => this.setState({ isEdit: true }) }
-        dangerouslySetInnerHTML={{ __html: (multiline && text ? this.md.render(text) : text) || this.props.placeholder }}>
+        dangerouslySetInnerHTML={{
+          __html: (multiline && text ? this.md.render(text) : text) || this.props.placeholder
+        }}>
       </a>
   }
 }
