@@ -7,6 +7,7 @@ var schema = new Schema({
   dept: { type: Types.ObjectId, index: true, ref: 'Dept' },
   loginId: { type: String, unique: true, index: true },
   password: String,
+  enabled: Boolean
 });
 
 module.exports = mongoose.model('User', schema);

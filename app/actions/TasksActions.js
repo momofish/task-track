@@ -8,11 +8,11 @@ class TasksActions {
     );
   }
 
-  getProjects() {
+  getProjects(opener) {
     teamService.getMyPartTeams()
       .then(teams => {
         projectService.getMyPartProjects()
-          .then(projects => this.actions.getProjectsSuccess({teams, projects}));
+          .then(projects => this.actions.getProjectsSuccess({teams, projects, opener}));
       });
   }
 }

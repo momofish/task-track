@@ -286,11 +286,21 @@ body {
     background: #e6e6e6;
     text-decoration: none;
 }
+.section a {
+  display: block;
+  position: relative;
+}
 .section a:hover {
   text-decoration: none;
 }
-.section a {
-  display: block;
+.section a .action-icon {
+  position: absolute;
+  right: 12px;
+  top: 13px;
+  color: transparent;
+}
+.section a:hover .action-icon {
+  color: #b9b9b9;
 }
 
 /* entry list */
@@ -339,12 +349,11 @@ body {
 }
 .smart-form .form-item {
   display: flex;
-  padding: 5px 0;
+  padding: 5px 0 10px 0;
 }
 .form-item > .item-label {
   font-size: 14px;
   font-weight: bolder;
-  padding: 6px 4px;
   width: 60px;
 }
 .form-item > .item-content {
@@ -352,6 +361,7 @@ body {
 }
 .form-item .form-title {
   font-size: 18px;
+  padding: 7px 0;
 }
 .form-control-static {
   display: block;
@@ -465,4 +475,9 @@ body {
 
 .button-group {
   padding: 5px 0;
+}
+
+.selectable-text {
+  display: inline-block;
+  padding-right: 10px;
 }

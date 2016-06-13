@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {Icon} from './common';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -37,9 +38,10 @@ class Sidebar extends Component {
           <a className='section-header' data-toggle='collapse'
             onClick={this.handleCollapse.bind(this, section) }
             href={`.section:nth-child(${i + 2}) > .section-body`}>
-            <i className='glyphicon glyphicon-triangle-bottom' />&nbsp;
-            {section.header.icon && <i className={`glyphicon glyphicon-${section.header.icon}`} />}&nbsp;
+            <Icon icon='triangle-bottom' />&nbsp;
+            {section.header.icon && <Icon icon={section.header.icon} />}&nbsp;
             {section.header.label}
+            {section.header.actionIcon && <Icon icon={section.header.actionIcon} onClick={section.header.onAction} className='action-icon' />}
           </a>
           <ul className='section-body collapse in'>
             {section.body.map((item, j) => (

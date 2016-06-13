@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import Sidebar from './Sidebar';
-import Modal from './Modal';
+import {Modal} from './common';
 import ProjectSetting from './ProjectSetting';
 import TeamSetting from './TeamSetting';
 import TasksStore from '../stores/TasksStore'
@@ -19,7 +19,7 @@ class Tasks extends Component {
   componentDidMount() {
     TasksStore.listen(this.onChange);
 
-    TasksActions.getProjects();
+    TasksActions.getProjects(openModal);
   }
 
   componentWillUnmount() {
@@ -33,19 +33,7 @@ class Tasks extends Component {
   handleAdd(event) {
     select.selectMenu(event.currentTarget, null,
       selecting => {
-        let modalOptions = {};
-        if (selecting.code == 'team')
-          assign(modalOptions, {
-            header: '团队设置',
-            body: <TeamSetting />
-          });
-        else if (selecting.code == 'project')
-          assign(modalOptions, {
-            header: '项目设置',
-            body: <ProjectSetting />
-          });
-
-        Modal.open(modalOptions);
+        openModal(selecting.code);
       }, {
         align: 'right',
         style: { width: 120 },
@@ -66,6 +54,28 @@ class Tasks extends Component {
       </div>
     );
   }
+}
+
+function openModal(code, object) {
+  let state = {};
+  let modalOptions = {
+    onHidden: () => {
+      state.updated && TasksActions.getProjects(openModal);
+      state.updated = false;
+    }
+  };
+  if (code == 'team')
+    assign(modalOptions, {
+      header: '团队设置',
+      body: <TeamSetting team={object} state={state} />
+    });
+  else if (code == 'project')
+    assign(modalOptions, {
+      header: '项目设置',
+      body: <ProjectSetting />
+    });
+
+  Modal.open(modalOptions);
 }
 
 export default Tasks;

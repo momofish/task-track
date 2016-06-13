@@ -28,16 +28,32 @@ class TasksStore {
     };
   }
 
-  getProjectsSuccess({teams, projects}) {
-    let sections = _.chain(projects)
-      .groupBy(project => (project.team || { name: '未指派团队' }).name)
-      .mapObject((teamProjects, team) => ({
-        header: { label: team, icon: 'th-large' },
-        body: teamProjects.map(project => ({
-          label: project.name,
-          icon: 'file', to: `/tasks/projects/${project._id}`
-        }))
-      })).toArray().value();
+  getProjectsSuccess({teams, projects, opener}) {
+    let team2Section = team => ({
+      header: {
+        label: team.name, icon: 'th-large', actionIcon: team._id && 'cog',
+        onAction: event => {
+          opener && opener('team', team);
+        },
+        key: team._id, data: team
+      },
+      body: []
+    });
+    let project2Item = project => ({
+      label: project.name, icon: 'file',
+      to: `/tasks/projects/${project._id}`,
+      key: project._id, data: project
+    });
+    let sections = teams.map(team2Section);
+    projects.map(project2Item).forEach(item => {
+      let teamId = item.data.team && item.data.team._id;
+      let section = _.find(sections, section => section.header.key == teamId);
+      if (!section) {
+        section = team2Section({ name: '未指派团队' });
+        sections.push(section);
+      }
+      section.body.push(item);
+    });
 
     this.buildSidebar(sections);
   }

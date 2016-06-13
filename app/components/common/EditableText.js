@@ -41,7 +41,7 @@ class EditableText extends Component {
           {
             multiline ?
               <textarea className='form-control'
-                onChange={this.changeText}
+                onChange={this.changeText} rows='5'
                 value={text} placeholder={this.props.placeholder} /> :
               <input type='text' className='form-control'
                 onChange={this.changeText}

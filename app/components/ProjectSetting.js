@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import FormItem from './FormItem';
+import {FormItem} from './common';
 
 class ProjectSetting extends Component {
   render() {

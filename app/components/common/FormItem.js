@@ -2,18 +2,17 @@ import React, {Component} from 'react';
 
 class componentName extends Component {
   render() {
-    let label = this.props.label;
-    let content = this.props.content;
+    let {label, content, className} = this.props;
 
     return (
-      <div className='form-item'>
+      <div className={`form-item ${className}`}>
         <div className='item-label'>{label}</div>
         {content instanceof Array ? content.map((inner, i) =>
           <div key={i} className='item-content'>
             {inner}
           </div>
         ) : <div className='item-content'>
-            {content}
+            {this.props.children || content}
           </div>
         }
       </div>

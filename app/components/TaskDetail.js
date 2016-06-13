@@ -3,11 +3,7 @@ import {Link} from 'react-router';
 import moment from 'moment';
 import {extend} from 'underscore';
 import classnames from 'classnames';
-import Modal from './Modal';
-import PopBox from './PopBox';
-import FormItem from './FormItem';
-import Selector from './Selector';
-import EditableText from './EditableText';
+import {Modal, PopBox, FormItem, Selector, EditableText, SelectableText, Icon} from './common';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
@@ -107,34 +103,27 @@ class TaskDetail extends Component {
         body={
           <div className='smart-form'>
             <FormItem
-              label={<input type='checkbox' checked={completed} onChange={this.completeTask} />}
+              label={<div className='form-title'>
+                <input type='checkbox' checked={completed} onChange={this.completeTask} />
+              </div>}
               content={<EditableText className={className} text={task.title}
                 onChange={(text) => this.updateTaskDetail({ title: text }) } />}
               />
             <FormItem content={[
-              <button className='btn btn-link'
-                onClick={this.selectMember.bind(this, task.owner, 'owner') }>
-                <i className='glyphicon glyphicon-user' /> {owner.name}&nbsp;
-              </button>,
-              <a href='javascript:' onClick={this.selectDueDate}>
-                <i className='glyphicon glyphicon-calendar' />&nbsp;
-                {task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
-              </a>
+              <SelectableText icon='user' text={owner.name}
+                onClick={this.selectMember.bind(this, task.owner, 'owner') } />,
+              <SelectableText text={task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
+                icon='calendar' onClick={this.selectDueDate}
+                />
             ]} />
             <FormItem content={<EditableText multiline='true' text={task.description} placeholder='添加描述'
               onChange={(text) => this.updateTaskDetail({ description: text }) } />} />
             <FormItem label='参与' content={
               <div>
-                {task.members.map((member, i) => (
-                  <button key={i} className="btn btn-link">
-                    <i className='glyphicon glyphicon-user' />&nbsp;
-                    {member.name}
-                  </button>
-                )) }
-                <button type="button" className="btn btn-default"
-                  onClick={this.selectMember.bind(this, task.members, 'members') }>
-                  <span className="glyphicon glyphicon-plus"></span>
-                </button>
+                {task.members.map((member, i) =>
+                  <SelectableText key={i} icon='user' text={member.name} />
+                ) }
+                <SelectableText icon='plus' onClick={this.selectMember.bind(this, task.members, 'members') } />
               </div>} />
           </div>}>
       </Modal>

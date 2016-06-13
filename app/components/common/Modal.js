@@ -6,17 +6,6 @@ let options = null;
 let containerDOM = null;
 
 class ModalContainer extends Component {
-  constructor(props) {
-    super(props);
-
-    this.close = this.close.bind(this);
-  }
-
-  close() {
-    options = null;
-    renderContainer();
-  }
-
   render() {
     let active = options != null;
 
@@ -35,15 +24,14 @@ class ModalContainer extends Component {
 }
 
 class Modal extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     $(this.refs.modal).modal('show')
       .on('hidden.bs.modal', () => {
         let onHidden = this.props.onHidden;
-        onHidden && onHidden();
+        let result = onHidden && onHidden();
+        if (result === false)
+          return;
+        Modal.close();
       });
   }
 
@@ -54,8 +42,7 @@ class Modal extends Component {
   render() {
     let realOptions = options || {};
     let content = this.props.children || realOptions.content;
-    let header = this.props.header || realOptions.header;
-    let body = this.props.body || realOptions.body;
+    let {header, body, footer} = this.props;
 
     return (
       <div ref='modal' className='modal fade'>
@@ -71,6 +58,9 @@ class Modal extends Component {
             {body && <div className='modal-body'>
               {body}
             </div>}
+            {footer && <div className='modal-footer'>
+              {footer}
+            </div>}
             {content}
           </div>
         </div>
@@ -80,14 +70,14 @@ class Modal extends Component {
 }
 
 function renderContainer() {
-  ReactDOM.render(<ModalContainer />, containerDOM);
-}
-
-Modal.open = function open(modalOptions) {
   if (!containerDOM) {
     containerDOM = document.createElement('div');
     document.body.appendChild(containerDOM);
   }
+  ReactDOM.render(<ModalContainer />, containerDOM);
+}
+
+Modal.open = function open(modalOptions) {
   options = modalOptions;
   renderContainer();
 }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import GroupList from './GroupList';
+import {GroupList} from './common';
 import ProjectStore from '../stores/ProjectStore';
 import ProjectActions from '../actions/ProjectActions';
 import TaskDetail from './TaskDetail';
@@ -12,7 +12,7 @@ class ProjectTask extends Component {
   constructor(props) {
     super(props);
     this.state = ProjectStore.getState();
-    
+
     this.onChange = this.onChange.bind(this);
     this.selectTask = this.selectTask.bind(this);
     this.selectFilter = this.selectFilter.bind(this);

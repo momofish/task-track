@@ -1,6 +1,5 @@
-import Selector from '../components/Selector';
-import DatePicker from '../components/DatePicker';
-import {projectService, teamService, deptService} from '../services';
+import {Selector, DatePicker} from '../components/common';
+import {projectService, teamService, userService} from '../services';
 import {extend} from 'underscore';
 
 export default {
@@ -33,6 +32,21 @@ export default {
           name: '团队',
           data: () => projectService.getProject(options._id)
             .then(project => (project.team || {}).members || []),
+          searchable: true
+        }
+      ],
+      selected,
+      onSelect
+    }, options));
+  },
+
+  selectUser(target, selected, onSelect, options) {
+    Selector.open(extend({
+      target,
+      dataSources: [
+        {
+          name: '人员',
+          data: userService.getUser,
           searchable: true
         }
       ],

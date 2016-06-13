@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import GroupList from './GroupList';
+import {GroupList} from './common';
 import MyTaskStore from '../stores/MyTaskStore';
 import MyTaskActions from '../actions/MyTaskActions';
 import QuickAdd from './QuickAdd';
