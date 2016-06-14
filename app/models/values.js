@@ -9,7 +9,7 @@ export const taskTreat = {
 
 export const myTaskFilters = [
   {
-    query: 'uncompleted', name: '按处理优先级', 
+    query: 'uncompleted', name: '按处理优先级',
     grouper: 'treat', groupConfig: taskTreat
   },
   {
@@ -26,7 +26,7 @@ export const myTaskFilters = [
 
 export const taskFilters = [
   {
-    query: 'uncompleted', name: '按处理优先级', 
+    query: 'uncompleted', name: '按处理优先级',
     grouper: 'treat', groupConfig: taskTreat
   },
   {
@@ -43,4 +43,9 @@ export const taskFilters = [
   {
     query: 'all', name: '所有任务'
   }
+]
+
+export const taskCalendarFilters = [
+  { query: 'uncompleted', name: '未完成任务' },
+  { query: 'all', name: '所有任务' }
 ]

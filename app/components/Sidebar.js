@@ -48,6 +48,7 @@ class Sidebar extends Component {
               <li key={`sectionItem_${i}_${j}`}>
                 <Link className='section-item' to={item.to} activeClassName='active'>
                   <i className={`glyphicon glyphicon-${item.icon}`} /> {item.label}
+                  {item.actionIcon && <Icon icon={item.actionIcon} onClick={item.onAction} className='action-icon' />}
                 </Link>
               </li>
             )) }

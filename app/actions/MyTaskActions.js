@@ -38,7 +38,7 @@ class MyTaskActions {
     select.selectMenu(target, filter, (newFilter) => {
       this.actions.selectedFilter(newFilter);
       if (filter.query != newFilter.query) {
-        this.actions.getTasks(undefined, newFilter.query);
+        this.actions.getTasks();
       }
     }, {align: 'right', data: myTaskFilters});
   }

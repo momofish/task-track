@@ -33,6 +33,7 @@ class TasksStore {
       header: {
         label: team.name, icon: 'th-large', actionIcon: team._id && 'cog',
         onAction: event => {
+          event.preventDefault();
           opener && opener('team', team);
         },
         key: team._id, data: team
@@ -40,7 +41,11 @@ class TasksStore {
       body: []
     });
     let project2Item = project => ({
-      label: project.name, icon: 'file',
+      label: project.name, icon: 'file', actionIcon: 'cog',
+      onAction: event => {
+        event.preventDefault();
+        opener && opener('project', project);
+      },
       to: `/tasks/projects/${project._id}`,
       key: project._id, data: project
     });

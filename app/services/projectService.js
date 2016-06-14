@@ -1,4 +1,4 @@
-import {get} from './commonService';
+import {get, save} from './commonService';
 
 const resourceUrl = '/api/projects';
 
@@ -13,5 +13,9 @@ export default {
 
   getMyPartProjects() {
     return get(resourceUrl, 'part');
+  },
+
+  saveProject(project) {
+    return save(resourceUrl, project);
   }
 }

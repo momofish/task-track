@@ -72,7 +72,7 @@ function openModal(code, object) {
   else if (code == 'project')
     assign(modalOptions, {
       header: '项目设置',
-      body: <ProjectSetting />
+      body: <ProjectSetting project={object} state={state} />
     });
 
   Modal.open(modalOptions);

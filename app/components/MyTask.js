@@ -15,10 +15,6 @@ class MyTask extends Component {
     this.state = MyTaskStore.getState();
     
     this.onChange = this.onChange.bind(this);
-    this.selectTask = this.selectTask.bind(this);
-    this.addTask = this.addTask.bind(this);
-    this.selectFilter = this.selectFilter.bind(this);
-    this.quickAddSelect = this.quickAddSelect.bind(this);
   }
 
   componentDidMount() {
@@ -77,7 +73,7 @@ class MyTask extends Component {
           <h2>
             <i className='glyphicon glyphicon-tasks' /> {`我${isPart ? '参与' : ''}的任务`} <span className="badge">{this.state.tasks.length}</span>
           </h2>
-          <div className="btn-group pull-right" onClick={this.selectFilter}>
+          <div className="btn-group pull-right" onClick={this.selectFilter.bind(this)}>
             <button type="button" className="btn btn-info" disabled>
               <span className="glyphicon glyphicon-list-alt" />
             </button>
@@ -86,8 +82,8 @@ class MyTask extends Component {
             </button>
           </div>
         </div>
-        {!isPart && <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask} selectors={selectors} />}
-        <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
+        {!isPart && <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} selectors={selectors} />}
+        <GroupList data={this.state.taskGroups} onSelect={this.selectTask.bind(this)} onClickTag={this.clickTag.bind(this)} />
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           MyTaskActions.selectTask();
           updated && MyTaskActions.getTasks();

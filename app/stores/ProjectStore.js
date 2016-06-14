@@ -8,6 +8,7 @@ class ProjectStore {
   constructor() {
     this.bindActions(ProjectActions);
 
+    this.quickAdd = { title: '' };
     this.project = {};
     this.tasks = [];
     this.taskGroups = [];

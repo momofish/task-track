@@ -3,6 +3,7 @@ import {GroupList} from './common';
 import ProjectStore from '../stores/ProjectStore';
 import ProjectActions from '../actions/ProjectActions';
 import TaskDetail from './TaskDetail';
+import QuickAdd from './QuickAdd';
 import {select} from '../utils';
 import {taskTreat} from '../models';
 
@@ -36,8 +37,7 @@ class ProjectTask extends Component {
   }
 
   addTask(quick, form) {
-    let task = { title: quick.title };
-    selectors.forEach(selector => task[selector.key] = quick[selector.key] && selector.idGetter(quick[selector.key]));
+    let task = { title: quick.title, project: this.state.project };
     ProjectActions.addTask(task, form);
   }
 
@@ -78,6 +78,7 @@ class ProjectTask extends Component {
             </button>
           </div>
         </div>
+        <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} />
         <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           ProjectActions.selectTask();

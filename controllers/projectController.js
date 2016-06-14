@@ -25,8 +25,8 @@ module.exports = function (router) {
     Project.findById(id).populate('owner members team').exec(function (err, project) {
       if (err) return next(err);
 
-      if (project.team) {
-        project.team.populate('members', function (err, team) {
+      if (project.project) {
+        project.project.populate('members', function (err, project) {
           if (err) return next(err);
 
           res.send(project);
@@ -45,6 +45,24 @@ module.exports = function (router) {
       if (err) return next(err);
 
       res.sendStatus(204);
+    });
+  })
+
+  router.route('/projects').post(function (req, res, next) {
+    Project.findById(req.body._id, function (err, project) {
+      if (err) return next(err);
+
+      if (!project) {
+        res.sendStatus(500, 'project not found');
+        return;
+      }
+
+      Object.assign(project, req.body);
+      project.save(function (err) {
+        if (err) return next(err);
+
+        res.sendStatus(204);
+      });
     });
   })
 }

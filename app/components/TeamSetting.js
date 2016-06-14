@@ -52,10 +52,10 @@ class TeamSetting extends Component {
 
     return (
       <form className='smart-form' onSubmit={this.handleSubmit.bind(this, team) }>
-        <FormItem label='名称' content={
+        <FormItem label='名称'>
           <input type='text' className='form-control'
             value={team.name} onChange={this.changeEntity.bind(this, team, 'name') } />
-        } />
+        </FormItem>
         <FormItem>
           <SelectableText icon='user' text={owner.name}
             onClick={this.selectUser.bind(this, 'owner') } />
@@ -69,12 +69,12 @@ class TeamSetting extends Component {
               onClick={this.selectUser.bind(this, 'members') } />
           </div>
         </FormItem>
-        <FormItem content={
+        <FormItem>
           <div>
             <button type='submit' className='btn btn-primary btn-sm'>确定</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
-        } />
+        </FormItem>
       </form>
     );
   }

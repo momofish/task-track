@@ -55,6 +55,21 @@ export default {
     }, options));
   },
 
+  selectTeam(target, selected, onSelect, options) {
+    Selector.open(extend({
+      target,
+      dataSources: [
+        {
+          name: '团队',
+          data: teamService.getMyTeams,
+          searchable: true
+        }
+      ],
+      selected,
+      onSelect
+    }, options));
+  },
+
   selectMenu(target, selected, onSelect, options) {
     Selector.open(extend({
       target,
