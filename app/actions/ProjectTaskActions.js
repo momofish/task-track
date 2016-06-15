@@ -1,9 +1,9 @@
 import alt from '../alt';
 import {taskService, projectService} from '../services';
-import {taskFilters} from '../models';
+import {projectTaskFilters} from '../models';
 import {select} from '../utils';
 
-class ProjectActions {
+class ProjectTaskActions {
   constructor() {
     this.generateActions(
       'beforeGetProject',
@@ -24,7 +24,7 @@ class ProjectActions {
   }
 
   getTasks() {
-    let state = this.alt.stores.ProjectStore.state;
+    let state = this.alt.stores.ProjectTaskStore.state;
     taskService.getTasks(state.project._id, state.filter.query)
       .then(tasks => this.actions.getTasksSuccess({tasks}));
   }
@@ -43,9 +43,9 @@ class ProjectActions {
     select.selectMenu(target, filter, (newFilter) => {
       this.actions.selectedFilter(newFilter);
       if (filter.query != newFilter.query) {
-        this.actions.getTasks(undefined, newFilter.query);
+        this.actions.getTasks(undefined);
       }
-    }, {align: 'right', data: taskFilters});
+    }, {align: 'right', data: projectTaskFilters});
   }
   
   updateTaskDetail(task) {
@@ -54,4 +54,4 @@ class ProjectActions {
   }
 }
 
-export default alt.createActions(ProjectActions);
+export default alt.createActions(ProjectTaskActions);

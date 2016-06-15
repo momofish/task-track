@@ -24,9 +24,9 @@ export const myTaskFilters = [
   }
 ]
 
-export const taskFilters = [
+export const projectTaskFilters = [
   {
-    query: 'uncompleted', name: '按处理优先级',
+    query: 'uncompleted', name: '看板视图', mode: 'pad',
     grouper: 'treat', groupConfig: taskTreat
   },
   {

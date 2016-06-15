@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {GroupList} from './common';
-import ProjectStore from '../stores/ProjectStore';
-import ProjectActions from '../actions/ProjectActions';
+import {GroupList, PadList} from './common';
+import Store from '../stores/ProjectTaskStore';
+import Actions from '../actions/ProjectTaskActions';
 import TaskDetail from './TaskDetail';
 import QuickAdd from './QuickAdd';
 import {select} from '../utils';
@@ -12,7 +12,7 @@ const selectors = [{ key: 'project', idGetter: project => project._id, nameGette
 class ProjectTask extends Component {
   constructor(props) {
     super(props);
-    this.state = ProjectStore.getState();
+    this.state = Store.getState();
 
     this.onChange = this.onChange.bind(this);
     this.selectTask = this.selectTask.bind(this);
@@ -20,16 +20,16 @@ class ProjectTask extends Component {
   }
 
   componentDidMount() {
-    ProjectStore.listen(this.onChange);
-    ProjectActions.getProject(this.props.params.id);
+    Store.listen(this.onChange);
+    Actions.getProject(this.props.params.id);
   }
 
   componentWillUnmount() {
-    ProjectStore.unlisten(this.onChange);
+    Store.unlisten(this.onChange);
   }
 
   componentWillReceiveProps(nextProps) {
-    ProjectActions.getProject(nextProps.params.id);
+    Actions.getProject(nextProps.params.id);
   }
 
   onChange(state) {
@@ -38,30 +38,29 @@ class ProjectTask extends Component {
 
   addTask(quick, form) {
     let task = { title: quick.title, project: this.state.project };
-    ProjectActions.addTask(task, form);
+    Actions.addTask(task, form);
   }
 
   selectTask(task, event) {
-    ProjectActions.selectTask(task);
+    Actions.selectTask(task);
   }
 
   clickTag(task, tag, event) {
     event.stopPropagation();
     if (tag.code === 'treat') {
       select.selectMenu(event.currentTarget, tag.data, treat => {
-        ProjectActions.updateTaskDetail({ _id: task._id, treat: treat.key });
+        Actions.updateTaskDetail({ _id: task._id, treat: treat.key });
       }, { align: 'right', data: taskTreat });
     }
   }
 
   selectFilter(event) {
-    ProjectActions.selectFilter(event.currentTarget, this.state.filter);
+    Actions.selectFilter(event.currentTarget, this.state.filter);
   }
 
   render() {
-    let project = this.state.project;
-    let tasks = this.state.tasks;
-    let selectedTask = this.state.selectedTask;
+    let {project, tasks, selectedTask, filter, quickAdd, taskGroups} = this.state;
+
     return (
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
@@ -74,15 +73,18 @@ class ProjectTask extends Component {
               <span className="glyphicon glyphicon-list-alt" />
             </button>
             <button type="button" className="btn btn-default" style={{ width: 180 }}>
-              {this.state.filter.name} <i className="caret" />
+              {filter.name} <i className="caret" />
             </button>
           </div>
         </div>
-        <QuickAdd data={this.state.quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} />
-        <GroupList data={this.state.taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
+        <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } />
+        {filter.mode == 'pad' ?
+          <PadList  data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} /> :
+          <GroupList data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
+        }
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
-          ProjectActions.selectTask();
-          updated && ProjectActions.getTasks();
+          Actions.selectTask();
+          updated && Actions.getTasks();
         } } />}
       </div>
     );

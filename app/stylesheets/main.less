@@ -78,6 +78,10 @@ body {
   flex: 1;
   overflow-y: auto;
 }
+.flex-hscroll {
+  flex: 1;
+  overflow-x: auto;
+}
 
 /* fix */
 .glyphicon {
@@ -124,7 +128,15 @@ body {
 
 /* tool */
 .tag {
+  border-radius: 2px;
+  padding: 4px 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  margin-left: 8px;
   color: #fff;
+}
+.tag:first-of-type {
+  margin-left: 0;
 }
 .tag.tag-success {
   background-color: #76b480;
@@ -304,21 +316,22 @@ body {
   color: #b9b9b9;
 }
 
-/* entry list */
-.entry-group {
+/* group list */
+.group-list {
   font-size: 16px;
   font-weight: 200;
   line-height: 20px;
   padding: 12px 0;
 }
-.group-header {
+.group-list .group-header {
   padding: 5px 0;
 }
-.group-body {
+.group-list .group-body {
   list-style-type: none;
+  font-size: 15px;
   padding: 0;
 }
-.entry-item {
+.group-list .group-item {
   display: flex;
   align-items: center;
   padding: 8px;
@@ -326,21 +339,42 @@ body {
   border-left: solid 2px #fff;
   cursor: pointer;
 }
-.entry-item:hover {
+.group-list .group-item:hover {
   background: #f6f8f8;
   border-left-color: #7266bb;
 }
-.entry-title {
+.group-list .item-title {
   flex: 1;
   line-height: 30px;
   white-space: nowrap;
 }
-.entry-tags > span {
-  border-radius: 2px;
-  padding: 4px 6px;
-  font-size: 13px;
-  white-space: nowrap;
-  margin-left: 8px;
+
+/*pad list*/
+.pad-list {
+  font-size: 16px;
+  line-height: 2;
+  width: 280px;
+  min-width: 280px;
+  padding-right: 16px;
+}
+.pad-list .pad-wrap {
+  border-radius: 3px;
+  background: #f4f4f4;
+  padding: 10px;
+}
+.pad-list .pad-header {
+  display: block;
+}
+.pad-list .pad-body {
+  list-style-type: none;
+  font-size: 14px;
+  padding: 0;
+}
+.pad-list .pad-item {
+  background: #fbfbfb;
+  padding: 5px;
+  margin-bottom: 6px;
+  cursor: pointer;
 }
 
 /*form*/

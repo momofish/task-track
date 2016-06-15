@@ -6,12 +6,6 @@ class GroupList extends Component {
     super(props);
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
   handleSelect(item, event) {
     this.props.onSelect(...arguments);
   }
@@ -33,22 +27,22 @@ class GroupList extends Component {
     return (
       <div className='flex-scroll'>
         {groups.map((group, i) => (
-          <div className='entry-group' key={`group_${i}`}>
+          <div className='group-list' key={`${i}`}>
             <a className='group-header' data-toggle='collapse'
               onClick={this.handleCollapse.bind(this, group) }
-              href={`.entry-group:nth-child(${i + 1}) > .group-body`}>
+              href={`.group-list:nth-child(${i + 1}) > .group-body`}>
               <i className={`glyphicon glyphicon-triangle-${group.collapsed ? 'right' : 'bottom'}`} /> {group.header.label + ` (${group.body.length})`}
             </a>
             <ul className={`group-body collapse ${!group.collapsed ? 'in' : ''}`}>
               {group.body.map((item, j) => (
-                <li className='entry-item' key={`entry_${i}_${j}`}
+                <li className='group-item' key={`${j}`}
                   onClick={this.handleSelect.bind(this, item.data) }>
-                  <span className={classnames('entry-title', { completed: item.completed }) }>
+                  <span className={classnames('item-title', { completed: item.completed }) }>
                     {item.label}
                   </span>
-                  <div className='entry-tags'>
+                  <div className='item-tags'>
                     {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (
-                      <span key={`tag-${k}`} className={`tag tag-${tag.style}`}
+                      <span key={`${k}`} className={`tag tag-${tag.style}`}
                         onClick={this.handleClickTag.bind(this, item.data, tag) }>
                         {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
                         {tag.label}

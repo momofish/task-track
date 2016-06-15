@@ -6,8 +6,9 @@ import Icon from './Icon';
 import Modal from './Modal';
 import Overlay from './Overlay';
 import PopBox from './PopBox';
+import PadList from './PadList';
 import SelectableText from './SelectableText';
 import Selector from './Selector';
 
 export {DatePicker, EditableText, FormItem, GroupList,
-Icon, Modal, Overlay, PopBox, SelectableText, Selector};
+Icon, Modal, Overlay, PopBox, PadList, SelectableText, Selector};
