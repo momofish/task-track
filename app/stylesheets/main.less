@@ -61,9 +61,6 @@ body {
   display: flex;
   flex: 1;
 }
-.app-container {
-  min-width: 600px;
-}
 .flex {
   display: flex;
   flex: 1;
@@ -79,8 +76,17 @@ body {
   overflow-y: auto;
 }
 .flex-hscroll {
+  position: relative;
   flex: 1;
   overflow-x: auto;
+}
+.scroll-container{
+  position: absolute;
+  top: 0;
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  white-space: nowrap;
 }
 
 /* fix */
@@ -351,16 +357,22 @@ body {
 
 /*pad list*/
 .pad-list {
+  display: inline-block;
   font-size: 16px;
   line-height: 2;
   width: 280px;
-  min-width: 280px;
+  height: 100%;
   padding-right: 16px;
+}
+.pad-list:last-of-type {
+  padding-right: 0px;
 }
 .pad-list .pad-wrap {
   border-radius: 3px;
   background: #f4f4f4;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 .pad-list .pad-header {
   display: block;
