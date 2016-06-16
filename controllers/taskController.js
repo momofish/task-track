@@ -17,7 +17,7 @@ module.exports = function (router) {
       params.completed = false;
     else if (filter == 'completed')
       params.completed = true;
-    Task.find(params).populate('owner project').exec(function (err, tasks) {
+    Task.find(params).populate('owner project', 'name').exec(function (err, tasks) {
       if (err) return next(err);
 
       res.send(tasks);
@@ -27,7 +27,7 @@ module.exports = function (router) {
   router.route('/tasks/:id').get(function (req, res, next) {
     var user = req.user;
     var id = req.params.id;
-    Task.findById(id).populate('owner members project').exec(function (err, task) {
+    Task.findById(id).populate('owner members project', 'name').exec(function (err, task) {
       if (err) return next(err);
 
       res.send(task);

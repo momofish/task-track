@@ -12,7 +12,7 @@ module.exports = function(router) {
   
   router.route('/users/:id').get(function (req, res, next) {
     var id = req.params.id;
-    User.findById(id).populate('dept').exec(function(err, user) {
+    User.findById(id).populate('dept', 'name').exec(function(err, user) {
       if (err) return next(err);
 
       res.send(user);
