@@ -9,6 +9,10 @@ export const taskTreat = {
 
 export const myTaskFilters = [
   {
+    query: 'uncompleted', name: '看板视图', mode: 'pad',
+    grouper: 'treat', groupConfig: taskTreat
+  },
+  {
     query: 'uncompleted', name: '按处理优先级',
     grouper: 'treat', groupConfig: taskTreat
   },

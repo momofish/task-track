@@ -6,7 +6,7 @@ module.exports = function (router) {
     var user = req.user;
     var category = req.params.category;
     var filter = req.params.filter;
-    var params = { };
+    var params = {};
     if (category == 'my')
       params.owner = user._id;
     else if (category == 'part')
@@ -17,7 +17,7 @@ module.exports = function (router) {
       params.completed = false;
     else if (filter == 'completed')
       params.completed = true;
-    Task.find(params).populate('owner project').exec(function (err, tasks) {
+    Task.find(params).populate('owner project', 'name').exec(function (err, tasks) {
       if (err) return next(err);
 
       res.send(tasks);
@@ -27,7 +27,7 @@ module.exports = function (router) {
   router.route('/tasks/:id').get(function (req, res, next) {
     var user = req.user;
     var id = req.params.id;
-    Task.findById(id).populate('owner members project').exec(function (err, task) {
+    Task.findById(id).populate('owner members project', 'name').exec(function (err, task) {
       if (err) return next(err);
 
       res.send(task);
@@ -37,8 +37,10 @@ module.exports = function (router) {
   router.route('/tasks').put(function (req, res, next) {
     var user = req.user;
     var task = new Task(req.body);
-    task.owner = user._id;
-    task.members = [user._id];
+    if (!task.owner)
+      task.owner = user._id;
+    if (!task.members)
+      task.members = [user._id];
     task.save(function (err) {
       if (err) return next(err);
 

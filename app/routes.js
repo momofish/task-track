@@ -1,7 +1,6 @@
 import React from 'react';
 import {Route, IndexRedirect} from 'react-router';
 import App from './components/App';
-import Home from './components/Home';
 import Tasks from './components/Tasks';
 import MyTask from './components/MyTask';
 import Calendar from './components/Calendar';

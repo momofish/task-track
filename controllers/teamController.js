@@ -4,7 +4,7 @@ var Team = require("../models").Team;
 module.exports = function (router) {
   router.route('/teams/my').get(function (req, res, next) {
     var user = req.user;
-    Team.find({ owner: user._id }).populate('owner')
+    Team.find({ owner: user._id }).populate('owner', 'name')
       .exec(function (err, teams) {
         if (err) return next(err);
 
@@ -14,7 +14,7 @@ module.exports = function (router) {
 
   router.route('/teams/part').get(function (req, res, next) {
     var user = req.user;
-    Team.where('members').in([user._id]).populate('owner')
+    Team.where('members').in([user._id]).populate('owner', 'name')
       .exec(function (err, teams) {
         if (err) return next(err);
 
@@ -24,7 +24,7 @@ module.exports = function (router) {
 
   router.route('/teams/:id').get(function (req, res, next) {
     var id = req.params.id;
-    Team.findById(id).populate('owner members')
+    Team.findById(id).populate('owner members', 'name')
       .exec(function (err, team) {
         if (err) return next(err);
 

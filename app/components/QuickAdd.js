@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {select} from '../utils';
+import {assign} from 'underscore';
 
 class QuickAdd extends Component {
   constructor(props) {
@@ -8,12 +9,6 @@ class QuickAdd extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,7 +33,7 @@ class QuickAdd extends Component {
     select[selector.type](event.currentTarget, this.state[selector.key], selection => {
       this.state[selector.key] = selection;
       this.forceUpdate();
-    }, {align: 'right'});
+    }, assign({align: 'right'}, selector.options));
   }
 
   render() {

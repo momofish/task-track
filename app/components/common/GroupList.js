@@ -41,7 +41,7 @@ class GroupList extends Component {
                     {item.label}
                   </span>
                   <div className='item-tags'>
-                    {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (
+                    {item.tags.filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
                       <span key={`${k}`} className={`tag tag-${tag.style}`}
                         onClick={this.handleClickTag.bind(this, item.data, tag) }>
                         {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
