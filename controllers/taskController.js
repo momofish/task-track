@@ -6,7 +6,7 @@ module.exports = function (router) {
     var user = req.user;
     var category = req.params.category;
     var filter = req.params.filter;
-    var params = { };
+    var params = {};
     if (category == 'my')
       params.owner = user._id;
     else if (category == 'part')
@@ -37,8 +37,10 @@ module.exports = function (router) {
   router.route('/tasks').put(function (req, res, next) {
     var user = req.user;
     var task = new Task(req.body);
-    task.owner = user._id;
-    task.members = [user._id];
+    if (!task.owner)
+      task.owner = user._id;
+    if (!task.members)
+      task.members = [user._id];
     task.save(function (err) {
       if (err) return next(err);
 

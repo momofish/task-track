@@ -25,8 +25,8 @@ module.exports = function (router) {
     Project.findById(id).populate('owner members team').exec(function (err, project) {
       if (err) return next(err);
 
-      if (project.project) {
-        project.project.populate('members', function (err, project) {
+      if (project.team) {
+        project.team.populate('members', function (err, team) {
           if (err) return next(err);
 
           res.send(project);
@@ -40,7 +40,7 @@ module.exports = function (router) {
   router.route('/projects').put(function (req, res, next) {
     var user = req.user;
     var project = new Project(req.body);
-    project.owner = user._id;
+    project.owner = req.body.owner || user._id;
     project.save(function (err) {
       if (err) return next(err);
 

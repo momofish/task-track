@@ -1,5 +1,6 @@
 import {Selector, DatePicker} from '../components/common';
 import {projectService, teamService, userService} from '../services';
+import moment from 'moment';
 import {extend} from 'underscore';
 
 export default {
@@ -87,7 +88,7 @@ export default {
   selectDate(target, selected, onSelect, options) {
     DatePicker.open(extend({
       target,
-      selected,
+      selected: moment(selected),
       onSelect
     }, options));
   }

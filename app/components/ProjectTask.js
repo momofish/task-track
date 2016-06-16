@@ -7,8 +7,6 @@ import QuickAdd from './QuickAdd';
 import {select} from '../utils';
 import {taskTreat} from '../models';
 
-const selectors = [{ key: 'project', idGetter: project => project._id, nameGetter: project => project.name, type: 'selectProject', label: '选择项目' }];
-
 class ProjectTask extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +35,7 @@ class ProjectTask extends Component {
   }
 
   addTask(quick, form) {
-    let task = { title: quick.title, project: this.state.project };
+    let task = { title: quick.title, owner: quick.owner, project: this.state.project };
     Actions.addTask(task, form);
   }
 
@@ -52,6 +50,16 @@ class ProjectTask extends Component {
         Actions.updateTaskDetail({ _id: task._id, treat: treat.key });
       }, { align: 'right', data: taskTreat });
     }
+    else if (tag.code === 'dueDate') {
+      select.selectDate(event.currentTarget, tag.data, dueDate => {
+        Actions.updateTaskDetail({ _id: task._id, dueDate });
+      });
+    }
+    else if (tag.code === 'owner') {
+      select.selectMember(event.currentTarget, tag.data, owner => {
+        Actions.updateTaskDetail({ _id: task._id, owner });
+      }, { _id: task.project._id });
+    }
   }
 
   selectFilter(event) {
@@ -60,6 +68,14 @@ class ProjectTask extends Component {
 
   render() {
     let {project, tasks, selectedTask, filter, quickAdd, taskGroups} = this.state;
+
+    const selectors = [{
+      key: 'owner',
+      idGetter: owner => owner._id,
+      nameGetter: owner => owner.name,
+      type: 'selectMember', label: '负责人',
+      options: {_id: project._id}
+    }];
 
     return (
       <div className='container-fluid flex flex-verticle'>
@@ -77,10 +93,10 @@ class ProjectTask extends Component {
             </button>
           </div>
         </div>
-        <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } />
+        <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } selectors={selectors} />
         {filter.mode == 'pad' ?
-          <PadList  data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} /> :
-          <GroupList data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag} />
+          <PadList  data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this) } /> :
+          <GroupList data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this) } />
         }
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           Actions.selectTask();
