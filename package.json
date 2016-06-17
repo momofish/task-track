@@ -36,6 +36,7 @@
     "morgan": "^1.6.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "promise": "^7.1.1",
     "react": "^0.14.2",
     "react-big-calendar": "^0.10.2",
     "react-date-range": "^0.2.4",
