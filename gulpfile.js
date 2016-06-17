@@ -61,15 +61,13 @@ gulp.task('browserify-vendor', function() {
  |--------------------------------------------------------------------------
  */
 gulp.task('browserify', ['browserify-vendor'], function() {
-  return browserify({ entries: 'app/main.js', debug: true })
+  return browserify({ entries: 'app/main.js', debug: false })
     .external(dependencies)
     .transform(babelify, { presets: ['es2015', 'react'] })
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(gulpif(production, uglify({ mangle: false })))
-    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/js'));
 });
 
