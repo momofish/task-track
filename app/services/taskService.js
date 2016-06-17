@@ -1,39 +1,21 @@
+import {get, put, post} from './commonService';
+
 const resourceUrl = '/api/tasks';
 
 export default {
   getTasks(category, filter) {
-    return new Promise((resolve, reject) =>
-      $.ajax({
-        url: `${resourceUrl}/${category}/${filter}`, contentType: 'application/json',
-        success: resolve, error: reject
-      })
-    );
+    return get(resourceUrl, `${category}/${filter}`);
   },
 
   getTaskDetail(id) {
-    return new Promise((resolve, reject) =>
-      $.ajax({
-        url: `${resourceUrl}/${id}`, contentType: 'application/json',
-        success: resolve, error: reject
-      })
-    );
+    return get(resourceUrl, id);
   },
 
   addTask(task) {
-    return new Promise((resolve, reject) =>
-      $.ajax({
-        url: resourceUrl, type: 'PUT', contentType: 'application/json',
-        data: JSON.stringify(task), success: resolve, error: reject
-      })
-    );
+    return put(resourceUrl, task);
   },
 
   updateTask(task) {
-    return new Promise((resolve, reject) =>
-      $.ajax({
-        url: resourceUrl, type: 'POST', contentType: 'application/json',
-        data: JSON.stringify(task), success: resolve, error: reject
-      })
-    );
+    return post(resourceUrl, task);
   }
 }

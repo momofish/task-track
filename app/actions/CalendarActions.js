@@ -1,4 +1,5 @@
 import alt from '../alt';
+import CalendarStore from '../stores/CalendarStore';
 import {taskService} from '../services';
 import {taskCalendarFilters} from '../models';
 import {select} from '../utils';
@@ -22,7 +23,7 @@ class CalendarActions {
   }
 
   getTasks() {
-    let state = alt.stores.CalendarStore.state;
+    let state = CalendarStore.state;
 
     taskService.getTasks(state.category, state.filter.query)
       .then(tasks => this.actions.getTasksSuccess(tasks));

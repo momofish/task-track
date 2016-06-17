@@ -1,5 +1,6 @@
 import alt from '../alt';
 import {taskService, projectService} from '../services';
+import ProjectTaskStore from '../stores/ProjectTaskStore'
 import {projectTaskFilters} from '../models';
 import {select} from '../utils';
 
@@ -24,7 +25,7 @@ class ProjectTaskActions {
   }
 
   getTasks() {
-    let state = this.alt.stores.ProjectTaskStore.state;
+    let state = ProjectTaskStore.state;
     taskService.getTasks(state.project._id, state.filter.query)
       .then(tasks => this.actions.getTasksSuccess({tasks}));
   }

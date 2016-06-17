@@ -1,4 +1,5 @@
 import alt from '../alt';
+import MyTaskStore from '../stores/MyTaskStore'
 import {taskService} from '../services';
 import {myTaskFilters} from '../models';
 import {select} from '../utils';
@@ -19,7 +20,7 @@ class MyTaskActions {
     if (category != null)
       this.actions.beforeGetTasks(category);
 
-    let state = alt.stores.MyTaskStore.state;
+    let state = MyTaskStore.state;
     taskService.getTasks(state.category, state.filter.query)
       .then(tasks => this.actions.getTasksSuccess(tasks));
   }
