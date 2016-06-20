@@ -54,7 +54,7 @@ class TasksStore {
       let teamId = item.data.team && item.data.team._id;
       let section = _.find(sections, section => section.header.key == teamId);
       if (!section) {
-        section = team2Section({ name: '未指派团队' });
+        section = team2Section(item.data.team || { name: '未指派团队' });
         sections.push(section);
       }
       section.body.push(item);

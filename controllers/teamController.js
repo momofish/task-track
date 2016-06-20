@@ -14,7 +14,12 @@ module.exports = function (router) {
 
   router.route('/teams/part').get(function (req, res, next) {
     var user = req.user;
-    Team.where('members').in([user._id]).populate('owner', 'name')
+    Team.find({
+      $or: [
+        { owner: user._id },
+        { members: { $in: [user._id] } }
+      ]
+    }).populate('owner', 'name')
       .exec(function (err, teams) {
         if (err) return next(err);
 

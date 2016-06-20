@@ -13,7 +13,12 @@ module.exports = function (router) {
 
   router.route('/projects/part').get(function (req, res, next) {
     var user = req.user;
-    Project.where('members').in([user._id]).populate('owner members team', 'name').exec(function (err, projects) {
+    Project.find({
+      $or: [
+        { owner: user._id },
+        { members: { $in: [user._id] } }
+      ]
+    }).populate('owner members team', 'name').exec(function (err, projects) {
       if (err) return next(err);
 
       res.send(projects);

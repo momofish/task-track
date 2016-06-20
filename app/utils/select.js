@@ -62,7 +62,7 @@ export default {
       dataSources: [
         {
           name: '团队',
-          data: teamService.getMyTeams,
+          data: teamService.getMyPartTeams,
           searchable: true
         }
       ],

@@ -121,7 +121,7 @@ class Selector extends Component {
           <ul className='selector-list'>
             {(items && items.length) ? items
               .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
-              .slice(0, 10)
+              .slice(0, 5)
               .map((item, i) => {
                 let isSelected = this.getSelected(item, selecting) != null;
                 return (<li key={`i${i}`} className={isSelected ? 'active' : null}>
