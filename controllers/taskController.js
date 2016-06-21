@@ -34,35 +34,35 @@ module.exports = function (router) {
     });
   });
 
-  router.route('/tasks').put(function (req, res, next) {
-    var user = req.user;
-    var task = new Task(req.body);
-    if (!task.owner)
-      task.owner = user._id;
-    if (!task.members)
-      task.members = [user._id];
-    task.save(function (err) {
-      if (err) return next(err);
-
-      res.sendStatus(204);
-    });
-  })
-
-  router.route('/tasks').post(function (req, res, next) {
-    Task.findById(req.body._id, function (err, task) {
-      if (err) return next(err);
-
-      if (!task) {
-        res.sendStatus(500, 'task not found');
-        return;
-      }
-
-      Object.assign(task, req.body);
+  router.route('/tasks')
+    .put(function (req, res, next) {
+      var user = req.user;
+      var task = new Task(req.body);
+      if (!task.owner)
+        task.owner = user._id;
+      if (!task.members)
+        task.members = [user._id];
       task.save(function (err) {
         if (err) return next(err);
 
         res.sendStatus(204);
       });
-    });
-  })
+    })
+    .post(function (req, res, next) {
+      Task.findById(req.body._id, function (err, task) {
+        if (err) return next(err);
+
+        if (!task) {
+          res.sendStatus(500, 'task not found');
+          return;
+        }
+
+        Object.assign(task, req.body);
+        task.save(function (err) {
+          if (err) return next(err);
+
+          res.sendStatus(204);
+        });
+      });
+    })
 }

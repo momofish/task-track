@@ -1,3 +1,4 @@
+// Module dependencies.
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -10,49 +11,52 @@ var React = require('react');
 var ReactDOM = require('react-dom/server');
 var Router = require('react-router');
 var swig = require('swig');
-
+var flash = require('connect-flash');
 var config = require('./config');
 var models = require('./models');
 var authenticate = require('./middlewares/authenticate');
 
-var app = express();
+// production config
 var production = process.env.NODE_ENV === 'production';
 
+// express
+var app = express();
 
 // mongoose init
 mongoose.connect(config.database);
-mongoose.connection.on('error', function() {
-  console.info('Error: Could not connect to MongoDB. Did you forget to run `mongod`?'.red);
+mongoose.connection.on('error', function () {
+  console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+  process.exit(1);
 });
-
 
 // passport
 passport.use(new Strategy(
-  function(loginId, password, next) {
-    models.User.findOne({loginId: loginId}, function(err, user) {
-      if (err) { return next(err); }
-      if (!user) { return next(null, false); }
-      if (user.password != password) { return next(null, false); }
-      
-      return next(null, user);
+  function (loginId, password, done) {
+    models.User.findOne({ loginId: loginId }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false, { msg: 'user not found' }); }
+      if (user.password != password) { return done(null, false, { msg: 'invalid password' }); }
+
+      return done(null, user);
     });
   }));
-  
-passport.serializeUser(function(user, next) {
-  next(null, user._id);
+
+passport.serializeUser(function (user, done) {
+  done(null, user._id);
 });
 
-passport.deserializeUser(function(req, id, next) {
-  if(req.session.user) {
-    next(null, req.session.user);
+passport.deserializeUser(function (req, id, done) {
+  var user = req.session.user;
+  if (user && user._id == id) {
+    done(null, req.session.user);
     return;
   }
-  
+
   models.User.findById(id, function (err, user) {
-    if (err) { return next(err); }
-    
+    if (err) { return done(err); }
+
     req.session.user = user;
-    next(null, user);
+    done(null, user);
   });
 });
 
@@ -70,27 +74,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // router
 require('./controllers')(app);
 
-app.get('/login', function(req, res) {
-  res.render('login');
+app.get('/login', function (req, res) {
+  res.render('login', { error: req.flash('error') });
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect('/');
-});
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: 'login failed'
+}));
 
-app.get('/logout', function(req, res) {
+app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
 
-app.use(authenticate.ensureLoggedIn(), function(req, res) {
+app.use(authenticate.ensureLoggedIn(), function (req, res) {
   if (config.disableServerRender) {
     res.render('index');
     return;
@@ -100,7 +106,7 @@ app.use(authenticate.ensureLoggedIn(), function(req, res) {
   require('babel-register');
   var routes = require('./app/routes');
 
-  Router.match({ routes: routes.default, location: req.url }, function(err, redirectLocation, renderProps) {
+  Router.match({ routes: routes.default, location: req.url }, function (err, redirectLocation, renderProps) {
     if (err) {
       res.status(500).send(err.message)
     } else if (redirectLocation) {
@@ -108,15 +114,16 @@ app.use(authenticate.ensureLoggedIn(), function(req, res) {
     } else if (renderProps) {
       renderProps.params.user = req.user;
       var html = ReactDOM.renderToString(React.createElement(Router.RoutingContext, renderProps));
-      var page = swig.renderFile('views/index.html', { html: html });
-      res.status(200).send(page);
+      // var page = swig.renderFile('views/index.html', { html: html });
+      // res.status(200).send(page);
+      res.render('index', { html: html })
     } else {
       res.status(404).send('Page Not Found')
     }
   });
 });
 
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   console.log(err.stack.red);
   res.status(err.status || 500);
   res.send({ message: err.message });
@@ -129,17 +136,17 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var onlineUsers = 0;
 
-io.sockets.on('connection', function(socket) {
+io.sockets.on('connection', function (socket) {
   onlineUsers++;
 
   io.sockets.emit('onlineUsers', { onlineUsers: onlineUsers });
 
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function () {
     onlineUsers--;
     io.sockets.emit('onlineUsers', { onlineUsers: onlineUsers });
   });
 });
 
-server.listen(app.get('port'), function() {
+server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
