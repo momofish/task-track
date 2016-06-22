@@ -3,7 +3,9 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var Strategy = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
+var OAuth2Strategy = require('passport-oauth2').Strategy;
+var OpenIDStrategy = require('passport-openid').Strategy;
 var colors = require('colors');
 var mongoose = require('mongoose');
 var request = require('request');
@@ -16,7 +18,10 @@ var config = require('./config');
 var models = require('./models');
 var authenticate = require('./middlewares/authenticate');
 
-// production config
+// global config
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+// global vars
 var production = process.env.NODE_ENV === 'production';
 
 // express
@@ -30,7 +35,7 @@ mongoose.connection.on('error', function () {
 });
 
 // passport
-passport.use(new Strategy(
+passport.use(new LocalStrategy(
   function (loginId, password, done) {
     models.User.findOne({ loginId: loginId }, function (err, user) {
       if (err) { return done(err); }
@@ -40,6 +45,32 @@ passport.use(new Strategy(
       return done(null, user);
     });
   }));
+
+passport.use(new OAuth2Strategy({
+  authorizationURL: 'https://link.bingocc.cc:8080/sso/oauth/2/authorize',
+  tokenURL: 'https://link.bingocc.cc:8080/sso/oauth/2/token',
+  clientID: 'clientId',
+  clientSecret: 'clientSecret',
+  callbackURL: "http://localhost:4000/oauth/callback",
+  passReqToCallback: true,
+  scope: 'read'
+},
+  function (req, accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    done(null, profile);
+  }
+));
+
+passport.use(new OpenIDStrategy({
+    apiKey: process.env.STEAM_KEY,
+    providerURL: 'https://link.bingocc.cc:8080/sso',
+    returnURL: 'http://localhost:4000/auth/openid/return',
+    realm: 'http://localhost:3000/'
+  },
+  function(identifier, done) {
+    done(null, {});
+  }
+));
 
 passport.serializeUser(function (user, done) {
   done(null, user._id);
@@ -59,7 +90,6 @@ passport.deserializeUser(function (req, id, done) {
     done(null, user);
   });
 });
-
 
 // server config
 app.set('port', process.env.PORT || 4000);
@@ -95,6 +125,16 @@ app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
+
+app.get('/auth/oauth', passport.authenticate('oauth2'));
+app.get('/auth/oauth/callback', passport.authenticate('oauth2', {
+  successRedirect: '/', failureRedirect: '/login'
+}));
+
+app.get('/auth/openid', passport.authenticate('openid'));
+app.get('/auth/openid/return', passport.authenticate('openid', {
+  successRedirect: '/', failureRedirect: '/login'
+}));
 
 app.use(authenticate.ensureLoggedIn(), function (req, res) {
   if (config.disableServerRender) {
