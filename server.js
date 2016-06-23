@@ -4,8 +4,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var OAuth2Strategy = require('passport-oauth2').Strategy;
-var OpenIDStrategy = require('passport-openid').Strategy;
 var colors = require('colors');
 var mongoose = require('mongoose');
 var request = require('request');
@@ -17,6 +15,7 @@ var flash = require('connect-flash');
 var config = require('./config');
 var models = require('./models');
 var authenticate = require('./middlewares/authenticate');
+var OAuth2Strategy = require('./libs/passport-bingo').Strategy;
 
 // global config
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -28,7 +27,7 @@ var production = process.env.NODE_ENV === 'production';
 var app = express();
 
 // mongoose init
-mongoose.connect(config.database);
+mongoose.connect(config.mongoUri);
 mongoose.connection.on('error', function () {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
   process.exit(1);
@@ -47,13 +46,9 @@ passport.use(new LocalStrategy(
   }));
 
 passport.use(new OAuth2Strategy({
-  authorizationURL: 'https://link.bingocc.cc:8080/sso/oauth/2/authorize',
-  tokenURL: 'https://link.bingocc.cc:8080/sso/oauth/2/token',
-  clientID: 'clientId',
-  clientSecret: 'clientSecret',
-  callbackURL: "http://localhost:4000/auth/oauth/callback",
-  passReqToCallback: true,
-  scope: 'read'
+  baseURL: config.ssoUri,
+  callbackURL: config.siteURL + '/auth/oauth/callback',
+  passReqToCallback: true
 },
   function (req, accessToken, refreshToken, profile, done) {
     console.log(profile);
@@ -61,29 +56,18 @@ passport.use(new OAuth2Strategy({
   }
 ));
 
-passport.use(new OpenIDStrategy({
-    apiKey: process.env.STEAM_KEY,
-    providerURL: 'https://link.bingocc.cc:8080/sso',
-    returnURL: 'http://localhost:4000/auth/openid/return',
-    realm: 'http://localhost:3000/'
-  },
-  function(identifier, done) {
-    done(null, {});
-  }
-));
-
 passport.serializeUser(function (user, done) {
-  done(null, user._id);
+  done(null, user);
 });
 
-passport.deserializeUser(function (req, id, done) {
+passport.deserializeUser(function (req, authUser, done) {
   var user = req.session.user;
-  if (user && user._id == id) {
+  if (user && user.loginId == authUser.loginId) {
     done(null, req.session.user);
     return;
   }
 
-  models.User.findById(id, function (err, user) {
+  models.User.find({ loginId: authUser.loginId }, function (err, user) {
     if (err) { return done(err); }
 
     req.session.user = user;
@@ -126,17 +110,12 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
-app.get('/auth/oauth', passport.authenticate('oauth2'));
-app.get('/auth/oauth/callback', passport.authenticate('oauth2', {
+app.get('/auth/oauth', passport.authenticate('bingo'));
+app.get('/auth/oauth/callback', passport.authenticate('bingo', {
   successRedirect: '/', failureRedirect: '/login'
 }));
 
-app.get('/auth/openid', passport.authenticate('openid'));
-app.get('/auth/openid/return', passport.authenticate('openid', {
-  successRedirect: '/', failureRedirect: '/login'
-}));
-
-app.use(authenticate.ensureLoggedIn(), function (req, res) {
+app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginUrl }), function (req, res) {
   if (config.disableServerRender) {
     res.render('index');
     return;
@@ -154,8 +133,6 @@ app.use(authenticate.ensureLoggedIn(), function (req, res) {
     } else if (renderProps) {
       renderProps.params.user = req.user;
       var html = ReactDOM.renderToString(React.createElement(Router.RoutingContext, renderProps));
-      // var page = swig.renderFile('views/index.html', { html: html });
-      // res.status(200).send(page);
       res.render('index', { html: html })
     } else {
       res.status(404).send('Page Not Found')
