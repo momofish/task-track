@@ -51,7 +51,7 @@ passport.use(new OAuth2Strategy({
   tokenURL: 'https://link.bingocc.cc:8080/sso/oauth/2/token',
   clientID: 'clientId',
   clientSecret: 'clientSecret',
-  callbackURL: "http://localhost:4000/oauth/callback",
+  callbackURL: "http://localhost:4000/auth/oauth/callback",
   passReqToCallback: true,
   scope: 'read'
 },
