@@ -51,7 +51,6 @@ passport.use(new OAuth2Strategy({
   passReqToCallback: true
 },
   function (req, accessToken, refreshToken, profile, done) {
-    console.log(profile);
     done(null, profile);
   }
 ));
@@ -115,7 +114,7 @@ app.get('/auth/oauth/callback', passport.authenticate('bingo', {
   successRedirect: '/', failureRedirect: '/login'
 }));
 
-app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginUrl }), function (req, res) {
+app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginPath }), function (req, res) {
   if (config.disableServerRender) {
     res.render('index');
     return;
