@@ -68,7 +68,7 @@ passport.deserializeUser(function (req, authUser, done) {
     return;
   }
 
-  models.User.find({ loginId: authUser.loginId }, function (err, user) {
+  models.User.findOne({ loginId: authUser.loginId }, function (err, user) {
     if (err) { return done(err); }
 
     req.session.user = user;
@@ -119,7 +119,7 @@ app.get('/logout', function (req, res) {
 
 app.get('/auth/oauth', passport.authenticate('bingo'));
 app.get('/auth/oauth/callback', passport.authenticate('bingo', {
-  successRedirect: '/', failureRedirect: '/login'
+  successRedirect: '/', failureRedirect: '/auth/oauth'
 }));
 
 app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginPath }), function (req, res) {
