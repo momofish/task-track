@@ -1,6 +1,8 @@
 // Module dependencies.
 var path = require('path');
 var express = require('express');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -84,7 +86,13 @@ if (!production) app.use(require('morgan')('dev'));
 app.use(require('cookie-parser')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
+app.use(session({
+  secret: 'working', resave: false, saveUninitialized: false,
+  store: new MongoStore({
+    url: config.mongoUri,
+    autoReconnect: true
+  })
+}));
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
