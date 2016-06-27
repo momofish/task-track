@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class componentName extends Component {
+class FormItem extends Component {
   render() {
     let {label, content, className} = this.props;
 
@@ -20,4 +20,4 @@ class componentName extends Component {
   }
 }
 
-export default componentName;
+export default FormItem;

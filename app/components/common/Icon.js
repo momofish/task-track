@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 
 class Icon extends Component {
   render() {
-    let {icon, onClick, className} = this.props;
+    let {icon, tooltip, onClick, className} = this.props;
     return (
       <i className={`glyphicon glyphicon-${icon} ${className}`}
-        onClick={onClick} />
+         data-toggle='tooltip' title={tooltip} onClick={onClick} />
     );
   }
 }

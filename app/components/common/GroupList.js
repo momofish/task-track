@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import classnames from 'classnames';
+import ListItem from './ListItem';
 
 class GroupList extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class GroupList extends Component {
     return (
       <div className='flex-scroll'>
         {groups.map((group, i) => (
-          <div className='group-list' key={`${i}`}>
+          <div className='group-list' key={i}>
             <a className='group-header' data-toggle='collapse'
               onClick={this.handleCollapse.bind(this, group) }
               href={`.group-list:nth-child(${i + 1}) > .group-body`}>
@@ -35,21 +35,10 @@ class GroupList extends Component {
             </a>
             <ul className={`group-body collapse ${!group.collapsed ? 'in' : ''}`}>
               {group.body.map((item, j) => (
-                <li className='group-item' key={`${j}`}
-                  onClick={this.handleSelect.bind(this, item.data) }>
-                  <span className={classnames('item-title', { completed: item.completed }) }>
-                    {item.label}
-                  </span>
-                  <div className='item-tags'>
-                    {item.tags.filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
-                      <span key={`${k}`} className={`tag tag-${tag.style}`}
-                        onClick={this.handleClickTag.bind(this, item.data, tag) }>
-                        {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
-                        {tag.label}
-                      </span>
-                    )) }
-                  </div>
-                </li>
+                <ListItem className='group-item' item={item} key={j}
+                  onCheck={this.props.onCheck}
+                  onClick={this.handleSelect.bind(this, item.data) }
+                  onClickTag={this.handleClickTag.bind(this) } />
               )) }
             </ul>
           </div>

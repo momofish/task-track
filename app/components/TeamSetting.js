@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, FormItem, SelectableText} from './common';
+import {Modal, FormItem, IconText} from './common';
 import {teamService} from '../services';
 import {select} from '../utils';
 
@@ -57,15 +57,15 @@ class TeamSetting extends Component {
             value={team.name} onChange={this.changeEntity.bind(this, team, 'name') } />
         </FormItem>
         <FormItem>
-          <SelectableText icon='user' text={owner.name}
+          <IconText icon='user' text={owner.name}
             onClick={this.selectUser.bind(this, 'owner') } />
         </FormItem>
         <FormItem label='成员'>
           <div>
             {members.map((member, i) =>
-              <SelectableText key={i} icon='user' text={member.name} />
+              <IconText key={i} icon='user' text={member.name} />
             ) }
-            <SelectableText icon='plus'
+            <IconText icon='plus'
               onClick={this.selectUser.bind(this, 'members') } />
           </div>
         </FormItem>

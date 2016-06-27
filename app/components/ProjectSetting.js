@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Modal, FormItem, SelectableText} from './common';
+import {Modal, FormItem, IconText} from './common';
 import {projectService} from '../services';
 import {select} from '../utils';
 
@@ -67,7 +67,7 @@ class ProjectSetting extends Component {
             value={project.name} onChange={this.changeEntity.bind(this, project, 'name') } />
         </FormItem>
         <FormItem>
-          <SelectableText icon='user' text={owner.name}
+          <IconText icon='user' text={owner.name}
             onClick={this.selectUser.bind(this, 'owner') } />
         </FormItem>
         <FormItem label='类型'>
@@ -78,15 +78,15 @@ class ProjectSetting extends Component {
           </select>
         </FormItem>
         <FormItem label='团队'>
-          <SelectableText icon='th-large' text={team.name}
+          <IconText icon='th-large' text={team.name}
             onClick={this.selectTeam.bind(this) } />
         </FormItem>
         <FormItem label='成员'>
           <div>
             {members.map((member, i) =>
-              <SelectableText key={i} icon='user' text={member.name} />
+              <IconText key={i} icon='user' text={member.name} />
             ) }
-            <SelectableText icon='plus'
+            <IconText icon='plus'
               onClick={this.selectUser.bind(this, 'members') } />
           </div>
         </FormItem>

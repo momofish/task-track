@@ -22,7 +22,7 @@ class PadList extends Component {
         <div className='scroll-container'>
           {groups.map((group, i) => (
             <div className='pad-list' key={`${i}`}>
-              <div className='pad-wrap'>
+              <div className='well-wrap'>
                 <div className='pad-header'>{group.header.label}</div>
                 <ul className={`pad-body`}>
                   {group.body.map((item, j) => (

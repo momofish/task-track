@@ -80,6 +80,12 @@ body {
   flex: 1;
   overflow-x: auto;
 }
+.flex > .flex-end {
+  justify-content: flex-end;
+}
+.flex > .center {
+  justify-content: center;
+}
 .scroll-container{
   position: absolute;
   top: 0;
@@ -349,6 +355,9 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
   border-left: solid 2px #fff;
   cursor: pointer;
 }
+.group-list .group-item > input {
+  margin: 0 5px;
+}
 .group-list .group-item:hover {
   background: #f6f8f8;
   border-left-color: #7266bb;
@@ -370,13 +379,6 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 }
 .pad-list:last-of-type {
   padding-right: 0px;
-}
-.pad-list .pad-wrap {
-  border-radius: 3px;
-  background: #f4f4f4;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
 }
 .pad-list .pad-header {
   display: block;
@@ -531,7 +533,7 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
   padding: 5px 0;
 }
 
-.selectable-text {
+.icon-text {
   display: inline-block;
   padding-right: 10px;
 }
@@ -542,4 +544,36 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 
 .rbc-now {
   background-color: #fac732;
+}
+
+.modal-header-content {
+  margin-right: 32px;
+}
+
+.glyphicon.circle {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #92a0ab;
+  border-radius: 50%;
+  padding: 7px 6px;
+}
+
+.well-wrap {
+  border-radius: 3px;
+  background: #f4f4f4;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  padding: 2px;
+  cursor: pointer;
+}
+.list-item:hover {
+  background: #fff;
+}
+.list-item > input{
+  margin-left: 5px;
+  margin-right: 10px;
 }

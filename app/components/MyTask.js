@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {GroupList, PadList} from './common';
+import {GroupList, PadList, QuickAdd} from './common';
 import MyTaskStore from '../stores/MyTaskStore';
 import Actions from '../actions/MyTaskActions';
-import QuickAdd from './QuickAdd';
 import TaskDetail from './TaskDetail';
 import {select} from '../utils';
 import {taskTreat} from '../models';
@@ -50,6 +49,10 @@ class MyTask extends Component {
     Actions.selectTask(task);
   }
 
+  checkTask(task, event) {
+    Actions.updateTaskDetail({ _id: task._id, completed: !task.completed });
+  }
+
   clickTag(task, tag, event) {
     event.stopPropagation();
     if (tag.code === 'treat') {
@@ -63,7 +66,7 @@ class MyTask extends Component {
     else if (tag.code === 'dueDate') {
       select.selectDate(event.currentTarget, tag.data, dueDate => {
         Actions.updateTaskDetail({ _id: task._id, dueDate });
-      });
+      }, { align: 'right' });
     }
   }
 
@@ -97,8 +100,11 @@ class MyTask extends Component {
         </div>
         {!isPart && <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } selectors={selectors} />}
         {filter.mode == 'pad' ?
-          <PadList  data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this)} /> :
-          <GroupList data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this)} />
+          <PadList  data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this) } /> :
+          <GroupList data={taskGroups}
+            onSelect={this.selectTask}
+            onClickTag={this.clickTag.bind(this) }
+            onCheck={this.checkTask.bind(this)} />
         }
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           Actions.selectTask();

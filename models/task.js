@@ -8,11 +8,10 @@ var schema = new Schema({
   dueDate: Date,
   owner: { type: Types.ObjectId, index: true, ref: 'User' },
   members: [{ type: Types.ObjectId, index: true, ref: 'User' }],
+  subTasks: [new Schema({ name: String, completed: Boolean })],
   completed: { type: Boolean, index: true, default: false },
   treat: { type: Number, default: 0 },
   description: String
-}, {
-    versionKey: false
 });
 
 module.exports = mongoose.model('Task', schema);

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {GroupList, PadList} from './common';
+import {GroupList, PadList, QuickAdd} from './common';
 import Store from '../stores/ProjectTaskStore';
 import Actions from '../actions/ProjectTaskActions';
 import TaskDetail from './TaskDetail';
-import QuickAdd from './QuickAdd';
 import {select} from '../utils';
 import {taskTreat} from '../models';
 
@@ -53,12 +52,12 @@ class ProjectTask extends Component {
     else if (tag.code === 'dueDate') {
       select.selectDate(event.currentTarget, tag.data, dueDate => {
         Actions.updateTaskDetail({ _id: task._id, dueDate });
-      });
+      }, { align: 'right' });
     }
     else if (tag.code === 'owner') {
       select.selectMember(event.currentTarget, tag.data, owner => {
         Actions.updateTaskDetail({ _id: task._id, owner });
-      }, { _id: task.project._id });
+      }, { align: 'right', _id: task.project._id });
     }
   }
 
@@ -74,7 +73,7 @@ class ProjectTask extends Component {
       idGetter: owner => owner._id,
       nameGetter: owner => owner.name,
       type: 'selectMember', label: '负责人',
-      options: {_id: project._id}
+      options: { _id: project._id }
     }];
 
     return (
