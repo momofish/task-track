@@ -365,10 +365,18 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
   background: #f6f8f8;
   border-left-color: #7266bb;
 }
-.group-list .item-title {
+.item-title {
+  display: flex;
   flex: 1;
   line-height: 30px;
   white-space: nowrap;
+}
+.item-title > form {
+  flex: 1;
+}
+.item-title .form-control-static {
+  padding: 0;
+  min-height: auto;
 }
 
 /*pad list*/
@@ -577,6 +585,7 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
   background: #fff;
 }
 .list-item > input{
+  height: 20px;
   margin-left: 5px;
   margin-right: 10px;
 }

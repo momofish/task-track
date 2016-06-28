@@ -3,8 +3,8 @@ import {Link} from 'react-router';
 import moment from 'moment';
 import {extend} from 'underscore';
 import classnames from 'classnames';
-import {Modal, PopBox, FormItem, 
-  Selector, EditableText, IconText, Icon, 
+import {Modal, PopBox, FormItem,
+  Selector, EditableText, IconText, Icon,
   ListItem, QuickAdd, Progress} from './common';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
@@ -63,7 +63,7 @@ class TaskDetail extends Component {
   }
 
   selectMember(selected, field, event) {
-    let task = this.state.task
+    let {task} = this.state;
     if (!task.project) {
       toastr.error('请先选择项目');
       return;
@@ -94,9 +94,10 @@ class TaskDetail extends Component {
     this.updateTaskDetail(newTask);
   }
 
-  completeSubTask(task, index) {
-    var subTask = task.subTasks[index];
-    subTask.completed = !subTask.completed;
+  editSubTask(updator, input) {
+    let {task} = this.state;
+
+    updator(input);
     this.updateTaskDetail(task);
   }
 
@@ -127,7 +128,7 @@ class TaskDetail extends Component {
                 <input type='checkbox' checked={completed} onChange={this.completeTask} />
               </div>}>
               <EditableText className={className} text={task.title}
-                onChange={(text) => this.updateTaskDetail({_id: task._id, title: text }) } />
+                onChange={(text) => this.updateTaskDetail({ _id: task._id, title: text }) } />
             </FormItem>
             <FormItem content={[
               <IconText icon='user' text={owner.name}
@@ -138,7 +139,7 @@ class TaskDetail extends Component {
             ]} />
             <FormItem>
               <EditableText multiline='true' text={task.description} placeholder='添加描述'
-                onChange={(text) => this.updateTaskDetail({_id: task._id, description: text }) } />
+                onChange={(text) => this.updateTaskDetail({ _id: task._id, description: text }) } />
             </FormItem>
             <FormItem label='参与'>
               <div>
@@ -151,13 +152,14 @@ class TaskDetail extends Component {
             {task.subTasks &&
               <FormItem label='检查点'>
                 <div className='well-wrap'>
-                  <Progress bar={{type: 'success', ratio: completeRatio}} />
+                  <Progress bar={{ type: 'success', ratio: completeRatio }} />
                   <ul>
                     {task.subTasks.map((subTask, i) =>
-                      <ListItem key={i} className='list-item' item={{
-                        label: subTask.name,
+                      <ListItem key={i} className='list-item flex' item={{
+                        label: <EditableText text={subTask.name}
+                          onChange={this.editSubTask.bind(this, (text) => subTask.name = text) } />,
                         checked: subTask.completed, completed: subTask.completed
-                      }} onCheck={this.completeSubTask.bind(this, task, i) } />
+                      }} onCheck={this.editSubTask.bind(this, () => subTask.completed = !subTask.completed) } />
                     ) }
                   </ul>
                   <QuickAdd placeHolder='添加检查点' onSubmit={this.addSubTask.bind(this) } />
