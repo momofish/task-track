@@ -3,7 +3,9 @@ import {Link} from 'react-router';
 import moment from 'moment';
 import {extend} from 'underscore';
 import classnames from 'classnames';
-import {Modal, PopBox, FormItem, Selector, EditableText, IconText, Icon, ListItem, QuickAdd} from './common';
+import {Modal, PopBox, FormItem, 
+  Selector, EditableText, IconText, Icon, 
+  ListItem, QuickAdd, Progress} from './common';
 import TaskDetailStore from '../stores/TaskDetailStore';
 import TaskDetailActions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
@@ -39,9 +41,7 @@ class TaskDetail extends Component {
   }
 
   updateTaskDetail(task) {
-    TaskDetailActions.updateTaskDetail(extend({
-      _id: this.state.task._id
-    }, task), task);
+    TaskDetailActions.updateTaskDetail(task, task);
   }
 
   completeTask(event) {
@@ -94,12 +94,20 @@ class TaskDetail extends Component {
     this.updateTaskDetail(newTask);
   }
 
+  completeSubTask(task, index) {
+    var subTask = task.subTasks[index];
+    subTask.completed = !subTask.completed;
+    this.updateTaskDetail(task);
+  }
+
   render() {
     let task = this.state.task || this.props.task;
     let project = task.project || { name: '未分配项目' };
     let owner = task.owner || { name: '未分配人员' };
-    let completed = task.completed;
+    let {completed, subTasks} = task;
     let className = classnames('form-title', { completed });
+    let completeRatio = subTasks.filter(subTask => subTask.completed).length / (subTasks.length + 1e-18);
+
     return (
       <Modal onHidden={this.dismiss}
         header={<div className='flex flex-horizontal'>
@@ -109,8 +117,7 @@ class TaskDetail extends Component {
             <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
           </Link>
           <div className='flex flex-end modal-header-content'>
-            <IconText icon='list-alt' iconClassName='circle' tooltip='子任务'
-              onclick={() => { } } />
+            <IconText icon='list-alt' iconClassName='circle' tooltip='子任务' />
           </div>
         </div>}
         body={
@@ -120,7 +127,7 @@ class TaskDetail extends Component {
                 <input type='checkbox' checked={completed} onChange={this.completeTask} />
               </div>}>
               <EditableText className={className} text={task.title}
-                onChange={(text) => this.updateTaskDetail({ title: text }) } />
+                onChange={(text) => this.updateTaskDetail({_id: task._id, title: text }) } />
             </FormItem>
             <FormItem content={[
               <IconText icon='user' text={owner.name}
@@ -131,7 +138,7 @@ class TaskDetail extends Component {
             ]} />
             <FormItem>
               <EditableText multiline='true' text={task.description} placeholder='添加描述'
-                onChange={(text) => this.updateTaskDetail({ description: text }) } />
+                onChange={(text) => this.updateTaskDetail({_id: task._id, description: text }) } />
             </FormItem>
             <FormItem label='参与'>
               <div>
@@ -144,9 +151,13 @@ class TaskDetail extends Component {
             {task.subTasks &&
               <FormItem label='检查点'>
                 <div className='well-wrap'>
+                  <Progress bar={{type: 'success', ratio: completeRatio}} />
                   <ul>
                     {task.subTasks.map((subTask, i) =>
-                      <ListItem key={i} className='list-item' item={{ label: subTask.name }} />
+                      <ListItem key={i} className='list-item' item={{
+                        label: subTask.name,
+                        checked: subTask.completed, completed: subTask.completed
+                      }} onCheck={this.completeSubTask.bind(this, task, i) } />
                     ) }
                   </ul>
                   <QuickAdd placeHolder='添加检查点' onSubmit={this.addSubTask.bind(this) } />

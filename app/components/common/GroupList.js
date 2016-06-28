@@ -6,11 +6,11 @@ class GroupList extends Component {
     super(props);
   }
 
-  handleSelect(item, event) {
+  handleSelect() {
     this.props.onSelect(...arguments);
   }
 
-  handleClickTag(item, tag, event) {
+  handleClickTag() {
     this.props.onClickTag(...arguments);
   }
 

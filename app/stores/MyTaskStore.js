@@ -30,6 +30,7 @@ class MyTaskStore {
           return {
             label: task.title,
             completed: task.completed,
+            checked: task.completed,
             tags: [
               { code: 'project', type: 'label', label: (task.project || {}).name, style: 'success', data: task.project },
               { code: 'dueDate', type: 'label', label: task.dueDate && moment(task.dueDate).format('L'), style: 'danger', data: task.dueDate },

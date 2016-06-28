@@ -49,7 +49,8 @@ class MyTask extends Component {
     Actions.selectTask(task);
   }
 
-  checkTask(task, event) {
+  checkTask(item, event) {
+    let task = item.data;
     Actions.updateTaskDetail({ _id: task._id, completed: !task.completed });
   }
 

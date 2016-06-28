@@ -13,7 +13,7 @@ class ListItem extends Component {
 
     return (
       <li className={className} onClick={onClick}>
-        {onCheck && <input type='checkbox' onClick={this.handleCheck.bind(this, item) } />}
+        {onCheck && <input type='checkbox' checked={item.checked} onChange={this.handleCheck.bind(this, item) } />}
         <span className={classnames('item-title', { completed: item.completed }) }>
           {item.label}
         </span>

@@ -12,6 +12,6 @@ var schema = new Schema({
   completed: { type: Boolean, index: true, default: false },
   treat: { type: Number, default: 0 },
   description: String
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Task', schema);
