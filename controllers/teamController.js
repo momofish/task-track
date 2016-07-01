@@ -40,8 +40,10 @@ module.exports = function (router) {
   router.route('/teams').put(function (req, res, next) {
     var user = req.user;
     var team = new Team(req.body);
-    team.owner = user._id;
-    team.members = [user._id];
+    if (!team.owner)
+      team.owner = user._id;
+    if (!team.members.length)
+      team.members = [user._id];
     team.save(function (err) {
       if (err) return next(err);
 

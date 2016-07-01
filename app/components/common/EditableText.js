@@ -4,52 +4,49 @@ import Markdown from 'markdown-it'
 class EditableText extends Component {
   constructor(props) {
     super(props);
-    this.state = { isEdit: false, text: props.text };
-    this.changeText = this.changeText.bind(this);
-    this.saveText = this.saveText.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = { isEdit: false, value: props.value };
 
     this.md = new Markdown();
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state.text = nextProps.text;
+    this.state.value = nextProps.value;
   }
 
-  changeText(event) {
-    this.setState({ text: event.target.value });
+  change(event) {
+    this.setState({ value: event.target.value });
   }
 
-  saveText(event) {
+  save() {
     let onChange = this.props.onChange;
-    onChange && onChange(this.state.text);
+    onChange && onChange({value: this.state.value});
     this.setState({ isEdit: false });
   }
 
-  handleSubmit(event) {
+  submit(event) {
     event.preventDefault();
-    this.saveText();
+    this.save();
   }
 
   render() {
     let multiline = this.props.multiline;
-    let text = this.state.text;
+    let value = this.state.value;
     let isEdit = this.state.isEdit;
     return isEdit ?
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.submit.bind(this)}>
         <div className='form-group'>
           {
             multiline ?
               <textarea className='form-control'
-                onChange={this.changeText} rows='5'
-                value={text} placeholder={this.props.placeholder} /> :
-              <input type='text' className='form-control'
-                onChange={this.changeText}
-                value={text} placeholder={this.props.placeholder} />
+                onChange={this.change.bind(this)} rows='5'
+                value={value} placeholder={this.props.placeholder} /> :
+              <input type='value' className='form-control'
+                onChange={this.change.bind(this)}
+                value={value} placeholder={this.props.placeholder} />
           }
         </div>
         <button type='button' className='btn btn-primary btn-sm'
-          onClick={this.saveText}>
+          onClick={this.save.bind(this)}>
           保存
         </button>
         <button type='button' className='btn btn-link btn-sm'
@@ -60,7 +57,7 @@ class EditableText extends Component {
       <a href='javascript:' className={`${this.props.className} form-control-static`}
         onClick={() => this.setState({ isEdit: true }) }
         dangerouslySetInnerHTML={{
-          __html: (multiline && text ? this.md.render(text) : text) || this.props.placeholder
+          __html: (multiline && value ? this.md.render(value) : value) || this.props.placeholder
         }}>
       </a>
   }

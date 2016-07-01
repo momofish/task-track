@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, FormItem, IconText} from './common';
+import {Modal, FormItem, IconText, EditableText} from './common';
 import {teamService} from '../services';
 import {select} from '../utils';
 
@@ -20,45 +20,57 @@ class TeamSetting extends Component {
     Modal.close();
   }
 
-  changeEntity(entity, field, event) {
-    entity[field] = event.target.value;
+  change(field, args) {
+    let {team} = this.state;
+
+    team[field] = args.value || args.target && args.target.value;
     this.forceUpdate();
   }
 
-  saveEntity(entity) {
-    this.props.state.updated = true;
-    teamService.saveTeam(entity)
+  save() {
+    let {state} = this.props;
+    let {team} = this.state;
+
+    state.updated = true;
+    teamService.saveTeam(team)
       .then(this.dismiss);
   }
 
-  handleSubmit(team, event) {
+  submit(event) {
     event.preventDefault();
-    this.saveEntity(team);
+
+    let {team} = this.state;
+    this.save(team);
   }
 
   selectUser(field, event) {
     let team = this.state.team;
     let selected = team[field];
+
     select.selectUser(event.currentTarget, selected, selecting => {
-      this.state.team[field] = selecting;
+      team[field] = selecting;
       this.forceUpdate();
     });
   }
 
   render() {
-    let team = this.state.team;
-    let owner = team.owner || { name: '无所有者' };
+    let {team} = this.state;
+    let owner = team.owner || { name: '所有者' };
     let members = team.members || [];
 
     return (
-      <form className='smart-form' onSubmit={this.handleSubmit.bind(this, team) }>
+      <form className='smart-form' onSubmit={this.submit.bind(this) }>
         <FormItem label='名称'>
           <input type='text' className='form-control'
-            value={team.name} onChange={this.changeEntity.bind(this, team, 'name') } />
+            value={team.name} onChange={this.change.bind(this, 'name') } />
         </FormItem>
         <FormItem>
           <IconText icon='user' text={owner.name}
             onClick={this.selectUser.bind(this, 'owner') } />
+        </FormItem>
+        <FormItem>
+          <EditableText multiline='true' value={team.description} placeholder='添加描述'
+            onChange={this.change.bind(this, 'description') } />
         </FormItem>
         <FormItem label='成员'>
           <div>
