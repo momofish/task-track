@@ -38,10 +38,12 @@ module.exports = function (router) {
     .put(function (req, res, next) {
       var user = req.user;
       var task = new Task(req.body);
+
       if (!task.owner)
         task.owner = user._id;
-      if (!task.members)
+      if (!task.members.length)
         task.members = [user._id];
+        
       task.save(function (err) {
         if (err) return next(err);
 
@@ -49,20 +51,12 @@ module.exports = function (router) {
       });
     })
     .post(function (req, res, next) {
-      Task.findById(req.body._id, function (err, task) {
+      var task = req.body;
+      Task.update({ _id: task._id }, task, function (err) {
         if (err) return next(err);
 
-        if (!task) {
-          res.sendStatus(500, 'task not found');
-          return;
-        }
-
-        Object.assign(task, req.body);
-        task.save(function (err) {
-          if (err) return next(err);
-
-          res.sendStatus(204);
-        });
+        res.sendStatus(204);
       });
-    })
+      return;
+    });
 }

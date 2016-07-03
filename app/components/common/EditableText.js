@@ -45,9 +45,9 @@ class EditableText extends Component {
                 value={value} placeholder={this.props.placeholder} />
           }
         </div>
-        <button type='button' className='btn btn-primary btn-sm'
+        <button type='button' className='btn btn-info btn-sm'
           onClick={this.save.bind(this)}>
-          保存
+          确定
         </button>
         <button type='button' className='btn btn-link btn-sm'
           onClick={() => this.setState({ isEdit: false }) }>

@@ -23,7 +23,9 @@ class TeamSetting extends Component {
   change(field, args) {
     let {team} = this.state;
 
-    team[field] = args.value || args.target && args.target.value;
+    team[field] = args.value != undefined ? args.value :
+      args.target.value;
+
     this.forceUpdate();
   }
 
@@ -83,7 +85,7 @@ class TeamSetting extends Component {
         </FormItem>
         <FormItem>
           <div>
-            <button type='submit' className='btn btn-primary btn-sm'>确定</button>
+            <button type='submit' className='btn btn-primary btn-sm'>保存</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
         </FormItem>

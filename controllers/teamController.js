@@ -40,6 +40,7 @@ module.exports = function (router) {
   router.route('/teams').put(function (req, res, next) {
     var user = req.user;
     var team = new Team(req.body);
+    
     if (!team.owner)
       team.owner = user._id;
     if (!team.members.length)
@@ -49,23 +50,12 @@ module.exports = function (router) {
 
       res.sendStatus(204);
     });
-  })
-
-  router.route('/teams').post(function (req, res, next) {
-    Team.findById(req.body._id, function (err, team) {
+  }).post(function (req, res, next) {
+    var team = req.body;
+    Team.update({ _id: team._id }, team, function (err) {
       if (err) return next(err);
 
-      if (!team) {
-        res.sendStatus(500, 'team not found');
-        return;
-      }
-
-      Object.assign(team, req.body);
-      team.save(function (err) {
-        if (err) return next(err);
-
-        res.sendStatus(204);
-      });
+      res.sendStatus(204);
     });
-  })
+  });
 }

@@ -45,29 +45,23 @@ module.exports = function (router) {
   router.route('/projects').put(function (req, res, next) {
     var user = req.user;
     var project = new Project(req.body);
-    project.owner = req.body.owner || user._id;
+
+    if (!project.owner)
+      project.owner = user._id;
+    if (!project.members.length)
+      project.members = [user._id];
+      
     project.save(function (err) {
       if (err) return next(err);
 
       res.sendStatus(204);
     });
-  })
-
-  router.route('/projects').post(function (req, res, next) {
-    Project.findById(req.body._id, function (err, project) {
+  }).post(function (req, res, next) {
+    var project = req.body;
+    Project.update({ _id: project._id }, project, function (err) {
       if (err) return next(err);
 
-      if (!project) {
-        res.sendStatus(500, 'project not found');
-        return;
-      }
-
-      Object.assign(project, req.body);
-      project.save(function (err) {
-        if (err) return next(err);
-
-        res.sendStatus(204);
-      });
+      res.sendStatus(204);
     });
-  })
+  });
 }

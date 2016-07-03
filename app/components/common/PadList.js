@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
+import ListItem from './ListItem';
 
 class PadList extends Component {
   constructor(props) {
@@ -21,26 +22,15 @@ class PadList extends Component {
       <div className='flex flex-hscroll'>
         <div className='scroll-container'>
           {groups.map((group, i) => (
-            <div className='pad-list' key={`${i}`}>
+            <div className='pad-list' key={i}>
               <div className='well-wrap'>
                 <div className='pad-header'>{group.header.label}</div>
                 <ul className={`pad-body`}>
                   {group.body.map((item, j) => (
-                    <li className='pad-item' key={`${j}`}
-                      onClick={this.handleSelect.bind(this, item.data) }>
-                      <div className={classnames('pad-title', { completed: item.completed }) }>
-                        {item.label}
-                      </div>
-                      <div className='pad-tags'>
-                        {item.tags.filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
-                          <span key={`${k}`} className={`tag tag-${tag.style}`}
-                            onClick={this.handleClickTag.bind(this, item.data, tag) }>
-                            {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
-                            {tag.label}
-                          </span>
-                        )) }
-                      </div>
-                    </li>
+                    <ListItem className='pad-item' item={item} key={j}
+                      onCheck={this.props.onCheck}
+                      onClick={this.handleSelect.bind(this, item.data) }
+                      onClickTag={this.handleClickTag.bind(this) } />
                   )) }
                 </ul>
               </div>

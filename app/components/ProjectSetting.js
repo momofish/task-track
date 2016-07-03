@@ -70,13 +70,6 @@ class ProjectSetting extends Component {
           <IconText icon='user' text={owner.name}
             onClick={this.selectUser.bind(this, 'owner') } />
         </FormItem>
-        <FormItem label='类型'>
-          <select className='form-control' value={project.type}
-            onChange={this.changeEntity.bind(this, project, 'type') }>
-            <option value='0'>私有</option>
-            <option value='1'>公共</option>
-          </select>
-        </FormItem>
         <FormItem label='团队'>
           <IconText icon='th-large' text={team.name}
             onClick={this.selectTeam.bind(this) } />

@@ -42,8 +42,9 @@ class ProjectTask extends Component {
     Actions.selectTask(task);
   }
 
-  clickTag(task, tag, event) {
+  clickTag(item, tag, event) {
     event.stopPropagation();
+    let task = item.data;
     if (tag.code === 'treat') {
       select.selectMenu(event.currentTarget, tag.data, treat => {
         Actions.updateTaskDetail({ _id: task._id, treat: treat.key });
@@ -59,6 +60,11 @@ class ProjectTask extends Component {
         Actions.updateTaskDetail({ _id: task._id, owner });
       }, { align: 'right', _id: task.project._id });
     }
+  }
+
+  checkTask(item, event) {
+    let task = item.data;
+    Actions.updateTaskDetail({ _id: task._id, completed: !task.completed });
   }
 
   selectFilter(event) {
@@ -94,8 +100,14 @@ class ProjectTask extends Component {
         </div>
         <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } selectors={selectors} />
         {filter.mode == 'pad' ?
-          <PadList  data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this) } /> :
-          <GroupList data={taskGroups} onSelect={this.selectTask} onClickTag={this.clickTag.bind(this) } />
+          <PadList data={taskGroups}
+            onSelect={this.selectTask}
+            onClickTag={this.clickTag.bind(this) }
+            onCheck={this.checkTask.bind(this) } /> :
+          <GroupList data={taskGroups}
+            onSelect={this.selectTask}
+            onClickTag={this.clickTag.bind(this) }
+            onCheck={this.checkTask.bind(this) } />
         }
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           Actions.selectTask();

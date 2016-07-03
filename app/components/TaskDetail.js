@@ -127,8 +127,8 @@ class TaskDetail extends Component {
               label={<div className='form-title'>
                 <input type='checkbox' checked={completed} onChange={this.completeTask} />
               </div>}>
-              <EditableText className={className} text={task.title}
-                onChange={(text) => this.updateTaskDetail({ _id: task._id, title: text }) } />
+              <EditableText className={className} value={task.title}
+                onChange={text => this.updateTaskDetail({ _id: task._id, title: text.value }) } />
             </FormItem>
             <FormItem content={[
               <IconText icon='user' text={owner.name}
@@ -138,8 +138,8 @@ class TaskDetail extends Component {
                 />
             ]} />
             <FormItem>
-              <EditableText multiline='true' text={task.description} placeholder='添加描述'
-                onChange={(text) => this.updateTaskDetail({ _id: task._id, description: text }) } />
+              <EditableText multiline='true' value={task.description} placeholder='添加描述'
+                onChange={text => this.updateTaskDetail({ _id: task._id, description: text.value }) } />
             </FormItem>
             <FormItem label='参与'>
               <div>
@@ -156,8 +156,8 @@ class TaskDetail extends Component {
                   <ul>
                     {task.subTasks.map((subTask, i) =>
                       <ListItem key={i} className='list-item flex' item={{
-                        label: <EditableText text={subTask.name}
-                          onChange={this.editSubTask.bind(this, (text) => subTask.name = text) } />,
+                        label: <EditableText value={subTask.name}
+                          onChange={this.editSubTask.bind(this, text => subTask.name = text.value) } />,
                         checked: subTask.completed, completed: subTask.completed
                       }} onCheck={this.editSubTask.bind(this, () => subTask.completed = !subTask.completed) } />
                     ) }
