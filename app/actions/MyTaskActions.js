@@ -44,7 +44,7 @@ class MyTaskActions {
     }, {align: 'right', data: myTaskFilters});
   }
   
-  updateTaskDetail(task) {
+  updateTask(task) {
     taskService.updateTask(task)
       .then(() => this.actions.getTasks());
   }

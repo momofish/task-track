@@ -32,6 +32,13 @@ module.exports = function (router) {
 
       res.send(task);
     });
+  }).put(function (req, res, next) {
+    var id = req.params.id;
+    Task.findByIdAndRemove(id, function (err) {
+        if (err) return next(err);
+
+        res.sendStatus(204);
+    });
   });
 
   router.route('/tasks')
@@ -43,7 +50,7 @@ module.exports = function (router) {
         task.owner = user._id;
       if (!task.members.length)
         task.members = [user._id];
-        
+
       task.save(function (err) {
         if (err) return next(err);
 

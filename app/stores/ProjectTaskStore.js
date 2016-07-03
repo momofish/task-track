@@ -78,7 +78,7 @@ class ProjectTaskStore {
     this.taskGroups = this.task2Groups();
   }
 
-  updateTaskDetailSuccess(task) {
+  updateTaskSuccess(task) {
     onSelectedFilter(this.filter);
   }
 }

@@ -6,30 +6,25 @@ import classnames from 'classnames';
 import {Modal, PopBox, FormItem,
   Selector, EditableText, IconText, Icon,
   ListItem, QuickAdd, Progress} from './common';
-import TaskDetailStore from '../stores/TaskDetailStore';
-import TaskDetailActions from '../actions/TaskDetailActions';
+import Store from '../stores/TaskDetailStore';
+import Actions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
 import {select} from '../utils';
 
 class TaskDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = TaskDetailStore.getState();
-
+    this.state = Store.getState();
     this.onChange = this.onChange.bind(this);
-    this.dismiss = this.dismiss.bind(this);
-    this.completeTask = this.completeTask.bind(this);
-    this.selectProject = this.selectProject.bind(this);
-    this.selectDueDate = this.selectDueDate.bind(this);
   }
 
   componentDidMount() {
-    TaskDetailStore.listen(this.onChange);
-    TaskDetailActions.getTaskDetail(this.props.task._id);
+    Store.listen(this.onChange);
+    Actions.getTask(this.props.task._id);
   }
 
   componentWillUnmount() {
-    TaskDetailStore.unlisten(this.onChange);
+    Store.unlisten(this.onChange);
   }
 
   onChange(state) {
@@ -40,14 +35,14 @@ class TaskDetail extends Component {
     this.props.onHidden(this.state.updated);
   }
 
-  updateTaskDetail(task) {
-    TaskDetailActions.updateTaskDetail(task, task);
+  updateTask(task) {
+    Actions.updateTask(task, task);
   }
 
   completeTask(event) {
     let task = this.state.task;
     task.completed = event.currentTarget.checked;
-    TaskDetailActions.updateTaskDetail({
+    Actions.updateTask({
       _id: task._id, completed: task.completed
     });
   }
@@ -56,7 +51,7 @@ class TaskDetail extends Component {
     event.preventDefault();
     let task = this.state.task;
     select.selectProject(event.currentTarget, task.project, (project) => {
-      TaskDetailActions.updateTaskDetail({
+      Actions.updateTask({
         _id: task._id, project: project._id
       }, { project });
     });
@@ -74,14 +69,14 @@ class TaskDetail extends Component {
         selecting.map(m => m._id) : selecting._id;
       let populated = {};
       populated[field] = selecting;
-      TaskDetailActions.updateTaskDetail(newTask, populated);
+      Actions.updateTask(newTask, populated);
     }, { _id: task.project && task.project._id });
   }
 
   selectDueDate(event) {
     let task = this.state.task
     select.selectDate(event.currentTarget, moment(task.dueDate), date => {
-      TaskDetailActions.updateTaskDetail({
+      Actions.updateTask({
         _id: task._id, dueDate: date.toString()
       }, { dueDate: date });
     });
@@ -91,14 +86,23 @@ class TaskDetail extends Component {
     let {task} = this.state;
     let newTask = { _id: task._id, subTasks: task.subTasks };
     newTask.subTasks.push({ name: quick.title });
-    this.updateTaskDetail(newTask);
+    this.updateTask(newTask);
   }
 
   editSubTask(updator, input) {
     let {task} = this.state;
 
     updator(input);
-    this.updateTaskDetail(task);
+    this.updateTask(task);
+  }
+
+  selectMenu(event) {
+    select.selectMenu(event.currentTarget, null, selecting => {
+      let {task} = this.state;
+      if (selecting.code == 'delete') {
+        Actions.deleteTask(task._id);
+      }
+    }, { data: [{ code: 'delete', name: '删除任务' }] });
   }
 
   render() {
@@ -110,36 +114,37 @@ class TaskDetail extends Component {
     let completeRatio = subTasks.filter(subTask => subTask.completed).length / (subTasks.length + 1e-18);
 
     return (
-      <Modal onHidden={this.dismiss}
+      <Modal onHidden={this.dismiss.bind(this) }
         header={<div className='flex flex-horizontal'>
           <Link to={`/tasks/projects/${project._id}`}
-            onClick={(event) => { if (!project.id) { event.preventDefault(); this.selectProject(event) } } }>
+            onClick={this.selectProject.bind(this) }>
             {project.name}&nbsp;
-            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject} />
+            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this) } />
           </Link>
           <div className='flex flex-end modal-header-content'>
-            <IconText icon='list-alt' iconClassName='circle' tooltip='子任务' />
+            <IconText icon='option-vertical' iconClassName='circle' tooltip='更多'
+              onClick={this.selectMenu.bind(this) } />
           </div>
         </div>}
         body={
           <div className='smart-form'>
             <FormItem
               label={<div className='form-title'>
-                <input type='checkbox' checked={completed} onChange={this.completeTask} />
+                <input type='checkbox' checked={completed} onChange={this.completeTask.bind(this) } />
               </div>}>
               <EditableText className={className} value={task.title}
-                onChange={text => this.updateTaskDetail({ _id: task._id, title: text.value }) } />
+                onChange={text => this.updateTask({ _id: task._id, title: text.value }) } />
             </FormItem>
             <FormItem content={[
               <IconText icon='user' text={owner.name}
                 onClick={this.selectMember.bind(this, task.owner, 'owner') } />,
               <IconText text={task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
-                icon='calendar' onClick={this.selectDueDate}
+                icon='calendar' onClick={this.selectDueDate.bind(this) }
                 />
             ]} />
             <FormItem>
               <EditableText multiline='true' value={task.description} placeholder='添加描述'
-                onChange={text => this.updateTaskDetail({ _id: task._id, description: text.value }) } />
+                onChange={text => this.updateTask({ _id: task._id, description: text.value }) } />
             </FormItem>
             <FormItem label='参与'>
               <div>

@@ -4,21 +4,26 @@ import {taskService} from '../services';
 class TaskDetailActions {
   constructor() {
     this.generateActions(
-      'getTaskDetailSuccess',
-      'updateTaskDetailSuccess'
+      'getTaskSuccess',
+      'updateTaskSuccess'
     );
   }
 
-  getTaskDetail(id) {
-    taskService.getTaskDetail(id)
+  getTask(id) {
+    taskService.getTask(id)
       .then(task => {
-        this.actions.getTaskDetailSuccess(task);
+        this.actions.getTaskSuccess(task);
       });
   }
 
-  updateTaskDetail(task, taskPopulated) {
+  updateTask(task, taskPopulated) {
     taskService.updateTask(task)
-      .then(() => this.actions.updateTaskDetailSuccess(taskPopulated));
+      .then(() => this.actions.updateTaskSuccess(taskPopulated));
+  }
+
+  deleteTask(id) {
+    taskService.deleteTask(id)
+      .then(() => Modal.close());
   }
 }
 

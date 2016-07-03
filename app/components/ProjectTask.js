@@ -47,24 +47,24 @@ class ProjectTask extends Component {
     let task = item.data;
     if (tag.code === 'treat') {
       select.selectMenu(event.currentTarget, tag.data, treat => {
-        Actions.updateTaskDetail({ _id: task._id, treat: treat.key });
+        Actions.updateTask({ _id: task._id, treat: treat.key });
       }, { align: 'right', data: taskTreat });
     }
     else if (tag.code === 'dueDate') {
       select.selectDate(event.currentTarget, tag.data, dueDate => {
-        Actions.updateTaskDetail({ _id: task._id, dueDate });
+        Actions.updateTask({ _id: task._id, dueDate });
       }, { align: 'right' });
     }
     else if (tag.code === 'owner') {
       select.selectMember(event.currentTarget, tag.data, owner => {
-        Actions.updateTaskDetail({ _id: task._id, owner });
+        Actions.updateTask({ _id: task._id, owner });
       }, { align: 'right', _id: task.project._id });
     }
   }
 
   checkTask(item, event) {
     let task = item.data;
-    Actions.updateTaskDetail({ _id: task._id, completed: !task.completed });
+    Actions.updateTask({ _id: task._id, completed: !task.completed });
   }
 
   selectFilter(event) {

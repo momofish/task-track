@@ -1,4 +1,4 @@
-import {get, put, post} from './commonService';
+import {get, put, post, remove} from './commonService';
 
 const resourceUrl = '/api/tasks';
 
@@ -7,7 +7,7 @@ export default {
     return get(resourceUrl, `${category}/${filter}`);
   },
 
-  getTaskDetail(id) {
+  getTask(id) {
     return get(resourceUrl, id);
   },
 
@@ -17,5 +17,9 @@ export default {
 
   updateTask(task) {
     return post(resourceUrl, task);
+  },
+  
+  deleteTask(id) {
+    return remove(id);
   }
 }

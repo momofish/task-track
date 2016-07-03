@@ -49,7 +49,7 @@ class ProjectTaskActions {
     }, {align: 'right', data: projectTaskFilters});
   }
   
-  updateTaskDetail(task) {
+  updateTask(task) {
     taskService.updateTask(task)
       .then(() => this.actions.getTasks());
   }

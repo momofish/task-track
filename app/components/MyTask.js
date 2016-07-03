@@ -51,7 +51,7 @@ class MyTask extends Component {
 
   checkTask(item, event) {
     let task = item.data;
-    Actions.updateTaskDetail({ _id: task._id, completed: !task.completed });
+    Actions.updateTask({ _id: task._id, completed: !task.completed });
   }
 
   clickTag(item, tag, event) {
@@ -59,7 +59,7 @@ class MyTask extends Component {
     let task = item.data;
     if (tag.code === 'treat') {
       select.selectMenu(event.currentTarget, tag.data, treat => {
-        Actions.updateTaskDetail({ _id: task._id, treat: treat.key });
+        Actions.updateTask({ _id: task._id, treat: treat.key });
       }, { align: 'right', data: taskTreat });
     }
     else if (tag.code === 'project') {
@@ -67,7 +67,7 @@ class MyTask extends Component {
     }
     else if (tag.code === 'dueDate') {
       select.selectDate(event.currentTarget, tag.data, dueDate => {
-        Actions.updateTaskDetail({ _id: task._id, dueDate });
+        Actions.updateTask({ _id: task._id, dueDate });
       }, { align: 'right' });
     }
   }
