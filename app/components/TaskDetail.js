@@ -161,7 +161,7 @@ class TaskDetail extends Component {
                   <ul>
                     {task.subTasks.map((subTask, i) =>
                       <ListItem key={i} className='list-item flex' item={{
-                        label: <EditableText value={subTask.name}
+                        label: <EditableText className='flex' value={subTask.name}
                           onChange={this.editSubTask.bind(this, text => subTask.name = text.value) } />,
                         checked: subTask.completed, completed: subTask.completed
                       }} onCheck={this.editSubTask.bind(this, () => subTask.completed = !subTask.completed) } />
