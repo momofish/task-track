@@ -82,6 +82,15 @@ class TaskDetail extends Component {
     });
   }
 
+  selectMenu(event) {
+    select.selectMenu(event.currentTarget, null, selecting => {
+      let {task} = this.state;
+      if (selecting.code == 'delete') {
+        Actions.deleteTask({id: task._id, component: this});
+      }
+    }, { data: [{ code: 'delete', name: '删除任务', icon: 'trash' }] });
+  }
+
   addSubTask(quick) {
     let {task} = this.state;
     let newTask = { _id: task._id, subTasks: task.subTasks };
@@ -96,15 +105,6 @@ class TaskDetail extends Component {
     this.updateTask(task);
   }
 
-  selectMenu(event) {
-    select.selectMenu(event.currentTarget, null, selecting => {
-      let {task} = this.state;
-      if (selecting.code == 'delete') {
-        Actions.deleteTask(task._id);
-      }
-    }, { data: [{ code: 'delete', name: '删除任务' }] });
-  }
-
   render() {
     let task = this.state.task || this.props.task;
     let project = task.project || { name: '未分配项目' };
@@ -114,7 +114,7 @@ class TaskDetail extends Component {
     let completeRatio = subTasks.filter(subTask => subTask.completed).length / (subTasks.length + 1e-18);
 
     return (
-      <Modal onHidden={this.dismiss.bind(this) }
+      <Modal ref='modal' onHidden={this.dismiss.bind(this) }
         header={<div className='flex flex-horizontal'>
           <Link to={`/tasks/projects/${project._id}`}
             onClick={this.selectProject.bind(this) }>

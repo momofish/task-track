@@ -32,7 +32,7 @@ module.exports = function (router) {
 
       res.send(task);
     });
-  }).put(function (req, res, next) {
+  }).delete(function (req, res, next) {
     var id = req.params.id;
     Task.findByIdAndRemove(id, function (err) {
         if (err) return next(err);

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PopBox from './PopBox';
+import IconText from './IconText';
 import _ from 'underscore';
 
 let selecting = null;
@@ -95,7 +96,7 @@ class Selector extends Component {
     let {dataSources} = this.props;
     let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
-    let {itemNameField = 'name', searchable} = dataSource;
+    let {nameField = 'name', searchable} = dataSource;
     let termReg = new RegExp(term, 'i');
     let multiple = selecting instanceof Array;
 
@@ -104,7 +105,7 @@ class Selector extends Component {
         {dataSources.length > 1 ?
           <ul ref='tabs' className='nav nav-tabs flat'>
             {dataSources.map((dataSource, i) =>
-              <li key={`t${i}`} data-toggle="tab"
+              <li key={i} data-toggle="tab"
                 className={dataSourceIndex == i ? 'active' : null}>
                 <a href='#' onClick={() => this.changeTab(i) }>{dataSource.name}</a>
               </li>
@@ -120,17 +121,16 @@ class Selector extends Component {
         <div className='tab-pane active'>
           <ul className='selector-list'>
             {(items && items.length) ? items
-              .filter(item => !termReg || item[itemNameField].search(termReg) >= 0)
+              .filter(item => !termReg || item[nameField].search(termReg) >= 0)
               .slice(0, 5)
               .map((item, i) => {
                 let isSelected = this.getSelected(item, selecting) != null;
-                return (<li key={`i${i}`} className={isSelected ? 'active' : null}>
-                  <a href='javascript:' onClick={ev => this.clickItem(item) }>
-                    {item[itemNameField]}
+                return (<li key={i} className={isSelected ? 'active' : null}>
+                  <IconText text={item[nameField]} icon={item.icon} onClick={event => this.clickItem(item) }>
                     {multiple && isSelected && <i className='pull-right glyphicon glyphicon-ok' />}
-                  </a>
+                  </IconText>
                 </li>);
-              }) : <li className='active'><a href='javascript:'>无更多数据</a></li> }
+              }) : <li className='active'><IconText text='无更多数据' /></li> }
           </ul>
           {multiple &&
             <div className='button-group'>

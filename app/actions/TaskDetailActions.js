@@ -5,7 +5,8 @@ class TaskDetailActions {
   constructor() {
     this.generateActions(
       'getTaskSuccess',
-      'updateTaskSuccess'
+      'updateTaskSuccess',
+      'deleteTaskSuccess'
     );
   }
 
@@ -21,9 +22,12 @@ class TaskDetailActions {
       .then(() => this.actions.updateTaskSuccess(taskPopulated));
   }
 
-  deleteTask(id) {
+  deleteTask({id, component}) {
     taskService.deleteTask(id)
-      .then(() => Modal.close());
+      .then(() => {
+        this.actions.deleteTaskSuccess();
+        $(component.refs.modal.refs.modal).modal('hide');
+      });
   }
 }
 

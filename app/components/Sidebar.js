@@ -34,7 +34,7 @@ class Sidebar extends Component {
     let sections;
     if (data.sections) {
       sections = data.sections.map((section, i) => (
-        <div className='section' key={`section_${i}`}>
+        <div className='section' key={i}>
           <a className='section-header' data-toggle='collapse'
             onClick={this.handleCollapse.bind(this, section) }
             href={`.section:nth-child(${i + 2}) > .section-body`}>
@@ -45,7 +45,7 @@ class Sidebar extends Component {
           </a>
           <ul className='section-body collapse in'>
             {section.body.map((item, j) => (
-              <li key={`sectionItem_${i}_${j}`}>
+              <li key={j}>
                 <Link className='section-item' to={item.to} activeClassName='active'>
                   <i className={`glyphicon glyphicon-${item.icon}`} /> {item.label}
                   {item.actionIcon && <Icon icon={item.actionIcon} onClick={item.onAction} className='action-icon' />}

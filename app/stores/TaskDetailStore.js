@@ -19,6 +19,10 @@ class TaskDetailStore {
     this.updated = true;
     assign(this.task, task);
   }
+
+  deleteTaskSuccess(task) {
+    this.updated = true;
+  }
 }
 
 export default alt.createStore(TaskDetailStore);

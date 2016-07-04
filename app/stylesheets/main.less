@@ -514,10 +514,10 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 
 /*selector*/
 .selector-container {
-  padding: 10px;
+  padding: 0px;
 }
 .selector-search {
-  padding: 5px 0px;
+  padding: 5px;
 }
 .selector-search .form-control {
   border-color: #f3f3f3;
@@ -529,11 +529,13 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
   margin: 0;
 }
 .selector-list > li {
-  margin: 1px 0;
+  margin: 0 0 1px 0;
+  border-left: solid 2px transparent;
 }
 .selector-list > li.active,
 .selector-list > li:hover {
   background-color: #f4f4f4;
+  border-left-color: #7266bb;
 }
 .selector-list > li a,
 .selector-list > li a:hover,
@@ -549,7 +551,7 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 }
 
 .button-group {
-  padding: 5px 0;
+  padding: 5px;
 }
 
 .icon-text {
@@ -588,9 +590,11 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 .list-item {
   padding: 2px;
   cursor: pointer;
+  border-left: solid 2px transparent;
 }
 .list-item:hover {
   background: #fff;
+  border-left-color: #7266bb;
 }
 .list-item > input{
   height: 20px;

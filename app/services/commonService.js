@@ -50,3 +50,12 @@ export function save(url, object) {
     })
   );
 }
+
+export function remove(url, id) {
+  return new Promise((resolve, reject) =>
+    $.ajax({
+      url: `${url}/${id || ''}`, type: 'DELETE',
+      success: resolve, error: handleError(reject)
+    })
+  );
+}

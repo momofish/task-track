@@ -20,6 +20,6 @@ export default {
   },
   
   deleteTask(id) {
-    return remove(id);
+    return remove(resourceUrl, id);
   }
 }
