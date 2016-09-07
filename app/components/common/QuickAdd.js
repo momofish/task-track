@@ -6,9 +6,6 @@ class QuickAdd extends Component {
   constructor(props) {
     super(props);
     this.state = props.data || {};
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,6 +27,12 @@ class QuickAdd extends Component {
     }
   }
 
+  handleKeyDown(event) {
+    if(event.keyCode == 13) {
+      this.handleSubmit(event);
+    }
+  }
+
   select(selector, event) {
     select[selector.type](event.currentTarget, this.state[selector.key], selection => {
       this.state[selector.key] = selection;
@@ -40,17 +43,17 @@ class QuickAdd extends Component {
   render() {
     let selectors = this.props.selectors || [];
     return (
-      <form ref='form' onSubmit={this.handleSubmit} className='animated quickadd'>
+      <div ref='form' onSubmit={this.handleSubmit.bind(this)} className='animated quickadd'>
         <div className='input-group'>
-          <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange} />
+          <input type='text' className='form-control' placeholder={this.props.placeHolder} value={this.state.title} onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} />
           <span className='input-group-btn'>
             {selectors.map((selector, i) => (
-              <button key={i} type="button" className="btn btn-default" onClick={this.select.bind(this, selector) }>{this.state[selector.key] && selector.nameGetter(this.state[selector.key]) || selector.label} <i className="caret" /></button>
+              <button key={i} type="button" className="btn btn-Default" onClick={this.select.bind(this, selector) }>{this.state[selector.key] && selector.nameGetter(this.state[selector.key]) || selector.label} <i className="caret" /></button>
             )) }
             <button className='btn btn-default'><i className='glyphicon glyphicon-plus'/></button>
           </span>
         </div>
-      </form>
+      </div>
     );
   }
 }

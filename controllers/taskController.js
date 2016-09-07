@@ -11,8 +11,11 @@ module.exports = function (router) {
       params.owner = user._id;
     else if (category == 'part')
       params.members = { $elemMatch: { $in: [user._id] } };
-    else
-      params.project = category;
+    else {
+      let parts = category.split('_');
+      params.project = parts[0];
+      params.packet = parts[1] || null;
+    }
     if (filter == 'uncompleted')
       params.completed = false;
     else if (filter == 'completed')
@@ -27,7 +30,7 @@ module.exports = function (router) {
   router.route('/tasks/:id').get(function (req, res, next) {
     var user = req.user;
     var id = req.params.id;
-    Task.findById(id).populate('owner members project', 'name').exec(function (err, task) {
+    Task.findById(id).populate('owner members', 'name').populate('project').exec(function (err, task) {
       if (err) return next(err);
 
       res.send(task);
@@ -35,9 +38,9 @@ module.exports = function (router) {
   }).delete(function (req, res, next) {
     var id = req.params.id;
     Task.findByIdAndRemove(id, function (err) {
-        if (err) return next(err);
+      if (err) return next(err);
 
-        res.sendStatus(204);
+      res.sendStatus(204);
     });
   });
 

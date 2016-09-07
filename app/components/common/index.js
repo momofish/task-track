@@ -12,7 +12,8 @@ import PadList from './PadList';
 import IconText from './IconText';
 import Selector from './Selector';
 import Progress from './Progress';
+import TabList from './TabList';
 
 export {DatePicker, EditableText, FormItem, GroupList, ListItem,
 Icon, Modal, Overlay, PopBox, PadList, IconText, Selector, QuickAdd,
-Progress};
+Progress, TabList};

@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import {Modal, FormItem, IconText} from './common';
+import {Modal, FormItem, IconText, ListItem, EditableText, QuickAdd} from './common';
 import {projectService} from '../services';
 import {select} from '../utils';
 
 class ProjectSetting extends Component {
   constructor(props) {
     super(props);
-    this.state = { project: props.project || {members: []} };
+    this.state = { project: props.project || { members: [] } };
   }
 
   componentDidMount() {
@@ -54,6 +54,18 @@ class ProjectSetting extends Component {
     });
   }
 
+  addPacket(quick) {
+    let {packets} = this.state.project;
+    packets.push({ name: quick.title, active: true });
+    this.forceUpdate();
+  }
+
+  editPacket(updator, input) {
+    let {packets} = this.state.project;
+    updator(input);
+    this.forceUpdate();
+  }
+
   render() {
     let project = this.state.project;
     let owner = project.owner || { name: '无所有者' };
@@ -83,6 +95,21 @@ class ProjectSetting extends Component {
               onClick={this.selectUser.bind(this, 'members') } />
           </div>
         </FormItem>
+        {project.packets &&
+          <FormItem label='工作包'>
+            <div className='well-wrap'>
+              <ul>
+                {project.packets.map((packet, i) =>
+                  <ListItem key={i} className='list-item flex' item={{
+                    label: <EditableText className='flex' value={packet.name}
+                      onChange={this.editPacket.bind(this, text => packet.name = text.value) } />,
+                    checked: !packet.active, completed: !packet.active
+                  }} onCheck={this.editPacket.bind(this, () => packet.active = !packet.active) } />
+                ) }
+              </ul>
+              <QuickAdd placeHolder='添加工作包' onSubmit={this.addPacket.bind(this) } />
+            </div>
+          </FormItem>}
         <FormItem>
           <div>
             <button type='submit' className='btn btn-primary btn-sm'>确定</button>

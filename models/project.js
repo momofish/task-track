@@ -8,7 +8,8 @@ var schema = new Schema({
   type: { type: Number, required: true, default: 0 },
   team: { type: Types.ObjectId, index: true, ref: 'Team' },
   owner: { type: Types.ObjectId, index: true, ref: 'User' },
-  members: [{ type: Types.ObjectId, ref: 'User' }]
+  members: [{ type: Types.ObjectId, ref: 'User' }],
+  packets: [new Schema({ name: String, active: Boolean })],
 });
 
 module.exports = mongoose.model('Project', schema);

@@ -34,7 +34,7 @@ class TasksStore {
         label: team.name, icon: 'th-large', actionIcon: team._id && 'cog',
         onAction: event => {
           event.preventDefault();
-          opener && opener('team', team);
+          opener && opener('team', team, event);
         },
         key: team._id, data: team
       },

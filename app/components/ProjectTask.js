@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {GroupList, PadList, QuickAdd} from './common';
+import {GroupList, PadList, QuickAdd, TabList} from './common';
 import Store from '../stores/ProjectTaskStore';
 import Actions from '../actions/ProjectTaskActions';
 import TaskDetail from './TaskDetail';
@@ -71,8 +71,13 @@ class ProjectTask extends Component {
     Actions.selectFilter(event.currentTarget, this.state.filter);
   }
 
+  selectPacket(tab) {
+    Actions.selectPacket(tab.packet);
+  }
+
   render() {
     let {project, tasks, selectedTask, filter, quickAdd, taskGroups} = this.state;
+    let {packets} = project;
 
     const selectors = [{
       key: 'owner',
@@ -99,6 +104,7 @@ class ProjectTask extends Component {
           </div>
         </div>
         <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } selectors={selectors} />
+        <TabList data={(packets || []).map((packet, i) => ({ name: packet.name, collapse: !packet.active, active: i == 0, packet })) } onSelect={this.selectPacket.bind(this) } />
         {filter.mode == 'pad' ?
           <PadList data={taskGroups}
             onSelect={this.selectTask}

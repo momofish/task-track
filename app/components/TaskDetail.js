@@ -10,6 +10,7 @@ import Store from '../stores/TaskDetailStore';
 import Actions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
 import {select} from '../utils';
+import {assign} from 'underscore';
 
 class TaskDetail extends Component {
   constructor(props) {
@@ -86,9 +87,19 @@ class TaskDetail extends Component {
     select.selectMenu(event.currentTarget, null, selecting => {
       let {task} = this.state;
       if (selecting.code == 'delete') {
-        Actions.deleteTask({id: task._id, component: this});
+        Actions.deleteTask({ id: task._id, component: this });
       }
     }, { data: [{ code: 'delete', name: '删除任务', icon: 'trash' }] });
+  }
+
+  selectPacket(event) {
+    let {task} = this.state;
+    let {project} = task;
+    select.selectMenu(event.currentTarget, { _id: task.packet }, selecting => {
+      Actions.updateTask({
+        _id: task._id, packet: selecting._id
+      }, { packet: selecting._id });
+    }, { data: project.packets.map(pack => assign({ icon: pack.active ? 'folder-open' : 'folder-close' }, pack)) });
   }
 
   addSubTask(quick) {
@@ -108,6 +119,10 @@ class TaskDetail extends Component {
   render() {
     let task = this.state.task || this.props.task;
     let project = task.project || { name: '未分配项目' };
+    let packet = task.packet;
+    if (typeof packet == 'string' && project.packets)
+      packet = project.packets.filter(pack => pack._id == packet).pop();
+    packet = packet || { name: "(无)" }
     let owner = task.owner || { name: '未分配人员' };
     let {completed, subTasks} = task;
     let className = classnames('form-title', { completed });
@@ -118,9 +133,10 @@ class TaskDetail extends Component {
         header={<div className='flex flex-horizontal'>
           <Link to={`/tasks/projects/${project._id}`}
             onClick={this.selectProject.bind(this) }>
+            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this) } />&nbsp;
             {project.name}&nbsp;
-            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this) } />
           </Link>
+          <IconText icon="folder-close" text={packet.name} onClick={this.selectPacket.bind(this) } />
           <div className='flex flex-end modal-header-content'>
             <IconText icon='option-vertical' iconClassName='circle' tooltip='更多'
               onClick={this.selectMenu.bind(this) } />

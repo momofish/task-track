@@ -5,6 +5,7 @@ var Types = Schema.Types;
 var schema = new Schema({
   title: String,
   project: { type: Types.ObjectId, index: true, ref: 'Project' },
+  packet: Types.ObjectId,
   dueDate: Date,
   owner: { type: Types.ObjectId, index: true, ref: 'User' },
   members: [{ type: Types.ObjectId, index: true, ref: 'User' }],

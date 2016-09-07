@@ -10,6 +10,7 @@ class ProjectTaskStore {
 
     this.quickAdd = { title: '' };
     this.project = {};
+    this.package = null;
     this.tasks = [];
     this.taskGroups = [];
     this.selectedTask = null;
@@ -29,6 +30,7 @@ class ProjectTaskStore {
           return {
             label: task.title,
             completed: task.completed,
+            checked: task.completed,
             tags: [
               { code: 'dueDate', type: "label", label: task.dueDate && moment(task.dueDate).format('L'), style: "danger", data: task.dueDate },
               task.owner && { code: 'owner', type: "label", label: task.owner.name, style: "info", data: task.owner },

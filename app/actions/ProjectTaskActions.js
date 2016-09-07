@@ -19,15 +19,26 @@ class ProjectTaskActions {
 
   getProject(id, filter) {
     this.actions.beforeGetProject(id);
-    this.actions.getTasks();
     projectService.getProject(id)
-      .then(project => this.actions.getProjectSuccess(project));
+      .then(project => {
+        project.packets.push({active: true, name: "(无)"});
+        this.actions.getProjectSuccess(project)
+        let state = ProjectTaskStore.state;
+        state.packet = project.packets.length ? project.packets[0]._id : null;
+        this.actions.getTasks();
+      });
+  }
+
+  selectPacket(packet) {
+    let state = ProjectTaskStore.state;
+    state.packet = packet._id;
+    this.actions.getTasks();
   }
 
   getTasks() {
-    let state = ProjectTaskStore.state;
-    taskService.getTasks(state.project._id, state.filter.query)
-      .then(tasks => this.actions.getTasksSuccess({tasks}));
+    let {project, filter, packet} = ProjectTaskStore.state;
+    taskService.getTasks(`${project._id}_${packet || ''}`, filter.query)
+      .then(tasks => this.actions.getTasksSuccess({ tasks }));
   }
 
   addTask(task, form) {
@@ -46,9 +57,9 @@ class ProjectTaskActions {
       if (filter.query != newFilter.query) {
         this.actions.getTasks(undefined);
       }
-    }, {align: 'right', data: projectTaskFilters});
+    }, { align: 'right', data: projectTaskFilters });
   }
-  
+
   updateTask(task) {
     taskService.updateTask(task)
       .then(() => this.actions.getTasks());

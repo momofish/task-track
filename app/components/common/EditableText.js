@@ -28,12 +28,18 @@ class EditableText extends Component {
     this.save();
   }
 
+  keyDown(event) {
+    if(event.keyCode == 13) {
+      this.submit(event);
+    }
+  }
+
   render() {
     let multiline = this.props.multiline;
     let value = this.state.value;
     let isEdit = this.state.isEdit;
     return isEdit ?
-      <form onSubmit={this.submit.bind(this)}>
+      <div onSubmit={this.submit.bind(this)}>
         <div className='form-group'>
           {
             multiline ?
@@ -42,6 +48,7 @@ class EditableText extends Component {
                 value={value} placeholder={this.props.placeholder} /> :
               <input type='value' className='form-control'
                 onChange={this.change.bind(this)}
+                onKeyDown={this.keyDown.bind(this)}
                 value={value} placeholder={this.props.placeholder} />
           }
         </div>
@@ -53,7 +60,7 @@ class EditableText extends Component {
           onClick={() => this.setState({ isEdit: false }) }>
           取消
         </button>
-      </form> :
+      </div> :
       <a href='javascript:' className={`${this.props.className} form-control-static`}
         onClick={() => this.setState({ isEdit: true }) }
         dangerouslySetInnerHTML={{
