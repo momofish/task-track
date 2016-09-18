@@ -15,7 +15,7 @@ class ListItem extends Component {
     let {className, item, onCheck, onClick, onClickTag} = this.props;
 
     return (
-      <li className={classnames(className) } onClick={onClick}>
+      <li className={classnames(className) } onClick={onClick} title={item.description}>
         <div className={classnames('item-title', { completed: item.completed }) }>
           {onCheck && <input type='checkbox' checked={item.checked} onChange={this.check.bind(this, item) } onClick={this.checkClick } />}
           {item.label}

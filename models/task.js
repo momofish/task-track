@@ -12,7 +12,9 @@ var schema = new Schema({
   subTasks: [new Schema({ name: String, completed: Boolean })],
   completed: { type: Boolean, index: true, default: false },
   treat: { type: Number, default: 0 },
-  description: String
+  description: String,
+  startDate: Date,
+  endDate: Date
 }, { versionKey: false });
 
 module.exports = mongoose.model('Task', schema);

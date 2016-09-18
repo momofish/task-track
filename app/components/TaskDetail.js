@@ -74,12 +74,12 @@ class TaskDetail extends Component {
     }, { _id: task.project && task.project._id });
   }
 
-  selectDueDate(event) {
+  selectDate(field, event) {
     let task = this.state.task
-    select.selectDate(event.currentTarget, moment(task.dueDate), date => {
-      Actions.updateTask({
-        _id: task._id, dueDate: date.toString()
-      }, { dueDate: date });
+    select.selectDate(event.currentTarget, moment(task[field]), date => {
+      let newTask = {_id: task._id};
+      newTask[field] = date;
+      Actions.updateTask(newTask, newTask);
     });
   }
 
@@ -124,7 +124,9 @@ class TaskDetail extends Component {
       packet = project.packets.filter(pack => pack._id == packet).pop();
     packet = packet || { name: "(无工作包)" }
     let owner = task.owner || { name: '未分配人员' };
-    let {completed, subTasks} = task;
+    let {completed, subTasks, members} = task;
+    subTasks = subTasks || [];
+    members = members || [];
     let className = classnames('form-title', { completed });
     let completeRatio = subTasks.filter(subTask => subTask.completed).length / (subTasks.length + 1e-18);
 
@@ -154,8 +156,8 @@ class TaskDetail extends Component {
             <FormItem content={[
               <IconText icon='user' text={owner.name}
                 onClick={this.selectMember.bind(this, task.owner, 'owner') } />,
-              <IconText text={task.dueDate ? moment(task.dueDate).format('L') : '截止日期'}
-                icon='calendar' onClick={this.selectDueDate.bind(this) }
+              <IconText text={task.dueDate ? moment(task.dueDate).format('L')+ ' 截止' : '截止日期'}
+                icon='calendar' onClick={this.selectDate.bind(this, 'dueDate') }
                 />
             ]} />
             <FormItem>
@@ -164,12 +166,18 @@ class TaskDetail extends Component {
             </FormItem>
             <FormItem label='参与'>
               <div>
-                {task.members.map((member, i) =>
+                {members.map((member, i) =>
                   <IconText key={i} icon='user' text={member.name} />
                 ) }
-                <IconText icon='plus' onClick={this.selectMember.bind(this, task.members, 'members') } />
+                <IconText icon='plus' onClick={this.selectMember.bind(this, members, 'members') } />
               </div>
             </FormItem>
+            <FormItem label='实际' content={[
+              <IconText text={task.startDate ? moment(task.startDate).format('L')+ ' 开始' : '开始日期'}
+                icon='calendar' onClick={this.selectDate.bind(this, 'startDate') } />,
+              <IconText text={task.endDate ? moment(task.endDate).format('L') + ' 结束' : '结束日期'}
+                icon='calendar' onClick={this.selectDate.bind(this, 'endDate') } />
+            ]} />
             {task.subTasks &&
               <FormItem label='检查点'>
                 <div className='well-wrap'>

@@ -20,7 +20,7 @@ module.exports = function (router) {
       params.completed = false;
     else if (filter == 'completed')
       params.completed = true;
-    Task.find(params).populate('owner project', 'name').exec(function (err, tasks) {
+    Task.find(params).select('completed project owner title treat dueDate startDate endDate').populate('owner project', 'name').exec(function (err, tasks) {
       if (err) return next(err);
 
       res.send(tasks);

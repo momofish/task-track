@@ -1,4 +1,5 @@
 import {assign, contains} from 'underscore';
+import moment from 'moment';
 import alt from '../alt';
 import CalendarActions from '../actions/CalendarActions';
 import {taskCalendarFilters} from '../models';
@@ -14,13 +15,19 @@ class CalendarStore {
   }
 
   task2Events(tasks) {
-    return tasks.map(task => ({
-      title: task.title,
-      allDay: true,
-      start: new Date(task.dueDate),
-      end: new Date(task.dueDate),
-      data: task
-    }));
+    return tasks.map(task => {
+      let start = task.dueDate, end = task.dueDate;
+      if (task.startDate) start = task.startDate;
+      if (task.endDate) end = task.endDate;
+
+      return {
+        title: task.title,
+        allDay: true,
+        start: new Date(start),
+        end: new Date(end),
+        data: task
+      }
+    });
   }
 
   selectedFilter(filter) {

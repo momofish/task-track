@@ -5,7 +5,7 @@ import TaskDetail from './TaskDetail';
 import Store from '../stores/CalendarStore';
 import Actions from '../actions/CalendarActions'
 
-BigCalendar.momentLocalizer(moment);
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 class Calendar extends Component {
   constructor(props) {

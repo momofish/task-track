@@ -29,6 +29,7 @@ class MyTaskStore {
         body: value.map(task => {
           return {
             label: task.title,
+            description: task.description,
             completed: task.completed,
             checked: task.completed,
             tags: [
