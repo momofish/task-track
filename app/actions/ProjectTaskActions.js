@@ -21,16 +21,17 @@ class ProjectTaskActions {
     this.actions.beforeGetProject(id);
     projectService.getProject(id)
       .then(project => {
-        project.packets.push({active: true, name: "(无)"});
+        project.packets.unshift({active: true, name: "(无工作包)"});
         this.actions.getProjectSuccess(project)
-        let state = ProjectTaskStore.state;
-        state.packet = project.packets.length ? project.packets[0]._id : null;
+        let {state} = ProjectTaskStore;
+        let activePacket = project.packets.filter(pack => pack.active).pop();
+        state.packet = activePacket ? activePacket._id : null;
         this.actions.getTasks();
       });
   }
 
   selectPacket(packet) {
-    let state = ProjectTaskStore.state;
+    let {state} = ProjectTaskStore;
     state.packet = packet._id;
     this.actions.getTasks();
   }

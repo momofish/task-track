@@ -122,7 +122,7 @@ class TaskDetail extends Component {
     let packet = task.packet;
     if (typeof packet == 'string' && project.packets)
       packet = project.packets.filter(pack => pack._id == packet).pop();
-    packet = packet || { name: "(无)" }
+    packet = packet || { name: "(无工作包)" }
     let owner = task.owner || { name: '未分配人员' };
     let {completed, subTasks} = task;
     let className = classnames('form-title', { completed });

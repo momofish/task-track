@@ -34,7 +34,8 @@ class ProjectTask extends Component {
   }
 
   addTask(quick, form) {
-    let task = { title: quick.title, owner: quick.owner, project: this.state.project };
+    let {project, packet} = this.state;
+    let task = { title: quick.title, owner: quick.owner, project: this.state.project, packet };
     Actions.addTask(task, form);
   }
 
@@ -76,8 +77,10 @@ class ProjectTask extends Component {
   }
 
   render() {
-    let {project, tasks, selectedTask, filter, quickAdd, taskGroups} = this.state;
+    let {project, packet, tasks, selectedTask, filter, quickAdd, taskGroups} = this.state;
     let {packets} = project;
+    packets = [].concat(packets || []);
+    packets.reverse();
 
     const selectors = [{
       key: 'owner',
@@ -104,7 +107,7 @@ class ProjectTask extends Component {
           </div>
         </div>
         <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } selectors={selectors} />
-        <TabList data={(packets || []).map((packet, i) => ({ name: packet.name, collapse: !packet.active, active: i == 0, packet })) } onSelect={this.selectPacket.bind(this) } />
+        <TabList data={packets.map(pack => ({ name: pack.name, collapse: !pack.active, active: pack._id == packet, packet: pack })) } onSelect={this.selectPacket.bind(this) } />
         {filter.mode == 'pad' ?
           <PadList data={taskGroups}
             onSelect={this.selectTask}
