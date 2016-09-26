@@ -29,7 +29,7 @@ var dependencies = [
  | Combine all JS libraries into a single file for fewer HTTP requests.
  |--------------------------------------------------------------------------
  */
-gulp.task('vendor', function() {
+gulp.task('vendor', function () {
   return gulp.src([
     'bower_components/jquery/dist/jquery.js',
     'bower_components/bootstrap/dist/js/bootstrap.js',
@@ -45,7 +45,7 @@ gulp.task('vendor', function() {
  | Compile third-party dependencies separately for faster performance.
  |--------------------------------------------------------------------------
  */
-gulp.task('browserify-vendor', function() {
+gulp.task('browserify-vendor', function () {
   return browserify()
     .require(dependencies)
     .bundle()
@@ -60,10 +60,13 @@ gulp.task('browserify-vendor', function() {
  | Compile only project files, excluding all third-party dependencies.
  |--------------------------------------------------------------------------
  */
-gulp.task('browserify', ['browserify-vendor'], function() {
+gulp.task('browserify', ['browserify-vendor'], function () {
   return browserify({ entries: 'app/main.js', debug: false })
     .external(dependencies)
-    .transform(babelify, { presets: ['es2015', 'react'] })
+    .transform(babelify, {
+      presets: ['stage-3', 'es2015', 'react'],
+      plugins: ["transform-runtime"]
+    })
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
@@ -76,20 +79,23 @@ gulp.task('browserify', ['browserify-vendor'], function() {
  | Same as browserify task, but will also watch for changes and re-compile.
  |--------------------------------------------------------------------------
  */
-gulp.task('browserify-watch', ['browserify-vendor'], function() {
+gulp.task('browserify-watch', ['browserify-vendor'], function () {
   var bundler = watchify(browserify({ entries: 'app/main.js', debug: true }, watchify.args));
   bundler.external(dependencies);
-  bundler.transform(babelify, { presets: ['es2015', 'react'] });
+  bundler.transform(babelify, {
+    presets: ['stage-3', 'es2015', 'react'],
+    plugins: ["transform-runtime"]
+  });
   bundler.on('update', rebundle);
   return rebundle();
 
   function rebundle() {
     var start = Date.now();
     return bundler.bundle()
-      .on('error', function(err) {
+      .on('error', function (err) {
         gutil.log(gutil.colors.red(err.toString()));
       })
-      .on('end', function() {
+      .on('end', function () {
         gutil.log(gutil.colors.green('Finished rebundling in', (Date.now() - start) + 'ms.'));
       })
       .pipe(source('bundle.js'))
@@ -105,7 +111,7 @@ gulp.task('browserify-watch', ['browserify-vendor'], function() {
  | Compile LESS stylesheets.
  |--------------------------------------------------------------------------
  */
-gulp.task('styles', function() {
+gulp.task('styles', function () {
   return gulp.src('app/stylesheets/main.less')
     .pipe(plumber())
     .pipe(less())
@@ -114,7 +120,7 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   gulp.watch('app/stylesheets/**/*.less', ['styles']);
 });
 

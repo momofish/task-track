@@ -9,4 +9,5 @@ module.exports = function(app) {
   require('./teamController')(router);
   require('./deptController')(router);
   require('./userController')(router);
+  require('./workloadController')(router);
 }

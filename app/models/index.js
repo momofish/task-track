@@ -1,1 +1,1 @@
-export * from './values';
+module.exports = require('./values');

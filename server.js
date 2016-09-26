@@ -29,6 +29,7 @@ var production = process.env.NODE_ENV === 'production';
 var app = express();
 
 // mongoose init
+mongoose.Promise = global.Promise;
 mongoose.connect(config.mongoUri);
 mongoose.connection.on('error', function () {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
@@ -100,6 +101,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // router
+require('babel-register');
+require("babel-polyfill");
 require('./controllers')(app);
 
 app.get('/login', function (req, res) {
@@ -129,7 +132,6 @@ app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginPath }), function 
   }
 
   // Babel ES6/JSX Compiler
-  require('babel-register');
   var routes = require('./app/routes');
 
   Router.match({ routes: routes.default, location: req.url }, function (err, redirectLocation, renderProps) {

@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
 import {Icon, Button, GroupButton} from './common';
 import moment from 'moment';
+import workloadService from '../services/workloadService';
 
 class Workload extends Component {
   constructor(props) {
     super(props);
-    this.state = { mode: 0, date: new Date() };
+    this.state = { mode: 0, date: new Date(), workSheet: null };
   }
 
   componentDidMount() {
+    this.loadData();
+  }
 
+  async loadData() {
+    let {mode, date} = this.state;
+    let workSheet = await workloadService.getWorkSheet(mode, date);
+    this.setState({ workSheet });
   }
 
   changeMode(button) {
