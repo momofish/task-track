@@ -20,11 +20,13 @@ module.exports = function (router) {
       params.completed = false;
     else if (filter == 'completed')
       params.completed = true;
-    Task.find(params).select('completed project owner title treat dueDate startDate endDate').populate('owner project', 'name').exec(function (err, tasks) {
-      if (err) return next(err);
+    Task.find(params)
+      .select('completed project owner title treat dueDate startDate endDate')
+      .populate('owner project', 'name').exec(function (err, tasks) {
+        if (err) return next(err);
 
-      res.send(tasks);
-    });
+        res.send(tasks);
+      });
   });
 
   router.route('/tasks/:id').get(function (req, res, next) {

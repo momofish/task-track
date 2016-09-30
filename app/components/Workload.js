@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import {Icon, Button, GroupButton} from './common';
+import TaskDetail from './TaskDetail';
 import moment from 'moment';
+import _ from 'underscore';
 import workloadService from '../services/workloadService';
 
 class Workload extends Component {
   constructor(props) {
     super(props);
-    this.state = { mode: 0, date: new Date(), workSheet: null };
+    this.state = {
+      mode: 0, date: new Date(), selectedTask: null,
+      worksheet: {
+        needWorkloads: {}, otherWorkloads: {}, tasks: []
+      }
+    };
   }
 
   componentDidMount() {
@@ -15,8 +22,8 @@ class Workload extends Component {
 
   async loadData() {
     let {mode, date} = this.state;
-    let workSheet = await workloadService.getWorkSheet(mode, date);
-    this.setState({ workSheet });
+    let worksheet = await workloadService.getWorkSheet(mode, date);
+    this.setState({ worksheet });
   }
 
   changeMode(button) {
@@ -24,8 +31,15 @@ class Workload extends Component {
     this.setState({ mode });
   }
 
+  selectTask(selectedTask, event) {
+    this.setState({selectedTask});
+    event.stopPropagation();
+  }
+
   render() {
-    let {mode, date} = this.state;
+    let {mode, date, worksheet, selectedTask} = this.state;
+    let {needWorkloads, otherWorkloads, tasks} = worksheet;
+    let needWorkloadsPair = _.pairs(needWorkloads);
 
     return (
       <div className='container-fluid flex flex-verticle'>
@@ -46,13 +60,13 @@ class Workload extends Component {
           </form>
         </nav>
         <div className="table-responsive">
-          <table className="table table-bordered table-striped table-condensed table-hover">
+          <table className="text-sm table table-bordered table-striped table-condensed table-hover">
             <thead>
               <tr>
                 <th style={{ width: 100 }}>任务</th>
                 <th style={{ width: 60 }}>开始</th>
                 <th style={{ width: 60 }}>结束</th>
-                <th style={{ width: 40 }}>一 9/19</th>
+                {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 40 }}>{moment(need[0]).format('MM/DD') }</th>) }
               </tr>
             </thead>
             <tbody>
@@ -60,17 +74,23 @@ class Workload extends Component {
                 <td>总量</td>
                 <td></td>
                 <td></td>
-                <td></td>
+                {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>) }
               </tr>
-              <tr>
-                <td>任务1</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
+              {tasks.map(task =>
+                <tr key={task._id}>
+                  <td><a href='' onClick={this.selectTask.bind(this, task)}>{`[${task.project.id || '无编号'}-${task.project.name}]${task.title}`}</a></td>
+                  <td>{moment(task.startDate).format('L') }</td>
+                  <td>{moment(task.endDate).format('L') }</td>
+                  {needWorkloadsPair.map(need => <td key={need[0]}></td>) }
+                </tr>
+              ) }
             </tbody>
           </table>
         </div>
+        {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
+          this.setState({selectedTask: null});
+          updated && this.loadData();
+        } } />}
       </div>
     );
   }
