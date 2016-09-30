@@ -75,8 +75,16 @@ class ProjectSetting extends Component {
     return (
       <form className='smart-form' onSubmit={this.handleSubmit.bind(this, project) }>
         <FormItem label='名称'>
-          <input type='text' className='form-control'
-            value={project.name} onChange={this.changeEntity.bind(this, project, 'name') } />
+          <div>
+            <div className="col-sm-3">
+              <input type='text' className='form-control' placeholder='编号'
+                value={project.id} onChange={this.changeEntity.bind(this, project, 'id') } />
+            </div>
+            <div className="col-sm-9">
+              <input type='text' className='form-control' placeholder='名称'
+                value={project.name} onChange={this.changeEntity.bind(this, project, 'name') } />
+            </div>
+          </div>
         </FormItem>
         <FormItem>
           <IconText icon='user' text={owner.name}
