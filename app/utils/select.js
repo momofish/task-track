@@ -1,7 +1,7 @@
 import {Selector, DatePicker} from '../components/common';
 import {projectService, teamService, userService} from '../services';
 import moment from 'moment';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 
 export default {
   selectProject(target, selected, onSelect, options) {

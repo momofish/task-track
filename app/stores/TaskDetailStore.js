@@ -1,4 +1,4 @@
-import {assign} from 'underscore';
+import {assign} from 'lodash';
 import alt from '../alt';
 import TaskDetailActions from '../actions/TaskDetailActions';
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import moment from 'moment';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 import classnames from 'classnames';
 import {Modal, PopBox, FormItem,
   Selector, EditableText, IconText, Icon,
@@ -10,7 +10,7 @@ import Store from '../stores/TaskDetailStore';
 import Actions from '../actions/TaskDetailActions';
 import {projectService} from '../services';
 import {select} from '../utils';
-import {assign} from 'underscore';
+import {assign} from 'lodash';
 
 class TaskDetail extends Component {
   constructor(props) {

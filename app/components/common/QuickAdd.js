@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {select} from '../../utils';
-import {assign} from 'underscore';
+import {assign} from 'lodash';
 
 class QuickAdd extends Component {
   constructor(props) {

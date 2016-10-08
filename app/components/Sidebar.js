@@ -7,12 +7,6 @@ class Sidebar extends Component {
     super(props);
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
   handleCollapse(section, event) {
     section.collapsed = !section.collapsed;
     event.currentTarget

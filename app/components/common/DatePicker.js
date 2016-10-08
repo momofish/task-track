@@ -18,7 +18,7 @@ class DatePicker extends Component {
 
   render() {
     return (
-      <Calendar date={this.props.selected} onChange={this.select} />
+      <Calendar date={this.props.selected} firstDayOfWeek={1} onChange={this.select} />
     )
   }
 }

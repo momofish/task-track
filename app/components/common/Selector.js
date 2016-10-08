@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PopBox from './PopBox';
 import IconText from './IconText';
-import _ from 'underscore';
+import _ from 'lodash';
 
 let selecting = null;
 
@@ -13,6 +13,17 @@ class Selector extends Component {
 
     this.changeTerm = this.changeTerm.bind(this);
     this.select = this.select.bind(this);
+  }
+
+  static open(options) {
+    let target = options.target;
+    let align = options.align;
+    let style = options.style;
+    selecting = options.selected;
+    if (selecting instanceof Array)
+      selecting = selecting.concat();
+    let boxOptions = { target, align, style, content: <Selector {...options} /> };
+    PopBox.open(boxOptions);
   }
 
   componentDidMount() {
@@ -37,7 +48,7 @@ class Selector extends Component {
     else if (dataSource.data instanceof Array)
       setItems(dataSource.data);
     else if (dataSource.data instanceof Object)
-      setItems(_.pairs(dataSource.data).map(pair => {
+      setItems(_.toPairs(dataSource.data).map(pair => {
         if (pair[1].key === undefined)
           pair[1].key = pair[0];
         return pair[1];
@@ -142,17 +153,6 @@ class Selector extends Component {
       </div>
     );
   }
-}
-
-Selector.open = function open(options) {
-  let target = options.target;
-  let align = options.align;
-  let style = options.style;
-  selecting = options.selected;
-  if (selecting instanceof Array)
-    selecting = selecting.concat();
-  let boxOptions = { target, align, style, content: <Selector {...options} /> };
-  PopBox.open(boxOptions);
 }
 
 export default Selector;

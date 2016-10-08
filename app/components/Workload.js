@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import _ from 'underscore';
+import _ from 'lodash';
 
 import {select} from '../utils';
 import {Icon, IconText, Button, GroupButton} from './common';
@@ -15,9 +15,8 @@ class Workload extends Component {
     this.state = {
       mode: 0, date: new Date(), selectedTask: null,
       worksheet: {
-        needWorkloads: {}, otherWorkloads: {}, tasks: []
-      },
-      workloads: {}
+        needWorkloads: {}, otherWorkloads: {}, tasks: [], workloads: {}
+      }
     };
   }
 
@@ -34,14 +33,14 @@ class Workload extends Component {
 
   changeMode(button) {
     let {mode} = button;
-    this.setState({ mode });
+    this.state.mode = mode;
     this.loadData();
   }
 
-  changeDate(event) {
+  changeDate(button, event) {
     let {date} = this.state
     select.selectDate(event.currentTarget, moment(date), date => {
-      this.setState({ date });
+      this.state.date = date;
       this.loadData();
     });
   }
@@ -52,7 +51,7 @@ class Workload extends Component {
   }
 
   changeWorkload(task, date, event) {
-    let {workloads} = this.state;
+    let {workloads} = this.state.worksheet;
 
     let filled = event.target.value;
     let workloadsByTask = workloads[task._id] = workloads[task._id] || {};
@@ -61,10 +60,11 @@ class Workload extends Component {
   }
 
   render() {
-    let {mode, date, worksheet, selectedTask, workloads} = this.state;
+    let {mode, date, worksheet, selectedTask} = this.state;
+    let {workloads} = worksheet;
     let {needWorkloads, otherWorkloads, tasks} = worksheet;
-    let needWorkloadsPair = _.pairs(needWorkloads);
-    let totalWorkloads = _.mapObject(needWorkloads, (v, k) => 0);
+    let needWorkloadsPair = _.toPairs(needWorkloads);
+    let totalWorkloads = _.mapValues(needWorkloads, (v, k) => 0);
     for (let taskId in workloads) {
       let workloadsByDate = workloads[taskId];
       for (let d in workloadsByDate) {
@@ -91,62 +91,70 @@ class Workload extends Component {
             ]} onClick={this.changeMode.bind(this) } />&nbsp;
             <GroupButton data={[
               { icon: 'chevron-left' },
-              { text: date ? moment(date).format('L') : '日期', icon: 'calendar', onClick: this.changeDate.bind(this) },
+              {
+                text: date ? moment(date).format('MM/DD') : '日期',
+                icon: 'calendar'
+              },
               { icon: 'chevron-right' }
-            ]} />&nbsp;
+            ]} onClick={this.changeDate.bind(this) } />&nbsp;
             <Button text='一键填报' className='btn-info' />
           </form>
         </nav>
-        <div className="table-responsive">
-          <table className="text-sm table table-bordered table-striped table-condensed table-hover">
-            <thead>
-              <tr>
-                <th style={{ width: 100 }}>任务</th>
-                <th style={{ width: 60 }}>开始</th>
-                <th style={{ width: 60 }}>结束</th>
-                {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 40 }}>{`${WEEKDAYS[moment(need[0]).weekday()]} ${moment(need[0]).format('MM/DD')}` }</th>) }
-              </tr>
-            </thead>
-            <tbody>
-              <tr className='info'>
-                <td>总量</td>
-                <td></td>
-                <td></td>
-                {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>) }
-              </tr>
-              <tr className='warning'>
-                <td>其它</td>
-                <td></td>
-                <td></td>
-                {needWorkloadsPair.map(need => <td key={need[0]}>{otherWorkloads[need[0]]}</td>) }
-              </tr>
-              {tasks.map(task => {
-                let workloadsByTask = workloads[task.id];
-                return (
-                  <tr key={task._id}>
-                    <td className='nowrap'>
-                      <IconText onClick={this.selectTask.bind(this, task) }>
-                        {`[${task.project.id || '无编号'}-${task.project.name}]${task.title}`}
-                      </IconText>
-                    </td>
-                    <td>{moment(task.startDate).format('MM/DD') }</td>
-                    <td>{moment(task.endDate).format('MM/DD') }</td>
-                    {needWorkloadsPair.map(need => <td key={need[0]}>
-                      <input type='text' disabled={!task.project.id || !needWorkloads[need[0]]} className='form-control input-sm'
-                        onChange={this.changeWorkload.bind(this, task, need[0]) }
-                        value={(workloadsByTask || {})[need[0]]} />
-                    </td>) }
-                  </tr>
-                )
-              }) }
-              <tr className='warning'>
-                <td>合计</td>
-                <td></td>
-                <td></td>
-                {_.pairs(totalWorkloads).map(workload => <td key={workload[0]}>{workload[1]}</td>) }
-              </tr>
-            </tbody>
-          </table>
+        <div className='flex flex-hscroll'>
+          <div className='scroll-container'>
+            <table className="text-sm table table-bordered table-striped table-condensed table-hover">
+              <thead>
+                <tr>
+                  <th style={{ width: 150 }}>任务</th>
+                  <th style={{ width: 60 }}>开始</th>
+                  <th style={{ width: 60 }}>结束</th>
+                  {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 30 }}>
+                    {`${WEEKDAYS[moment(need[0]).weekday()]} ${moment(need[0]).format('MM/DD')}` }
+                  </th>) }
+                </tr>
+              </thead>
+              <tbody>
+                <tr className='info'>
+                  <td>总量</td>
+                  <td></td>
+                  <td></td>
+                  {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>) }
+                </tr>
+                <tr className='warning'>
+                  <td>其它</td>
+                  <td></td>
+                  <td></td>
+                  {needWorkloadsPair.map(need => <td key={need[0]}>{otherWorkloads[need[0]]}</td>) }
+                </tr>
+                {tasks.map(task => {
+                  let workloadsByDate = workloads[task._id];
+                  return (
+                    <tr key={task._id}>
+                      <td className='nowrap'>
+                        <IconText onClick={this.selectTask.bind(this, task) }>
+                          {`[${task.project.id || '无编号'}-${task.project.name}]${task.title}`}
+                        </IconText>
+                      </td>
+                      <td>{moment(task.startDate).format('MM/DD') }</td>
+                      <td>{moment(task.endDate).format('MM/DD') }</td>
+                      {needWorkloadsPair.map(need => <td key={need[0]}>
+                        <input type='text' disabled={!task.project.id || !needWorkloads[need[0]]}
+                          className='form-control input-sm'
+                          onChange={this.changeWorkload.bind(this, task, need[0]) }
+                          value={(workloadsByDate || {})[need[0]]} />
+                      </td>) }
+                    </tr>
+                  )
+                }) }
+                <tr className='warning'>
+                  <td>合计</td>
+                  <td></td>
+                  <td></td>
+                  {_.toPairs(totalWorkloads).map(workload => <td key={workload[0]}>{workload[1]}</td>) }
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           this.setState({ selectedTask: null });

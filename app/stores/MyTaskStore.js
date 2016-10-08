@@ -2,7 +2,7 @@ import moment from 'moment';
 import alt from '../alt';
 import MyTaskActions from '../actions/MyTaskActions';
 import {myTaskFilters} from '../models';
-import _ from 'underscore';
+import _ from 'lodash';
 
 class MyTaskStore {
   constructor() {
@@ -21,7 +21,7 @@ class MyTaskStore {
     let realGrouper = grouper instanceof Function ?
       grouper : task => task[grouper] || 0;
     let groups = _.chain(this.tasks).groupBy(realGrouper)
-      .mapObject((value, key) => ({
+      .mapValues((value, key) => ({
         header: {
           label: grouper ? groupConfig ? groupConfig[key].name : key : this.filter.name
         },

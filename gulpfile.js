@@ -21,7 +21,7 @@ var dependencies = [
   'react',
   'react-dom',
   'react-router',
-  'underscore'
+  'lodash'
 ];
 
 /*

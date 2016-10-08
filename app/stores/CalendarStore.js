@@ -1,4 +1,4 @@
-import {assign, contains} from 'underscore';
+import {assign, contains} from 'lodash';
 import moment from 'moment';
 import alt from '../alt';
 import CalendarActions from '../actions/CalendarActions';

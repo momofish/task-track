@@ -3,5 +3,6 @@ module.exports = {
   User: require('./user'),
   Project: require('./project'),
   Task: require('./task'),
-  Team: require('./team')
+  Team: require('./team'),
+  Workload: require('./workload')
 }

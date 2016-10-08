@@ -7,7 +7,7 @@ import TeamSetting from './TeamSetting';
 import TasksStore from '../stores/TasksStore'
 import TasksActions from '../actions/TasksActions';
 import {select} from '../utils';
-import {assign} from 'underscore';
+import {assign} from 'lodash';
 
 class Tasks extends Component {
   constructor(props) {

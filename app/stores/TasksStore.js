@@ -1,6 +1,6 @@
 import alt from '../alt';
 import TasksActions from '../actions/TasksActions';
-import _ from 'underscore';
+import _ from 'lodash';
 
 class TasksStore {
   constructor() {

@@ -24,6 +24,16 @@ class ModalContainer extends Component {
 }
 
 class Modal extends Component {
+  static open(modalOptions) {
+    options = modalOptions;
+    renderContainer();
+  }
+
+  static close() {
+    options = null;
+    renderContainer();
+  }
+
   componentDidMount() {
     $(this.refs.modal).modal('show')
       .on('hidden.bs.modal', () => {
@@ -75,16 +85,6 @@ function renderContainer() {
     document.body.appendChild(containerDOM);
   }
   ReactDOM.render(<ModalContainer />, containerDOM);
-}
-
-Modal.open = function open(modalOptions) {
-  options = modalOptions;
-  renderContainer();
-}
-
-Modal.close = function close() {
-  options = null;
-  renderContainer();
 }
 
 export default Modal;
