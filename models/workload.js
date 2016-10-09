@@ -8,6 +8,8 @@ var schema = new Schema({
   date: { type: Date, index: true },
   workload: Number,
   owner: { type: Types.ObjectId, index: true, ref: 'User' },
+  status: Number, // 0： 待审批, 1, 审核中，2, 已通过， 3, 已拒绝
+  opinion: String
 }, { versionKey: false });
 
 module.exports = mongoose.model('Workload', schema);
