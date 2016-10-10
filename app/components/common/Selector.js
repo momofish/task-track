@@ -131,17 +131,17 @@ class Selector extends Component {
         }
         <div className='tab-pane active'>
           <ul className='selector-list'>
-            {(items && items.length) ? items
+            {items && items.length ? items
               .filter(item => !termReg || item[nameField].search(termReg) >= 0)
               .slice(0, 5)
               .map((item, i) => {
                 let isSelected = this.getSelected(item, selecting) != null;
-                return (<li key={i} className={isSelected ? 'active' : null}>
+                return (<li key={item._id || i} className={isSelected ? 'active' : null}>
                   <IconText text={item[nameField]} icon={item.icon} onClick={event => this.clickItem(item) }>
                     {multiple && isSelected && <i className='pull-right glyphicon glyphicon-ok' />}
                   </IconText>
                 </li>);
-              }) : <li className='active'><IconText text='无更多数据' /></li> }
+              }) : items ? <li className='active'><IconText text='无更多数据' /></li> : null }
           </ul>
           {multiple &&
             <div className='button-group'>

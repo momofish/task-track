@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import classnames from 'classnames';
+
 import ListItem from './ListItem';
 
 class GroupList extends Component {
@@ -7,11 +9,13 @@ class GroupList extends Component {
   }
 
   handleSelect() {
-    this.props.onSelect(...arguments);
+    let {onSelect} = this.props;
+    onSelect && onSelect(...arguments);
   }
 
   handleClickTag() {
-    this.props.onClickTag(...arguments);
+    let {onClickTag} = this.props;
+    onClickTag && onClickTag(...arguments);
   }
 
   handleCollapse(group, event) {
@@ -23,9 +27,10 @@ class GroupList extends Component {
 
   render() {
     let groups = this.props.data;
+    let {className, style} = this.props;
 
     return (
-      <div className='flex-scroll'>
+      <div className={classnames('flex-scroll', className) } style={style}>
         {groups.map((group, i) => (
           <div className='group-list' key={i}>
             <a className='group-header' data-toggle='collapse'

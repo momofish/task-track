@@ -10,5 +10,13 @@ export default {
 
   submitWorkSheet(mode, date, workloads) {
     return post(`${resourceUrl}/${mode}/${moment(date).format('YYYY-MM-DD')}`, { workloads });
+  },
+
+  getTodos(category) {
+    return get(resourceUrl, `todos/${category || ''}`);
+  },
+
+  approve(approves, agree, opinion) {
+    return post(`${resourceUrl}/todos/approve`, { approves, agree, opinion });
   }
 }

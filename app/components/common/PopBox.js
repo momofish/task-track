@@ -51,6 +51,21 @@ class PopBox extends Component {
     super(props);
   }
 
+  static open(boxOptions) {
+    if (!containerDOM) {
+      containerDOM = document.createElement('div');
+      document.body.appendChild(containerDOM);
+    }
+    options = boxOptions;
+    renderContainer();
+  }
+
+  static close() {
+    options.onClose && options.onClose();
+    options = null;
+    renderContainer();
+  }
+
   render() {
     let options = this.props;
     let className = classnames(
@@ -66,26 +81,8 @@ class PopBox extends Component {
   }
 }
 
-PopBox.propTypes = {
-  className: PropTypes.string,
-};
-
 function renderContainer() {
   ReactDOM.render(<PopBoxContainer />, containerDOM);
-}
-
-PopBox.open = function open(boxOptions) {
-  if (!containerDOM) {
-    containerDOM = document.createElement('div');
-    document.body.appendChild(containerDOM);
-  }
-  options = boxOptions;
-  renderContainer();
-}
-
-PopBox.close = function close() {
-  options = null;
-  renderContainer();
 }
 
 export default PopBox;
