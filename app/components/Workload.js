@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 
-import {select} from '../utils';
-import {Icon, IconText, Button, GroupButton, PopBox, GroupList} from './common';
+import { select } from '../utils';
+import { Icon, IconText, Button, GroupButton, PopBox, GroupList } from './common';
 import TaskDetail from './TaskDetail';
 import workloadService from '../services/workloadService';
 
@@ -15,7 +15,7 @@ export default class Workload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: 0, date: new Date(), selectedTask: null, todos: {},
+      mode: 0, date: new Date(), selectedTask: null, todos: {}, filled: false,
       worksheet: {
         needWorkloads: {}, otherWorkloads: {}, tasks: [], workloads: {}
       }
@@ -36,6 +36,7 @@ export default class Workload extends Component {
     let {mode, date} = this.state;
     let worksheet = await workloadService.getWorkSheet(mode, date);
     this.state.worksheet = worksheet;
+    this.state.filled = false;
     this.makeTotal();
 
     this.forceUpdate();
@@ -92,21 +93,27 @@ export default class Workload extends Component {
     workload.status = 0;
 
     this.makeTotal();
+    this.state.filled = true;
 
     this.setState({ workloads });
   }
 
   async submit() {
-    if (!confirm('确定提交'))
-      return false;
-
-    let {mode, date, worksheet} = this.state;
+    let {mode, date, worksheet, filled} = this.state;
     let {workloads, needWorkloads, totalWorkloads} = worksheet;
 
     if (_.chain(totalWorkloads).toPairs().some(pair => pair[1] > needWorkloads[pair[0]]).value()) {
       alert('超过工作量填报限制');
       return;
     }
+
+    if (!filled) {
+      alert('请填报工作量后提交');
+      return;
+    }
+
+    if (!confirm('确定提交'))
+      return false;
 
     await workloadService.submitWorkSheet(mode, date, workloads);
     this.loadData();
@@ -117,7 +124,7 @@ export default class Workload extends Component {
       target: event.currentTarget,
       align: 'right',
       style: { width: 600 },
-      onClose: () => this.loadData(),
+      onClose: () => { this.loadData(); this.loadTodos(); },
       content: <WorkloadApprove />
     });
   }
@@ -134,7 +141,7 @@ export default class Workload extends Component {
           <h2>
             <Icon icon='lock' /> 填工作量
           </h2>
-          <div className="btn-group pull-right" onClick={this.selectApprove.bind(this) }>
+          <div className="btn-group pull-right" onClick={this.selectApprove.bind(this)}>
             <button type="button" className="btn btn-info">
               <span className="glyphicon glyphicon-list-alt" />
             </button>
@@ -145,11 +152,11 @@ export default class Workload extends Component {
         </div>
         <nav className='navbar navbar-default'>
           <form className='navbar-form' role='search'>
-            <Button text='提交' className='btn-primary' onClick={this.submit.bind(this) } />&nbsp;
+            <Button text='提交' className='btn-primary' onClick={this.submit.bind(this)} />&nbsp;
             <GroupButton data={[
               { text: '按周', className: mode == 0 && 'active', mode: 0 },
               { text: '按月', className: mode == 1 && 'active', mode: 1 }
-            ]} onClick={this.changeMode.bind(this) } />&nbsp;
+            ]} onClick={this.changeMode.bind(this)} />&nbsp;
             <GroupButton data={[
               { icon: 'chevron-left', direction: -1 },
               {
@@ -157,7 +164,7 @@ export default class Workload extends Component {
                 icon: 'calendar'
               },
               { icon: 'chevron-right', direction: 1 }
-            ]} onClick={this.changeDate.bind(this) } />&nbsp;
+            ]} onClick={this.changeDate.bind(this)} />&nbsp;
             <Button text='一键填报' className='btn-info' />
           </form>
         </nav>
@@ -170,8 +177,8 @@ export default class Workload extends Component {
                   <th style={{ width: 60 }}>开始</th>
                   <th style={{ width: 60 }}>结束</th>
                   {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 30 }}>
-                    {`${WEEKDAYS[moment(need[0]).weekday()]} ${moment(need[0]).format('MM/DD')}` }
-                  </th>) }
+                    {`${WEEKDAYS[moment(need[0]).weekday()]} ${moment(need[0]).format('MM/DD')}`}
+                  </th>)}
                 </tr>
               </thead>
               <tbody>
@@ -179,19 +186,19 @@ export default class Workload extends Component {
                   <td>应填报</td>
                   <td></td>
                   <td></td>
-                  {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>) }
+                  {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>)}
                 </tr>
                 {tasks.map(task => {
                   let workloadsByDate = workloads[task._id] || {};
                   return (
                     <tr key={task._id}>
                       <td className='nowrap'>
-                        <IconText onClick={this.selectTask.bind(this, task) }>
+                        <IconText onClick={this.selectTask.bind(this, task)}>
                           {`[${task.project.id || '无编号'}-${task.project.name}]${task.title}`}
                         </IconText>
                       </td>
-                      <td>{moment(task.startDate).format('MM/DD') }</td>
-                      <td>{moment(task.endDate).format('MM/DD') }</td>
+                      <td>{moment(task.startDate).format('MM/DD')}</td>
+                      <td>{moment(task.endDate).format('MM/DD')}</td>
                       {needWorkloadsPair.map(pair => {
                         let day = pair[0];
                         let workload = workloadsByDate[day] || {};
@@ -200,19 +207,19 @@ export default class Workload extends Component {
                             <input disabled={!task.project.id || !needWorkloads[day]}
                               title={workload.status && `[${APPROVE_STATUS_NAME[workload.status]}]${workload.opinion || ''}`}
                               className={`form-control input-sm ${APPROVE_STATUS_CLASS[workload.status]}`}
-                              onChange={this.changeWorkload.bind(this, task, day) }
+                              onChange={this.changeWorkload.bind(this, task, day)}
                               value={workload.workload} />
                           </td>
                         )
-                      }) }
+                      })}
                     </tr>
                   )
-                }) }
+                })}
                 <tr>
                   <td>其它已填</td>
                   <td></td>
                   <td></td>
-                  {needWorkloadsPair.map(pair => <td key={pair[0]}>{otherWorkloads[pair[0]]}</td>) }
+                  {needWorkloadsPair.map(pair => <td key={pair[0]}>{otherWorkloads[pair[0]]}</td>)}
                 </tr>
                 <tr className='warning'>
                   <td>合计</td>
@@ -220,8 +227,8 @@ export default class Workload extends Component {
                   <td></td>
                   {_.toPairs(totalWorkloads).map((pair, i) => {
                     let day = pair[0], workload = pair[1], need = needWorkloadsPair[i][1];
-                    return <td key={day} className={workload > need ? 'text-danger' : workload == need && need ? 'text-success' : null}>{need>0 && workload}</td>
-                  }) }
+                    return <td key={day} className={workload > need ? 'text-danger' : workload == need && need ? 'text-success' : null}>{need > 0 && workload}</td>
+                  })}
                 </tr>
               </tbody>
             </table>
@@ -239,7 +246,7 @@ export default class Workload extends Component {
 class WorkloadApprove extends Component {
   constructor(props) {
     super(props);
-    this.state = { approveGroups: [], approves: null, selectedTask: null };
+    this.state = { approveGroups: [], workloads: null, selectedTask: null };
   }
 
   componentDidMount() {
@@ -296,14 +303,14 @@ class WorkloadApprove extends Component {
       <div className='container-fluid' style={{ paddingTop: 20 }}>
         <nav className='navbar navbar-default'>
           <form className='navbar-form' role='search'>
-            <input value={opinion} className='form-control' placeholder='审批意见' onChange={event => this.state.opinion = event.value} />&nbsp;
-            <Button text='同意' className='btn-sm btn-success' onClick={this.approve.bind(this, true) } />&nbsp;
-            <Button text='不同意' className='btn-sm btn-danger' onClick={this.approve.bind(this, false) } />&nbsp;
+            <input value={opinion} className='form-control' placeholder='审批意见' onChange={event => this.state.opinion = event.target.value} />&nbsp;
+            <Button text='同意' className='btn-sm btn-success' onClick={this.approve.bind(this, true)} />&nbsp;
+            <Button text='不同意' className='btn-sm btn-danger' onClick={this.approve.bind(this, false)} />&nbsp;
           </form>
         </nav>
         <GroupList data={approveGroups} style={{ maxHeight: 600 }}
-          onCheck={this.check.bind(this) }
-          onSelect={this.select.bind(this) }
+          onCheck={this.check.bind(this)}
+          onSelect={this.select.bind(this)}
           />
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           this.setState({ selectedTask: null });

@@ -1,4 +1,4 @@
 {
   "verbose": false,
-  "watch": ["middlerwares", "server.js", "controllers", "views", "models"]
+  "watch": ["middlerwares", "server.js", "controllers", "utils", "views", "models"]
 }

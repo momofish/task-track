@@ -3,7 +3,8 @@ import moment from 'moment';
 import mongoose from 'mongoose';
 import _ from 'lodash';
 
-import {Task, Workload, Project} from '../models';
+import { Task, Workload, Project } from '../models';
+import { api } from '../utils';
 import * as config from '../config';
 
 const baseUri = '/workload';
@@ -20,9 +21,11 @@ const parsePeriod = (mode, date) => {
 
   return ({ startDate, endDate });
 }
+const workloadServiceBaseUri = `${config.evmSiteUrl}/Services/WorkloadService`;
 
 module.exports = function (router) {
   router.route(`${baseUri}/todos`)
+    // 获取待办数
     .get(wrap(async (req, res) => {
       let {user} = req;
       // 待审批数：所管理项目的工作量待审批记录数
@@ -36,44 +39,68 @@ module.exports = function (router) {
     .get(wrap(async (req, res) => { // 获取待办
       let {user} = req;
       let {category} = req.params;
-      let result;
+      let todos;
       if (category == 'approve') {
         // 待审批数：所管理项目的工作量待审批记录数
         let projects = await Project.find({ owner: user._id }).select('_id');
-        result = await Workload
+        todos = await Workload
           .find({ project: { $in: projects.map(p => p._id) }, status: 1 })
           .populate('project task owner', 'name title');
       }
 
-      res.send(result);
+      res.send(todos);
     }))
-    .post(wrap(async (req, res) => { // 提交审批
+    // 提交审批
+    .post(wrap(async (req, res) => {
       let {user} = req;
       let {category} = req.params;
       let {approves, agree, opinion} = req.body;
 
       if (agree) {
-        // 同步工作量
+        // 按人、日期同步工作量（当前待审批工作量及相关人员日期已审批工作量）
+        let workloads = await Workload
+          .find({ _id: { $in: approves }, status: 1 })
+          .populate('owner project task', 'id name title');
+        // 待审按人员日期分组
+        let workloadUnits = _.groupBy(workloads, workload =>
+          `${workload.owner._id}|${workload.owner.id}|${moment(workload.date).format('YYYY-MM-DD')}`);
+        // 根据分组找已审工作量
+        for (let unit in workloadUnits) {
+          let pair = unit.split('|');
+          let approvedWorkloads = await Workload
+            .find({ owner: pair[0], date: pair[2], status: 2 })
+            .populate('owner project task', 'id name title');
+          workloadUnits[unit] = workloadUnits[unit].concat(approvedWorkloads);
+        }
+        let toSync = _.chain(workloadUnits).mapKeys((value, key) => key.split('|').slice(1, 3).join('|'))
+          .mapValues(value => value.map(w => ({
+            projectId: w.project.id, taskId: w.task._id, taskName: w.task.title,
+            date: w.date, workload: w.workload
+          })));
+        await api.fetch(`${workloadServiceBaseUri}/SyncWorkload`, {
+          method: 'POST',
+          body: JSON.stringify(toSync)
+        });
       }
 
       for (let approve of approves) {
-        await Workload.findByIdAndUpdate(approve, { $set: { status: agree ? 2 : 3, opinion } });
+        await Workload.findByIdAndUpdate(approve, {
+          $set: { status: agree ? 2 : 3, opinion }
+        });
       }
 
       res.sendStatus(204);
     }));
 
   router.route(`${baseUri}/:mode/:date`)
+    // 待填报任务
     .get(wrap(async (req, res) => {
       let {user} = req;
       let {mode, date} = req.params;
       let {startDate, endDate} = parsePeriod(mode, date);
 
-      let workloadServiceUri = `${config.evmSiteUrl}/Services/WorkloadService/ListWorkload?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`;
-      let fWorksheet = await fetch(workloadServiceUri);
-      let worksheet = await fWorksheet.json();
-      if (fWorksheet.status >= 400)
-        throw new Error(worksheet.ExceptionMessage);
+      let listWorkloadUri = `${workloadServiceBaseUri}/ListWorkload?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`;
+      let worksheet = await api.fetch(listWorkloadUri);
 
       let tasks = await Task.find({
         $and: [
@@ -104,6 +131,7 @@ module.exports = function (router) {
 
       res.send(worksheet);
     }))
+    // 提交审批
     .post(wrap(async (req, res) => {
       let {user} = req;
       let owner = user._id;
@@ -116,7 +144,7 @@ module.exports = function (router) {
           if (wl.status == 0) { // 待审批
             let workload = await Workload.findOne({ task, date, owner });
 
-            if (!(wl.workload * 1)) {
+            if (!wl.workload) {
               if (workload)
                 await Workload.findOneAndRemove({ _id: workload._id });
               continue;
