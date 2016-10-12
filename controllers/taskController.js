@@ -62,8 +62,17 @@ module.exports = function (router) {
         res.sendStatus(204);
       });
     })
-    .post(function (req, res, next) {
-      var task = req.body;
+    .post(async function (req, res, next) {
+      let task = req.body;
+      let oldTask = await Task.findById(task._id);
+      // 设置为现在做时记录开始日期
+      if (task.treat == 10 && oldTask.treat != task.treat && !task.startDate) {
+        task.startDate = new Date();
+      }
+      // 设置完成时记录结束日期
+      if (task.completed && oldTask.completed != task.completed) {
+        task.endDate = new Date();
+      }
       Task.update({ _id: task._id }, task, function (err) {
         if (err) return next(err);
 

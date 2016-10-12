@@ -37,8 +37,8 @@ export default class Workload extends Component {
     let worksheet = await workloadService.getWorkSheet(mode, date);
     this.state.worksheet = worksheet;
     this.state.filled = false;
-    this.makeTotal();
 
+    this.makeTotal();
     this.forceUpdate();
   }
 
@@ -84,18 +84,52 @@ export default class Workload extends Component {
   }
 
   changeWorkload(task, day, event) {
-    let {workloads} = this.state.worksheet;
-
     let filled = event.target.value;
+    let {workloads} = this.state.worksheet;
     let workloadsByTask = workloads[task._id] = workloads[task._id] || {};
     let workload = workloadsByTask[day] = workloadsByTask[day] || {};
+
     workload.workload = filled;
     workload.status = 0;
 
     this.makeTotal();
     this.state.filled = true;
+    this.forceUpdate();
+  }
 
-    this.setState({ workloads });
+  autoFill() {
+    let {worksheet} = this.state;
+    let {workloads, needWorkloads, otherWorkloads, tasks} = worksheet;
+
+    // 自动按天填充未填的工作量
+    for (let day in needWorkloads) {
+      let need = needWorkloads[day];
+      if (!need) continue;
+      let currentTasks = tasks.filter(task => day >= task.startDate && day <= task.endDate);
+      let other = otherWorkloads[day] || 0;
+      let currentWorkloads = [];
+      currentTasks.forEach(task => {
+        let workloadsByTask = workloads[task._id] = workloads[task._id] || {};
+        let workload = workloadsByTask[day] = workloadsByTask[day] || {};
+        currentWorkloads.push(workload);
+      });
+      // 已填未填的分成两组
+      let pair = _.groupBy(currentWorkloads, workload => workload.status >= 0 && workload.status <= 2);
+      // 没有可填的就不管了
+      if (!pair[false] || !pair[false].length) continue;
+      let sumY = (pair[true] || []).reduce((pre, cur) => (pre.workload || 0) + (cur.workload || 0), 0);
+      // 待填数
+      let toFill = need - other - sumY;
+      let toFillAverage = Math.round(toFill / pair[false].length * 100) / 100;
+      pair[false].forEach(workload => {
+        workload.workload = toFillAverage;
+        workload.status = 0;
+      });
+    }
+
+    this.makeTotal();
+    this.state.filled = true;
+    this.forceUpdate();
   }
 
   async submit() {
@@ -104,6 +138,10 @@ export default class Workload extends Component {
 
     if (_.chain(totalWorkloads).toPairs().some(pair => pair[1] > needWorkloads[pair[0]]).value()) {
       alert('超过工作量填报限制');
+      return;
+    }
+    if (_.chain(totalWorkloads).toPairs().some(pair => isNaN(pair[1])).value()) {
+      alert('无效工作量');
       return;
     }
 
@@ -165,7 +203,7 @@ export default class Workload extends Component {
               },
               { icon: 'chevron-right', direction: 1 }
             ]} onClick={this.changeDate.bind(this)} />&nbsp;
-            <Button text='一键填报' className='btn-info' />
+            <Button text='一键填报' className='btn-info' onClick={this.autoFill.bind(this)} />
           </form>
         </nav>
         <div className='flex flex-hscroll'>
@@ -197,14 +235,14 @@ export default class Workload extends Component {
                           {`[${task.project.id || '无编号'}-${task.project.name}]${task.title}`}
                         </IconText>
                       </td>
-                      <td>{moment(task.startDate).format('MM/DD')}</td>
-                      <td>{moment(task.endDate).format('MM/DD')}</td>
+                      <td>{task.startDate && moment(task.startDate).format('MM/DD')}</td>
+                      <td>{task.endDate && moment(task.endDate).format('MM/DD')}</td>
                       {needWorkloadsPair.map(pair => {
                         let day = pair[0];
                         let workload = workloadsByDate[day] || {};
                         return (
                           <td key={day}>
-                            <input disabled={!task.project.id || !needWorkloads[day]}
+                            <input disabled={!task.project.id || !needWorkloads[day] || day < task.startDate || day > task.endDate}
                               title={workload.status && `[${APPROVE_STATUS_NAME[workload.status]}]${workload.opinion || ''}`}
                               className={`form-control input-sm ${APPROVE_STATUS_CLASS[workload.status]}`}
                               onChange={this.changeWorkload.bind(this, task, day)}
