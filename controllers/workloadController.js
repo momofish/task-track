@@ -105,8 +105,8 @@ module.exports = function (router) {
       let tasks = await Task.find({
         $and: [
           { $or: [{ owner: user._id }, { members: { $in: [user._id] } }] },
-          { $or: [{ startDate: { $lte: endDate } }, { startDate: { $exists: false } }] },
-          { $or: [{ endDate: { $gte: startDate } }, { endDate: { $exists: false } }] },
+          { $or: [{ startDate: { $lte: moment(endDate) } }, { startDate: { $exists: false } }] },
+          { $or: [{ endDate: { $gte: moment(startDate) } }, { endDate: { $exists: false } }] },
           { $or: [{ startDate: { $exists: true } }, { endDate: { $exists: true } }] },
           { project: { $exists: true } }
         ]

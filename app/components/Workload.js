@@ -105,7 +105,9 @@ export default class Workload extends Component {
     for (let day in needWorkloads) {
       let need = needWorkloads[day];
       if (!need) continue;
-      let currentTasks = tasks.filter(task => day >= task.startDate && day <= task.endDate);
+      let currentTasks = tasks.filter(task =>
+        day >= moment(task.startDate || '1900-01-01').format('YYYY-MM-DD')
+        && day <= moment(task.endDate || '2099-01-01').format('YYYY-MM-DD'));
       let other = otherWorkloads[day] || 0;
       let currentWorkloads = [];
       currentTasks.forEach(task => {
@@ -179,7 +181,7 @@ export default class Workload extends Component {
           <h2>
             <Icon icon='lock' /> 填工作量
           </h2>
-          <div className="btn-group pull-right" onClick={this.selectApprove.bind(this)}>
+          <div className="btn-group pull-right" onClick={this.selectApprove.bind(this) }>
             <button type="button" className="btn btn-info">
               <span className="glyphicon glyphicon-list-alt" />
             </button>
@@ -190,11 +192,11 @@ export default class Workload extends Component {
         </div>
         <nav className='navbar navbar-default'>
           <form className='navbar-form' role='search'>
-            <Button text='提交' className='btn-primary' onClick={this.submit.bind(this)} />&nbsp;
+            <Button text='提交' className='btn-primary' onClick={this.submit.bind(this) } />&nbsp;
             <GroupButton data={[
               { text: '按周', className: mode == 0 && 'active', mode: 0 },
               { text: '按月', className: mode == 1 && 'active', mode: 1 }
-            ]} onClick={this.changeMode.bind(this)} />&nbsp;
+            ]} onClick={this.changeMode.bind(this) } />&nbsp;
             <GroupButton data={[
               { icon: 'chevron-left', direction: -1 },
               {
@@ -202,8 +204,8 @@ export default class Workload extends Component {
                 icon: 'calendar'
               },
               { icon: 'chevron-right', direction: 1 }
-            ]} onClick={this.changeDate.bind(this)} />&nbsp;
-            <Button text='一键填报' className='btn-info' onClick={this.autoFill.bind(this)} />
+            ]} onClick={this.changeDate.bind(this) } />&nbsp;
+            <Button text='一键填报' className='btn-info' onClick={this.autoFill.bind(this) } />
           </form>
         </nav>
         <div className='flex flex-hscroll'>
@@ -216,7 +218,7 @@ export default class Workload extends Component {
                   <th style={{ width: 60 }}>结束</th>
                   {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 30 }}>
                     {`${WEEKDAYS[moment(need[0]).weekday()]} ${moment(need[0]).format('MM/DD')}`}
-                  </th>)}
+                  </th>) }
                 </tr>
               </thead>
               <tbody>
@@ -224,40 +226,40 @@ export default class Workload extends Component {
                   <td>应填报</td>
                   <td></td>
                   <td></td>
-                  {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>)}
+                  {needWorkloadsPair.map(need => <td key={need[0]}>{need[1]}</td>) }
                 </tr>
                 {tasks.map(task => {
                   let workloadsByDate = workloads[task._id] || {};
                   return (
                     <tr key={task._id}>
                       <td className='nowrap'>
-                        <IconText onClick={this.selectTask.bind(this, task)}>
+                        <IconText onClick={this.selectTask.bind(this, task) }>
                           {`[${task.project.id || '无编号'}-${task.project.name}]${task.title}`}
                         </IconText>
                       </td>
-                      <td>{task.startDate && moment(task.startDate).format('MM/DD')}</td>
-                      <td>{task.endDate && moment(task.endDate).format('MM/DD')}</td>
+                      <td>{task.startDate && moment(task.startDate).format('MM/DD') }</td>
+                      <td>{task.endDate && moment(task.endDate).format('MM/DD') }</td>
                       {needWorkloadsPair.map(pair => {
                         let day = pair[0];
                         let workload = workloadsByDate[day] || {};
                         return (
                           <td key={day}>
-                            <input disabled={!task.project.id || !needWorkloads[day] || day < task.startDate || day > task.endDate}
+                            <input disabled={!task.project.id || !needWorkloads[day] || moment(day) < moment(task.startDate || '1900-01-01') || moment(day) > moment(task.endDate || '2099-01-01') }
                               title={workload.status && `[${APPROVE_STATUS_NAME[workload.status]}]${workload.opinion || ''}`}
                               className={`form-control input-sm ${APPROVE_STATUS_CLASS[workload.status]}`}
-                              onChange={this.changeWorkload.bind(this, task, day)}
+                              onChange={this.changeWorkload.bind(this, task, day) }
                               value={workload.workload} />
                           </td>
                         )
-                      })}
+                      }) }
                     </tr>
                   )
-                })}
+                }) }
                 <tr>
                   <td>其它已填</td>
                   <td></td>
                   <td></td>
-                  {needWorkloadsPair.map(pair => <td key={pair[0]}>{otherWorkloads[pair[0]]}</td>)}
+                  {needWorkloadsPair.map(pair => <td key={pair[0]}>{otherWorkloads[pair[0]]}</td>) }
                 </tr>
                 <tr className='warning'>
                   <td>合计</td>
@@ -266,7 +268,7 @@ export default class Workload extends Component {
                   {_.toPairs(totalWorkloads).map((pair, i) => {
                     let day = pair[0], workload = pair[1], need = needWorkloadsPair[i][1];
                     return <td key={day} className={workload > need ? 'text-danger' : workload == need && need ? 'text-success' : null}>{need > 0 && workload}</td>
-                  })}
+                  }) }
                 </tr>
               </tbody>
             </table>
@@ -342,14 +344,15 @@ class WorkloadApprove extends Component {
         <nav className='navbar navbar-default'>
           <form className='navbar-form' role='search'>
             <input value={opinion} className='form-control' placeholder='审批意见' onChange={event => this.state.opinion = event.target.value} />&nbsp;
-            <Button text='同意' className='btn-sm btn-success' onClick={this.approve.bind(this, true)} />&nbsp;
-            <Button text='不同意' className='btn-sm btn-danger' onClick={this.approve.bind(this, false)} />&nbsp;
+            <Button text='同意' className='btn-sm btn-success' onClick={this.approve.bind(this, true) } />&nbsp;
+            <Button text='不同意' className='btn-sm btn-danger' onClick={this.approve.bind(this, false) } />&nbsp;
           </form>
         </nav>
-        <GroupList data={approveGroups} style={{ maxHeight: 600 }}
-          onCheck={this.check.bind(this)}
-          onSelect={this.select.bind(this)}
-          />
+        {approveGroups.length ?
+          <GroupList data={approveGroups} style={{ maxHeight: 600 }}
+            onCheck={this.check.bind(this) }
+            onSelect={this.select.bind(this) }
+            /> : <div className="alert alert-info">无待审批项</div>}
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           this.setState({ selectedTask: null });
         } } />}

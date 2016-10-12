@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var Task = require("../models").Task;
+var moment = require('moment');
 
 module.exports = function (router) {
   router.route('/tasks/:category/:filter').get(function (req, res, next) {
@@ -67,11 +68,11 @@ module.exports = function (router) {
       let oldTask = await Task.findById(task._id);
       // 设置为现在做时记录开始日期
       if (task.treat == 10 && oldTask.treat != task.treat && !task.startDate) {
-        task.startDate = new Date();
+        task.startDate = moment().startOf('day');
       }
       // 设置完成时记录结束日期
       if (task.completed && oldTask.completed != task.completed) {
-        task.endDate = new Date();
+        task.endDate = moment().startOf('day');
       }
       Task.update({ _id: task._id }, task, function (err) {
         if (err) return next(err);
