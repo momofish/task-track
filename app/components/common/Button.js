@@ -6,7 +6,7 @@ class Button extends Component {
   render() {
     let {type = 'button', className, icon, text, onClick} = this.props;
     return (
-      <button type={type} className={classnames('btn btn-default', className) } onClick={onClick}>
+      <button {...this.props} type={type} className={classnames('btn btn-default', className) }>
          {icon && <Icon icon={icon} />}
          {text}
       </button>
