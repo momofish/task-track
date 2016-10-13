@@ -1,15 +1,13 @@
-var mongoose = require("mongoose");
-var models = require("../models");
-var User = models.User;
-var Dept = models.Dept;
+import mongoose from 'mongoose';
+
+import {User, Dept} from '../models';
+import { api, route } from '../utils';
+
+const baseUri = '/system';
 
 module.exports = function (router) {
-  router.route('system/syncOu').get(function (req, res, next) {
-    Dept.find().exec(function (err, depts) {
-
-      User.find().exec(function (err, users) {
-        if (err) return next(err);
-      });
-    });
+  router.route(`${baseUri}/syncOu`).get(function (req, res, next) {
+    let depts = await Dept.find({id: {$exists: true}});
+    let users = await User.find({id: {$exists: true}});
   });
 }

@@ -125,11 +125,14 @@ export default class Workload extends Component {
       // 待填数
       let toFill = need - other - sumY;
       if (toFill <= 0) continue;
-      let toFillAverage = Math.round(toFill / pair[false].length * 100) / 100;
-      pair[false].forEach(workload => {
+      let toFillPair = pair[false];
+      let toFillAverage = Math.round(toFill / toFillPair.length * 100) / 100;
+      let delta = Math.round((toFill - toFillAverage * toFillPair.length) * 100) / 100;
+      toFillPair.forEach(workload => {
         workload.workload = toFillAverage;
         workload.status = 0;
       });
+      toFillPair[0].workload += delta;
     }
 
     this.makeTotal();
@@ -270,15 +273,15 @@ export default class Workload extends Component {
                   <td></td>
                   {needWorkloadsPair.map(pair => <td key={pair[0]}>{otherWorkloads[pair[0]]}</td>)}
                 </tr>
-                <tr className='warning'>
+                <tr className='info'>
                   <td>合计</td>
                   <td></td>
                   <td></td>
                   {_.toPairs(totalWorkloads).map((pair, i) => {
                     let day = pair[0], workload = pair[1], need = needWorkloadsPair[i][1];
                     return <td key={day}
-                      className={workload > need ? 'text-danger' : workload == need && need ? 'text-success' : null}>
-                      {need > 0 && workload.toFixed(2)}
+                      className={workload > need ? 'text-danger' : workload < need ? 'text-warning' : 'text-success'}>
+                      {need > 0 && workload}
                     </td>
                   })}
                 </tr>
