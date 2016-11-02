@@ -132,7 +132,7 @@ export default class Workload extends Component {
         workload.workload = toFillAverage;
         workload.status = 0;
       });
-      toFillPair[0].workload += delta;
+      toFillPair[0].workload = Math.round((toFillPair[0].workload + delta) * 100) / 100;
     }
 
     this.makeTotal();

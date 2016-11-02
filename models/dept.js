@@ -7,7 +7,6 @@ var schema = new Schema({
   name: String,
   enabled: { type: Boolean, index: true },
   parent: { type: Types.ObjectId, index: true, ref: 'Dept' },
-  children: [{ type: Types.ObjectId, index: true, ref: 'Dept' }]
 });
 
 module.exports = mongoose.model('Dept', schema);
