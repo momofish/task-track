@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import {Modal, FormItem, IconText, ListItem, EditableText, QuickAdd} from './common';
-import {projectService} from '../services';
-import {select} from '../utils';
+import { Modal, FormItem, IconText, ListItem, EditableText, QuickAdd } from './common';
+import { projectService } from '../services';
+import { select } from '../utils';
 
 class ProjectSetting extends Component {
   constructor(props) {
@@ -73,34 +73,34 @@ class ProjectSetting extends Component {
     let team = project.team || { name: '未指派团队' };
 
     return (
-      <form className='smart-form' onSubmit={this.handleSubmit.bind(this, project) }>
+      <form className='smart-form' onSubmit={this.handleSubmit.bind(this, project)}>
         <FormItem label='名称'>
           <div>
-            <div className="col-sm-3">
+            <div className="col-sm-3" style={{ paddingLeft: 0, paddingRight: 0 }}>
               <input type='text' className='form-control' placeholder='编号'
-                value={project.id} onChange={this.changeEntity.bind(this, project, 'id') } />
+                value={project.id} onChange={this.changeEntity.bind(this, project, 'id')} />
             </div>
             <div className="col-sm-9">
               <input type='text' className='form-control' placeholder='名称'
-                value={project.name} onChange={this.changeEntity.bind(this, project, 'name') } />
+                value={project.name} onChange={this.changeEntity.bind(this, project, 'name')} />
             </div>
           </div>
         </FormItem>
         <FormItem>
           <IconText icon='user' text={owner.name}
-            onClick={this.selectUser.bind(this, 'owner') } />
+            onClick={this.selectUser.bind(this, 'owner')} />
         </FormItem>
         <FormItem label='团队'>
           <IconText icon='th-large' text={team.name}
-            onClick={this.selectTeam.bind(this) } />
+            onClick={this.selectTeam.bind(this)} />
         </FormItem>
         <FormItem label='成员'>
           <div>
             {members.map((member, i) =>
               <IconText key={i} icon='user' text={member.name} />
-            ) }
+            )}
             <IconText icon='plus'
-              onClick={this.selectUser.bind(this, 'members') } />
+              onClick={this.selectUser.bind(this, 'members')} />
           </div>
         </FormItem>
         {project.packets &&
@@ -109,13 +109,13 @@ class ProjectSetting extends Component {
               <ul>
                 {project.packets.map((packet, i) =>
                   <ListItem key={i} className='list-item flex' item={{
-                    label: <EditableText className='flex' value={packet.name}
-                      onChange={this.editPacket.bind(this, text => packet.name = text.value) } />,
+                    label: <EditableText className='flex' style={{ flex: 1 }} value={packet.name}
+                      onChange={this.editPacket.bind(this, text => packet.name = text.value)} />,
                     checked: !packet.active, completed: !packet.active
-                  }} onCheck={this.editPacket.bind(this, () => packet.active = !packet.active) } />
-                ) }
+                  }} onCheck={this.editPacket.bind(this, () => packet.active = !packet.active)} />
+                )}
               </ul>
-              <QuickAdd placeHolder='添加工作包' onSubmit={this.addPacket.bind(this) } />
+              <QuickAdd placeHolder='添加工作包' onSubmit={this.addPacket.bind(this)} />
             </div>
           </FormItem>}
         <FormItem>
