@@ -31,8 +31,8 @@ var app = express();
 // mongoose init
 mongoose.Promise = global.Promise;
 mongoose.connect(config.mongoUri);
-mongoose.connection.on('error', function () {
-  console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+mongoose.connection.on('error', function (err) {
+  console.error(err);
   process.exit(1);
 });
 
