@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Markdown from 'markdown-it'
+
+import { Icon } from '.';
 
 class EditableText extends Component {
   constructor(props) {
@@ -19,7 +21,7 @@ class EditableText extends Component {
 
   save() {
     let onChange = this.props.onChange;
-    onChange && onChange({value: this.state.value});
+    onChange && onChange({ value: this.state.value });
     this.setState({ isEdit: false });
   }
 
@@ -29,27 +31,27 @@ class EditableText extends Component {
   }
 
   keyDown(event) {
-    if(event.keyCode == 13) {
+    if (event.keyCode == 13) {
       this.submit(event);
     }
   }
 
   render() {
-    let multiline = this.props.multiline;
-    let value = this.state.value;
-    let isEdit = this.state.isEdit;
+    let {multiline, placeholder, className, editClassName, style, actionIcon, onAction} = this.props;
+    let {value, isEdit} = this.state;
+
     return isEdit ?
-      <div onSubmit={this.submit.bind(this)}>
+      <div onSubmit={this.submit.bind(this)} className={editClassName} style={style}>
         <div className='form-group'>
           {
             multiline ?
               <textarea className='form-control'
                 onChange={this.change.bind(this)} rows='5'
-                value={value} placeholder={this.props.placeholder} /> :
+                value={value} placeholder={placeholder} /> :
               <input type='value' className='form-control'
                 onChange={this.change.bind(this)}
                 onKeyDown={this.keyDown.bind(this)}
-                value={value} placeholder={this.props.placeholder} />
+                value={value} placeholder={placeholder} />
           }
         </div>
         <button type='button' className='btn btn-info btn-sm'
@@ -57,15 +59,19 @@ class EditableText extends Component {
           确定
         </button>
         <button type='button' className='btn btn-link btn-sm'
-          onClick={() => this.setState({ isEdit: false }) }>
+          onClick={() => this.setState({ isEdit: false })}>
           取消
         </button>
       </div> :
-      <a href='javascript:' className={`${this.props.className} form-control-static`}
-        onClick={() => this.setState({ isEdit: true }) }
-        dangerouslySetInnerHTML={{
-          __html: (multiline && value ? this.md.render(value) : value) || this.props.placeholder
-        }}>
+      <a href='javascript:' className={`form-control-static ${className}`} style={style}
+        onClick={() => this.setState({ isEdit: true })} >
+        <span dangerouslySetInnerHTML={{
+          __html: (multiline && value ? this.md.render(value) : value) || placeholder
+        }} />
+        {actionIcon && <Icon icon={actionIcon} onClick={event => {
+          onAction && onAction(event);
+          event.stopPropagation();
+        } } className='action-icon' />}
       </a>
   }
 }

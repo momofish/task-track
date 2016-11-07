@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 import moment from 'moment';
-import {extend} from 'lodash';
+import { extend } from 'lodash';
 import classnames from 'classnames';
-import {Modal, PopBox, FormItem,
+import {
+  Modal, PopBox, FormItem,
   Selector, EditableText, IconText, Icon,
-  ListItem, QuickAdd, Progress} from './common';
+  ListItem, QuickAdd, Progress
+} from './common';
 import Store from '../stores/TaskDetailStore';
 import Actions from '../actions/TaskDetailActions';
-import {projectService} from '../services';
-import {select} from '../utils';
-import {assign} from 'lodash';
+import { projectService } from '../services';
+import { select } from '../utils';
+import { assign } from 'lodash';
 
 class TaskDetail extends Component {
   constructor(props) {
@@ -77,7 +79,7 @@ class TaskDetail extends Component {
   selectDate(field, event) {
     let task = this.state.task
     select.selectDate(event.currentTarget, moment(task[field]), date => {
-      let newTask = {_id: task._id};
+      let newTask = { _id: task._id };
       newTask[field] = date;
       Actions.updateTask(newTask, newTask);
     });
@@ -131,52 +133,52 @@ class TaskDetail extends Component {
     let completeRatio = subTasks.filter(subTask => subTask.completed).length / (subTasks.length + 1e-18);
 
     return (
-      <Modal ref='modal' onHidden={this.dismiss.bind(this) }
+      <Modal ref='modal' onHidden={this.dismiss.bind(this)}
         header={<div className='flex flex-horizontal'>
           <Link to={`/tasks/projects/${project._id}`}
-            onClick={this.selectProject.bind(this) }>
-            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this) } />&nbsp;
+            onClick={this.selectProject.bind(this)}>
+            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this)} />&nbsp;
             {project.name}&nbsp;
           </Link>
-          <IconText icon="folder-close" text={packet.name} onClick={this.selectPacket.bind(this) } />
+          <IconText icon="folder-close" text={packet.name} onClick={this.selectPacket.bind(this)} />
           <div className='flex flex-end modal-header-content'>
             <IconText icon='option-vertical' iconClassName='circle' tooltip='更多'
-              onClick={this.selectMenu.bind(this) } />
+              onClick={this.selectMenu.bind(this)} />
           </div>
         </div>}
         body={
           <div className='smart-form'>
             <FormItem
               label={<div className='form-title'>
-                <input type='checkbox' checked={completed} onChange={this.completeTask.bind(this) } />
+                <input type='checkbox' checked={completed} onChange={this.completeTask.bind(this)} />
               </div>}>
               <EditableText className={className} value={task.title}
-                onChange={text => this.updateTask({ _id: task._id, title: text.value }) } />
+                onChange={text => this.updateTask({ _id: task._id, title: text.value })} />
             </FormItem>
             <FormItem content={[
               <IconText icon='user' text={owner.name}
-                onClick={this.selectMember.bind(this, task.owner, 'owner') } />,
-              <IconText text={task.dueDate ? moment(task.dueDate).format('L')+ ' 截止' : '截止日期'}
-                icon='calendar' onClick={this.selectDate.bind(this, 'dueDate') }
+                onClick={this.selectMember.bind(this, task.owner, 'owner')} />,
+              <IconText text={task.dueDate ? moment(task.dueDate).format('L') + ' 截止' : '截止日期'}
+                icon='calendar' onClick={this.selectDate.bind(this, 'dueDate')}
                 />
             ]} />
             <FormItem>
               <EditableText multiline='true' value={task.description} placeholder='添加描述'
-                onChange={text => this.updateTask({ _id: task._id, description: text.value }) } />
+                onChange={text => this.updateTask({ _id: task._id, description: text.value })} />
             </FormItem>
             <FormItem label='参与'>
               <div>
                 {members.map((member, i) =>
                   <IconText key={i} icon='user' text={member.name} />
-                ) }
-                <IconText icon='plus' onClick={this.selectMember.bind(this, members, 'members') } />
+                )}
+                <IconText icon='plus' onClick={this.selectMember.bind(this, members, 'members')} />
               </div>
             </FormItem>
             <FormItem label='实际' content={[
-              <IconText text={task.startDate ? moment(task.startDate).format('L')+ ' 开始' : '开始日期'}
-                icon='calendar' onClick={this.selectDate.bind(this, 'startDate') } />,
+              <IconText text={task.startDate ? moment(task.startDate).format('L') + ' 开始' : '开始日期'}
+                icon='calendar' onClick={this.selectDate.bind(this, 'startDate')} />,
               <IconText text={task.endDate ? moment(task.endDate).format('L') + ' 结束' : '结束日期'}
-                icon='calendar' onClick={this.selectDate.bind(this, 'endDate') } />
+                icon='calendar' onClick={this.selectDate.bind(this, 'endDate')} />
             ]} />
             {task.subTasks &&
               <FormItem label='检查点'>
@@ -185,13 +187,15 @@ class TaskDetail extends Component {
                   <ul>
                     {task.subTasks.map((subTask, i) =>
                       <ListItem key={i} className='list-item flex' item={{
-                        label: <EditableText className='flex' value={subTask.name}
-                          onChange={this.editSubTask.bind(this, text => subTask.name = text.value) } />,
+                        label: <EditableText style={{ flex: 1, position: 'relative' }} value={subTask.name}
+                          actionIcon='trash'
+                          onAction={this.editSubTask.bind(this, text => task.subTasks.splice(i, 1))}
+                          onChange={this.editSubTask.bind(this, text => subTask.name = text.value)} />,
                         checked: subTask.completed, completed: subTask.completed
-                      }} onCheck={this.editSubTask.bind(this, () => subTask.completed = !subTask.completed) } />
-                    ) }
+                      }} onCheck={this.editSubTask.bind(this, () => subTask.completed = !subTask.completed)} />
+                    )}
                   </ul>
-                  <QuickAdd placeHolder='添加检查点' onSubmit={this.addSubTask.bind(this) } />
+                  <QuickAdd placeHolder='添加检查点' onSubmit={this.addSubTask.bind(this)} />
                 </div>
               </FormItem>}
           </div>}>
