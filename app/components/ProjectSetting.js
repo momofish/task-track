@@ -139,7 +139,8 @@ class ProjectSetting extends Component {
           </FormItem>}
         <FormItem>
           <div>
-            <button type='submit' className='btn btn-primary btn-sm' disabled={(pProject.owner || {})._id != userService.currentUser._id }>确定</button>
+            <button type='submit' className='btn btn-primary btn-sm'
+              disabled={pProject.owner && pProject.owner._id != userService.currentUser._id}>确定</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
         </FormItem>
