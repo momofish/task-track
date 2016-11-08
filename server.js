@@ -156,7 +156,7 @@ app.use(function (err, req, res, next) {
 });
 
 var server = require('http').createServer(app);
-if (production) {
+if (config.enableHttps) {
   var fs = require('fs');
   var privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
   var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
