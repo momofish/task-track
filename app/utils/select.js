@@ -77,7 +77,7 @@ export default {
       dataSources: [
         {
           data: options.data,
-          searchable: false
+          searchable: options.searchable
         }
       ],
       selected,

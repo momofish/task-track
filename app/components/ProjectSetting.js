@@ -63,11 +63,16 @@ class ProjectSetting extends Component {
     let selected = project[field];
     select.selectMenu(event.currentTarget, selected, selecting => {
       project[field] = selecting.id;
+      project.name = selecting.ProjectName;
       this.forceUpdate();
     }, {
+        searchable: true,
         data: () => workloadService.myProjects()
           .then(projects =>
-            projects.map(project => ({ id: project.ProjectID, name: `[${project.ProjectID}]${project.ProjectName}` })))
+            projects.map(project => ({
+              id: project.ProjectID, name: `[${project.ProjectID}]${project.ProjectName}`,
+              ProjectName: project.ProjectName
+            })))
       });
   }
 
