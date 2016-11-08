@@ -56,7 +56,7 @@ class TeamSetting extends Component {
   }
 
   render() {
-    let pTeam = this.props.team;
+    let pTeam = this.props.team || {};
     let {team} = this.state;
     let owner = team.owner || { name: '所有者' };
     let members = team.members || [];
