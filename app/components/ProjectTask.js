@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
+
 import {GroupList, PadList, QuickAdd, TabList} from './common';
 import Store from '../stores/ProjectTaskStore';
 import Actions from '../actions/ProjectTaskActions';
 import TaskDetail from './TaskDetail';
 import {select} from '../utils';
 import {taskTreat} from '../models';
+import {projectService} from '../services'
 
 class ProjectTask extends Component {
   constructor(props) {
@@ -95,7 +97,7 @@ class ProjectTask extends Component {
         <div className='page-header'>
           <h2>
             <i className='glyphicon glyphicon-file' />&nbsp;
-            {project.name} <span className="badge">{tasks.length}</span>
+            {projectService.formatProjectName(project)} <span className="badge">{tasks.length}</span>
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter}>
             <button type="button" className="btn btn-info" disabled>

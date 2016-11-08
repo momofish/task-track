@@ -40,7 +40,7 @@ class Sidebar extends Component {
           <ul className='section-body collapse in'>
             {section.body.map((item, j) => (
               <li key={j}>
-                <Link className='section-item' to={item.to} activeClassName='active'>
+                <Link className='section-item text-overflow' to={item.to} activeClassName='active'>
                   <i className={`glyphicon glyphicon-${item.icon}`} /> {item.label}
                   {item.actionIcon && <Icon icon={item.actionIcon} onClick={item.onAction} className='action-icon' />}
                 </Link>

@@ -50,7 +50,7 @@ class QuickAdd extends Component {
             {selectors.map((selector, i) => (
               <button key={i} type="button" className="btn btn-Default" onClick={this.select.bind(this, selector) }>{this.state[selector.key] && selector.nameGetter(this.state[selector.key]) || selector.label} <i className="caret" /></button>
             )) }
-            <button className='btn btn-default'><i className='glyphicon glyphicon-plus'/></button>
+            <button className='btn btn-default' onClick={this.handleSubmit.bind(this)}><i className='glyphicon glyphicon-plus'/></button>
           </span>
         </div>
       </div>

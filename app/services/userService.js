@@ -1,9 +1,17 @@
-import {get} from './commonService';
+import { get } from './commonService';
 
 const resourceUrl = '/api/users';
 
-export default {
+let userSerivce = {
   getUser(id) {
     return get(resourceUrl, id);
-  }
-}
+  },
+
+  currentUser: null
+};
+
+  (async () => {
+    userSerivce.currentUser = await userSerivce.getUser('current');
+  })();
+
+export default userSerivce;

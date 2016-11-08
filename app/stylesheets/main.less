@@ -106,13 +106,15 @@ body {
   color: #b9b9b9;
 }
 .page-header {
-    padding: 10px 0;
-    margin: 0 0 10px 0;
+  padding: 10px 0;
+  margin: 0 0 10px 0;
 }
 .page-header h2 {
   font-size: 18px;
   margin: 8px 0;
   float: left;
+  max-width: 400px;
+  .text-overflow();
 }
 .progress {
   height: 12px;
@@ -148,6 +150,7 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 
 /* tool */
 .tag {
+  display: inline-block;
   border-radius: 2px;
   padding: 4px 6px;
   font-size: 13px;
@@ -155,6 +158,8 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
   margin-left: 8px;
   color: #fff;
   background-color: #7266bb;
+  max-width: 100px;
+  .text-overflow();
 }
 .tag:first-of-type {
   margin-left: 0;
@@ -313,8 +318,10 @@ ul, menu, dir { list-style-type: none; text-indent: 0px; padding: initial; }
 }
 .section-item {
   padding-left: 40px;
+  padding-right: 20px;
   margin-bottom: 1px;
   line-height: 40px;
+  .text-overflow();
 }
 .section-header:hover, .section-item.active, .section-item:hover {
     background: #e6e6e6;
@@ -390,7 +397,7 @@ a:hover .action-icon {
 .pad-list {
   display: inline-block;
   font-size: 16px;
-  line-height: 2;
+  line-height: 1.5;
   width: 280px;
   height: 100%;
   padding-right: 16px;

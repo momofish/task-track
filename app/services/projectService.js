@@ -1,4 +1,4 @@
-import {get, save} from './commonService';
+import { get, save } from './commonService';
 
 const resourceUrl = '/api/projects';
 
@@ -17,5 +17,12 @@ export default {
 
   saveProject(project) {
     return save(resourceUrl, project);
+  },
+
+  formatProjectName(project) {
+    if(!project)
+      return null;
+    let projectName = `[${project.id || '个人'}]${project.name}`;
+    return projectName;
   }
 }

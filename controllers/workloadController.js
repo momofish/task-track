@@ -34,7 +34,8 @@ module.exports = function (router) {
     }));
 
   router.route(`${baseUri}/todos/:category`)
-    .get(route.wrap(async (req, res) => { // 获取待办
+    // 获取待办
+    .get(route.wrap(async (req, res) => {
       let {user} = req;
       let {category} = req.params;
       let todos;
@@ -109,8 +110,8 @@ module.exports = function (router) {
           { project: { $exists: true } }
         ]
       }).select('_id title startDate endDate project')
-        .populate('project', 'id name type');
-      worksheet.tasks = tasks.filter(task => task.project.type == 1);
+        .populate('project', 'id name');
+      worksheet.tasks = tasks.filter(task => task.project.id);
 
       let aWorkloads = await Workload.find({
         $and: [
@@ -164,5 +165,14 @@ module.exports = function (router) {
         }
       }
       res.sendStatus(204);
+    }));
+
+  router.route(`${baseUri}/myProjects`)
+    .get(route.wrap(async (req, res) => {
+      let {user} = req;
+      let listProjectUri = `${workloadServiceBaseUri}/ListMyProject?loginId=${user.loginId}`;
+      let projects = await api.fetch(listProjectUri);
+
+      res.send(projects);
     }));
 }

@@ -18,5 +18,9 @@ export default {
 
   approve(approves, agree, opinion) {
     return post(`${resourceUrl}/todos/approve`, { approves, agree, opinion });
+  },
+  
+  myProjects() {
+    return get(resourceUrl, `myProjects`);
   }
 }

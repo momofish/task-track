@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, FormItem, IconText, ListItem, EditableText, QuickAdd } from './common';
-import { projectService } from '../services';
+import { projectService, workloadService, userService } from '../services';
 import { select } from '../utils';
 
 class ProjectSetting extends Component {
@@ -10,7 +10,8 @@ class ProjectSetting extends Component {
   }
 
   componentDidMount() {
-    let project = this.props.project;
+    let {project} = this.props;
+
     if (project)
       projectService.getProject(project._id)
         .then(project => this.setState({ project }));
@@ -20,24 +21,27 @@ class ProjectSetting extends Component {
     Modal.close();
   }
 
-  changeEntity(entity, field, event) {
-    entity[field] = event.target.value;
+  changeEntity(field, event) {
+    let {project} = this.state;
+    project[field] = event.target.value;
     this.forceUpdate();
   }
 
-  saveEntity(entity) {
+  saveEntity() {
+    let {project} = this.state;
     this.props.state.updated = true;
-    projectService.saveProject(entity)
+    projectService.saveProject(project)
       .then(this.dismiss);
   }
 
-  handleSubmit(project, event) {
+  handleSubmit(event) {
+    let {project} = this.state;
     event.preventDefault();
     this.saveEntity(project);
   }
 
   selectTeam(event) {
-    let project = this.state.project;
+    let {project} = this.state;
 
     select.selectTeam(event.currentTarget, project.team, selecting => {
       project.team = selecting;
@@ -46,12 +50,25 @@ class ProjectSetting extends Component {
   }
 
   selectUser(field, event) {
-    let project = this.state.project;
+    let {project} = this.state;
     let selected = project[field];
     select.selectUser(event.currentTarget, selected, selecting => {
       project[field] = selecting;
       this.forceUpdate();
     });
+  }
+
+  selectProject(field, event) {
+    let {project} = this.state;
+    let selected = project[field];
+    select.selectMenu(event.currentTarget, selected, selecting => {
+      project[field] = selecting.id;
+      this.forceUpdate();
+    }, {
+        data: () => workloadService.myProjects()
+          .then(projects =>
+            projects.map(project => ({ id: project.ProjectID, name: `[${project.ProjectID}]${project.ProjectName}` })))
+      });
   }
 
   addPacket(quick) {
@@ -67,22 +84,24 @@ class ProjectSetting extends Component {
   }
 
   render() {
-    let project = this.state.project;
+    let pProject = this.props.project || {};
+    let {project} = this.state;
     let owner = project.owner || { name: '无所有者' };
     let members = project.members || [];
     let team = project.team || { name: '未指派团队' };
 
     return (
-      <form className='smart-form' onSubmit={this.handleSubmit.bind(this, project)}>
+      <form className='smart-form' onSubmit={this.handleSubmit.bind(this)}>
         <FormItem label='名称'>
           <div>
-            <div className="col-sm-3" style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <input type='text' className='form-control' placeholder='编号'
-                value={project.id} onChange={this.changeEntity.bind(this, project, 'id')} />
+            <div className="col-sm-4" style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <button type='button' disabled={project.id} className='btn btn-default form-control' onClick={this.selectProject.bind(this, 'id')}>
+                {project.id || '个人项目'} <i className="caret" />
+              </button>
             </div>
-            <div className="col-sm-9">
+            <div className="col-sm-8">
               <input type='text' className='form-control' placeholder='名称'
-                value={project.name} onChange={this.changeEntity.bind(this, project, 'name')} />
+                value={project.name} onChange={this.changeEntity.bind(this, 'name')} />
             </div>
           </div>
         </FormItem>
@@ -120,7 +139,7 @@ class ProjectSetting extends Component {
           </FormItem>}
         <FormItem>
           <div>
-            <button type='submit' className='btn btn-primary btn-sm'>确定</button>
+            <button type='submit' className='btn btn-primary btn-sm' disabled={(pProject.owner || {})._id != userService.currentUser._id }>确定</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
         </FormItem>

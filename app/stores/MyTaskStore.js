@@ -1,8 +1,10 @@
 import moment from 'moment';
+import _ from 'lodash';
+
 import alt from '../alt';
 import MyTaskActions from '../actions/MyTaskActions';
 import {myTaskFilters} from '../models';
-import _ from 'lodash';
+import {projectService} from '../services'
 
 class MyTaskStore {
   constructor() {
@@ -33,7 +35,7 @@ class MyTaskStore {
             completed: task.completed,
             checked: task.completed,
             tags: [
-              { code: 'project', type: 'label', label: (task.project || {}).name, style: 'success', data: task.project },
+              { code: 'project', type: 'label', label: projectService.formatProjectName(task.project), style: 'success', data: task.project },
               { code: 'dueDate', type: 'label', label: task.dueDate && moment(task.dueDate).format('L'), style: 'danger', data: task.dueDate },
               grouper === 'treat' && { code: 'treat', type: 'label', icon: 'flag', style: groupConfig[key].style || 'default', data: task.treat || 0 },
             ],

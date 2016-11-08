@@ -1,6 +1,8 @@
+import _ from 'lodash';
+
 import alt from '../alt';
 import TasksActions from '../actions/TasksActions';
-import _ from 'lodash';
+import {projectService} from '../services'
 
 class TasksStore {
   constructor() {
@@ -42,7 +44,7 @@ class TasksStore {
       body: []
     });
     let project2Item = project => ({
-      label: project.name, icon: 'file', actionIcon: 'cog',
+      label: projectService.formatProjectName(project), icon: 'file', actionIcon: 'cog',
       onAction: event => {
         event.preventDefault();
         opener && opener('project', project);
