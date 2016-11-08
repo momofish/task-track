@@ -7,12 +7,12 @@ var OAuth2Strategy = require('passport-oauth2')
 function Strategy(options, verify) {
   options = options || {};
   var baseURL = options.baseURL || 'https://sso.bingosoft.net';
-  options.authorizationURL = options.authorizationURL || baseURL && (baseURL + '/oauth/2/authorize');
-  options.tokenURL = options.tokenURL || baseURL && (baseURL + '/oauth/2/token');
-  options.userProfileURL = options.userProfileURL || baseURL && (baseURL + '/oauth/checktoken');
-  options.clientID = options.clientID || 'clientId',
-    options.clientSecret = options.clientSecret || 'clientSecret',
-    options.scope = options.scope || 'read';
+  options.authorizationURL = options.authorizationURL || (baseURL + '/oauth/2/authorize');
+  options.tokenURL = options.tokenURL || (baseURL + '/oauth/2/token');
+  options.userProfileURL = options.userProfileURL || (baseURL + '/oauth/checktoken');
+  options.clientID = options.clientID || 'clientId';
+  options.clientSecret = options.clientSecret || 'clientSecret';
+  options.scope = options.scope || 'read';
   options.scopeSeparator = options.scopeSeparator || ',';
   options.customHeaders = options.customHeaders || {};
 
@@ -24,21 +24,6 @@ function Strategy(options, verify) {
   this.name = 'bingo';
   this._userProfileURL = options.userProfileURL;
   this._oauth2.useAuthorizationHeaderforGET(true);
-
-  var self = this;
-  var _oauth2_getOAuthAccessToken = this._oauth2.getOAuthAccessToken;
-  this._oauth2.getOAuthAccessToken = function (code, params, callback) {
-    _oauth2_getOAuthAccessToken.call(self._oauth2, code, params, function (err, accessToken, refreshToken, params) {
-      if (err) { return callback(err); }
-      if (!accessToken) {
-        return callback({
-          statusCode: 400,
-          data: JSON.stringify(params)
-        });
-      }
-      callback(null, accessToken, refreshToken, params);
-    });
-  }
 }
 
 // Inherit from `OAuth2Strategy`.

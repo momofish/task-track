@@ -155,10 +155,22 @@ app.use(function (err, req, res, next) {
   res.send({ message: err.message });
 });
 
+var server = require('http').createServer(app);
+if (production) {
+  var fs = require('fs');
+  var privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
+  var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+  var credentials = { key: privateKey, cert: certificate };
+  server = require('https').createServer(credentials, app);
+}
+
+server.listen(app.get('port'), function () {
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
 /**
  * Socket.io stuff.
  */
-var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var onlineUsers = 0;
 
@@ -171,8 +183,4 @@ io.sockets.on('connection', function (socket) {
     onlineUsers--;
     io.sockets.emit('onlineUsers', { onlineUsers: onlineUsers });
   });
-});
-
-server.listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'));
 });
