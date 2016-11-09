@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
+
 import TaskDetail from './TaskDetail';
 import Store from '../stores/CalendarStore';
 import Actions from '../actions/CalendarActions'
+import {Icon} from './common';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
@@ -42,7 +44,7 @@ class Calendar extends Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            任务日历
+            <Icon icon='calendar' /> 任务日历
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter.bind(this) }>
             <button type="button" className="btn btn-info" disabled>
