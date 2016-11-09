@@ -84,6 +84,8 @@ class ProjectTask extends Component {
     packets = [].concat(packets || []);
     packets.reverse();
 
+    let projectName = projectService.formatProjectName(project);
+
     const selectors = [{
       key: 'owner',
       idGetter: owner => owner._id,
@@ -95,9 +97,9 @@ class ProjectTask extends Component {
     return (
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
-          <h2>
+          <h2 title={projectName}>
             <i className='glyphicon glyphicon-file' />&nbsp;
-            {projectService.formatProjectName(project)} <span className="badge">{tasks.length}</span>
+            {projectName} <span className="badge">{tasks.length}</span>
           </h2>
           <div className="btn-group pull-right" onClick={this.selectFilter}>
             <button type="button" className="btn btn-info" disabled>

@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
-import {Icon} from './common';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import { Icon } from './common';
 
 class Sidebar extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class Sidebar extends Component {
       sections = data.sections.map((section, i) => (
         <div className='section' key={i}>
           <a className='section-header' data-toggle='collapse'
-            onClick={this.handleCollapse.bind(this, section) }
+            onClick={this.handleCollapse.bind(this, section)}
             href={`.section:nth-child(${i + 2}) > .section-body`}>
             <Icon icon='triangle-bottom' />&nbsp;
             {section.header.icon && <Icon icon={section.header.icon} />}&nbsp;
@@ -40,12 +40,12 @@ class Sidebar extends Component {
           <ul className='section-body collapse in'>
             {section.body.map((item, j) => (
               <li key={j}>
-                <Link className='section-item text-overflow' to={item.to} activeClassName='active'>
+                <Link className='section-item text-overflow' to={item.to} title={item.label} activeClassName='active'>
                   <i className={`glyphicon glyphicon-${item.icon}`} /> {item.label}
                   {item.actionIcon && <Icon icon={item.actionIcon} onClick={item.onAction} className='action-icon' />}
                 </Link>
               </li>
-            )) }
+            ))}
           </ul>
         </div>
       ));
