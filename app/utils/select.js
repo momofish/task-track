@@ -1,7 +1,7 @@
-import {Selector, DatePicker} from '../components/common';
-import {projectService, teamService, userService} from '../services';
+import { Selector, DatePicker } from '../components/common';
+import { projectService, teamService, userService } from '../services';
 import moment from 'moment';
-import {extend} from 'lodash';
+import { extend } from 'lodash';
 
 export default {
   selectProject(target, selected, onSelect, options) {
@@ -47,8 +47,8 @@ export default {
       dataSources: [
         {
           name: '团队',
-          data: () => projectService.getProject(options._id)
-            .then(project => (project.team || {}).members || []),
+          data: () => teamService.getTeam((options.team || {})._id)
+            .then(team => (team || {}).members || []),
           searchable: true
         },
         {
