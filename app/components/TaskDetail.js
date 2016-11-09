@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import { extend } from 'lodash';
 import classnames from 'classnames';
+import { assign } from 'lodash';
+
 import {
   Modal, PopBox, FormItem,
   Selector, EditableText, IconText, Icon,
@@ -12,7 +14,6 @@ import Store from '../stores/TaskDetailStore';
 import Actions from '../actions/TaskDetailActions';
 import { projectService } from '../services';
 import { select } from '../utils';
-import { assign } from 'lodash';
 
 class TaskDetail extends Component {
   constructor(props) {
@@ -138,7 +139,7 @@ class TaskDetail extends Component {
           <Link to={`/tasks/projects/${project._id}`}
             onClick={this.selectProject.bind(this)}>
             <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this)} />&nbsp;
-            {project.name}&nbsp;
+            {projectService.formatProjectName(project)}&nbsp;
           </Link>
           <IconText icon="folder-close" text={packet.name} onClick={this.selectPacket.bind(this)} />
           <div className='flex flex-end modal-header-content'>

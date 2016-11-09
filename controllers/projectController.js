@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var Project = require("../models").Project;
+var Team = require("../models").Team;
 
 module.exports = function (router) {
   router.route('/projects/my').get(function (req, res, next) {
@@ -27,13 +28,14 @@ module.exports = function (router) {
 
   router.route('/projects/:id').get(function (req, res, next) {
     var id = req.params.id;
-    Project.findById(id).populate('owner members team', 'name').exec(function (err, project) {
+    Project.findById(id).populate('owner members', 'name').exec(function (err, project) {
       if (err) return next(err);
 
       if (project.team) {
-        project.team.populate('members', function (err, team) {
+        Team.findById(project.team).populate('members', 'name').exec(function (err, team) {
           if (err) return next(err);
 
+          project.team = team;
           res.send(project);
         });
       }
@@ -50,7 +52,7 @@ module.exports = function (router) {
       project.owner = user._id;
     if (!project.members.length)
       project.members = [user._id];
-      
+
     project.save(function (err) {
       if (err) return next(err);
 

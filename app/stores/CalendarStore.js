@@ -23,8 +23,8 @@ class CalendarStore {
       return {
         title: task.title,
         allDay: true,
-        start: new Date(start),
-        end: new Date(end),
+        start: start && moment(start),
+        end: end && moment(end).add(1, 'd'),
         data: task
       }
     });
