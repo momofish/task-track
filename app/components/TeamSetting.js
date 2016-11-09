@@ -6,7 +6,9 @@ import { select } from '../utils';
 class TeamSetting extends Component {
   constructor(props) {
     super(props);
-    this.state = { team: props.team || {} };
+    let team = props.team || {};
+    team.members = team.members || [];
+    this.state = { team };
   }
 
   componentDidMount() {
