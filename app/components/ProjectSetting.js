@@ -52,10 +52,10 @@ class ProjectSetting extends Component {
   selectUser(field, event) {
     let {project} = this.state;
     let selected = project[field];
-    select.selectUser(event.currentTarget, selected, selecting => {
+    select.select4ProjectMember(event.currentTarget, selected, selecting => {
       project[field] = selecting;
       this.forceUpdate();
-    });
+    }, project);
   }
 
   selectProject(field, event) {

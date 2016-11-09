@@ -41,6 +41,27 @@ export default {
     }, options));
   },
 
+  select4ProjectMember(target, selected, onSelect, options) {
+    Selector.open(extend({
+      target,
+      dataSources: [
+        {
+          name: '团队',
+          data: () => projectService.getProject(options._id)
+            .then(project => (project.team || {}).members || []),
+          searchable: true
+        },
+        {
+          name: '所有',
+          data: userService.getUser,
+          searchable: true
+        }
+      ],
+      selected,
+      onSelect
+    }, options));
+  },
+
   selectUser(target, selected, onSelect, options) {
     Selector.open(extend({
       target,
