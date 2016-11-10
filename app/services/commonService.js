@@ -13,6 +13,7 @@ export function get(url, id) {
   return new Promise((resolve, reject) =>
     $.ajax({
       url: `${url}/${id || ''}`,
+      cache: false,
       success: resolve, error: handleError(reject)
     })
   );
