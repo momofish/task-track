@@ -3,8 +3,8 @@ import _ from 'lodash';
 
 import alt from '../alt';
 import MyTaskActions from '../actions/MyTaskActions';
-import {myTaskFilters} from '../models';
-import {projectService} from '../services'
+import { myTaskFilters } from '../models';
+import { projectService } from '../services'
 
 class MyTaskStore {
   constructor() {
@@ -23,6 +23,7 @@ class MyTaskStore {
     let realGrouper = grouper instanceof Function ?
       grouper : task => task[grouper] || 0;
     let groups = _.chain(this.tasks).groupBy(realGrouper)
+      .merge(grouper === 'treat' ? _.mapValues(groupConfig, () => []) : null)
       .mapValues((value, key) => ({
         header: {
           label: grouper ? groupConfig ? groupConfig[key].name : key : this.filter.name

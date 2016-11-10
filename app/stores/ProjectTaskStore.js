@@ -22,6 +22,7 @@ class ProjectTaskStore {
     let realGrouper = grouper instanceof Function ?
       grouper : task => task[grouper] || 0;
     let groups = _.chain(this.tasks).groupBy(realGrouper)
+      .merge(grouper === 'treat' ? _.mapValues(groupConfig, () => []) : null)
       .mapValues ((value, key) => ({
         header: {
           label: grouper ? groupConfig ? groupConfig[key].name : key : this.filter.name
