@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import _ from 'lodash';
 
 import {GroupList, PadList, QuickAdd, TabList} from './common';
 import Store from '../stores/ProjectTaskStore';
@@ -43,6 +44,11 @@ class ProjectTask extends Component {
 
   selectTask(task, event) {
     Actions.selectTask(task);
+  }
+
+  sortTask(option) {
+    let {group, index, item} = option;
+    Actions.updateTask({ _id: item.data._id, treat: _.toPairs(taskTreat)[group][0]});
   }
 
   clickTag(item, tag, event) {
@@ -114,6 +120,7 @@ class ProjectTask extends Component {
         <TabList data={packets.map(pack => ({ name: pack.name, collapse: !pack.active, active: pack._id == packet, packet: pack })) } onSelect={this.selectPacket.bind(this) } />
         {filter.mode == 'pad' ?
           <PadList data={taskGroups}
+            onSort={this.sortTask.bind(this)}
             onSelect={this.selectTask}
             onClickTag={this.clickTag.bind(this) }
             onCheck={this.checkTask.bind(this) } /> :

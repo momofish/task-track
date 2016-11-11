@@ -54,8 +54,6 @@ module.exports = function (router) {
 
       if (!task.owner)
         task.owner = user._id;
-      if (!task.members.length)
-        task.members = [user._id];
 
       task.save(function (err) {
         if (err) return next(err);
