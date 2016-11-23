@@ -69,7 +69,7 @@ passport.deserializeUser(function (req, authUser, done) {
     return;
   }
 
-  models.User.findOne({ loginId: new RegExp(authUser.loginId, 'i') }, function (err, user) {
+  models.User.findOne({ loginId: new RegExp(`^${authUser.loginId}$`, 'i') }, function (err, user) {
     if (err) { return done(err); }
     if(!user) return done(new Error(`用户${authUser.loginId}不存在`)); 
 
