@@ -7,11 +7,16 @@ let userSerivce = {
     return get(resourceUrl, id);
   },
 
-  currentUser: null
-};
+  currentUser: null,
 
-  (async () => {
-    userSerivce.currentUser = await userSerivce.getUser('current');
-  })();
+  async getCurrentUser() {
+    if (this.currentUser)
+      return this.currentUser;
+
+    this.currentUser = await this.getUser('current');
+    return this.currentUser;
+  }
+};
+userSerivce.getCurrentUser();
 
 export default userSerivce;

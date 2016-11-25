@@ -370,7 +370,7 @@ class WorkloadApprove extends Component {
           </form>
         </nav>
         {approveGroups.length ?
-          <GroupList data={approveGroups} style={{ maxHeight: 600 }}
+          <GroupList data={approveGroups} style={{ maxHeight: 400 }}
             onCheck={this.check.bind(this)}
             onSelect={this.select.bind(this)}
             /> : <div className="alert alert-info">无待审批项</div>}

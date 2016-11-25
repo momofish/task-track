@@ -10,5 +10,5 @@ module.exports = {
 
   loginPath: process.env.LOGIN_PATH || '/login',
 
-  evmSiteUrl: process.env.EVM_SITE_URL || 'http://localhost:1081/Portal'
+  evmSiteUrl: process.env.EVM_SITE_URL || 'http://tproject.bingosoft.net:88/Portal'
 };

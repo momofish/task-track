@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+
 import { Modal, FormItem, IconText, ListItem, EditableText, QuickAdd } from './common';
 import { projectService, workloadService, userService } from '../services';
 import { select } from '../utils';
@@ -94,6 +95,7 @@ class ProjectSetting extends Component {
     let owner = project.owner || { name: '无所有者' };
     let members = project.members || [];
     let team = project.team || { name: '未指派团队' };
+    let {currentUser} = userService;
 
     return (
       <form className='smart-form' onSubmit={this.handleSubmit.bind(this)}>
@@ -145,7 +147,7 @@ class ProjectSetting extends Component {
         <FormItem>
           <div>
             <button type='submit' className='btn btn-primary btn-sm'
-              disabled={pProject.owner && pProject.owner._id != userService.currentUser._id}>确定</button>
+              disabled={pProject.owner && pProject.owner._id != currentUser._id}>确定</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
         </FormItem>

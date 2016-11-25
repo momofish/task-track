@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { Modal, FormItem, IconText, EditableText } from './common';
 import { teamService, userService } from '../services';
 import { select } from '../utils';
@@ -62,6 +63,7 @@ class TeamSetting extends Component {
     let {team} = this.state;
     let owner = team.owner || { name: '所有者' };
     let members = team.members || [];
+    let {currentUser} = userService;
 
     return (
       <form className='smart-form' onSubmit={this.submit.bind(this)}>
@@ -89,7 +91,7 @@ class TeamSetting extends Component {
         <FormItem>
           <div>
             <button type='submit' className='btn btn-primary btn-sm'
-              disabled={pTeam.owner && pTeam.owner._id != userService.currentUser._id}>保存</button>
+              disabled={pTeam.owner && pTeam.owner._id != currentUser._id}>保存</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
           </div>
         </FormItem>
