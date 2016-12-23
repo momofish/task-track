@@ -22,7 +22,7 @@ class ListItem extends Component {
         </div>
         <div className='item-tags'>
           {(item.tags || []).filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
-            <span key={k} className={`tag tag-${tag.style}`}
+            <span key={k} className={`tag tag-${tag.style}`} title={tag.label}
               onClick={event => onClickTag(item, tag, event) }>
               {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
               {tag.label}

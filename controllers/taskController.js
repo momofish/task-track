@@ -23,7 +23,7 @@ module.exports = function (router) {
       params.completed = true;
     Task.find(params)
       .select('completed project owner title treat dueDate startDate endDate')
-      .populate('owner project', 'name').exec(function (err, tasks) {
+      .populate('owner project', 'id name').exec(function (err, tasks) {
         if (err) return next(err);
 
         res.send(tasks);
