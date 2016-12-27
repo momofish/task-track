@@ -14,7 +14,7 @@ const parsePeriod = (mode, date) => {
   if (mode == 1) {
     let month = (mDate.date() >= 24 ? mDate.add(1, 'M') : mDate).startOf('month');
     startDate = month.add(-1, 'M').add(23, 'd').format('L');
-    endDate = month.add(22, 'd').format('L');
+    endDate = month.add(1, 'M').add(-1, 'd').format('L');
   }
 
   return ({ startDate, endDate });
