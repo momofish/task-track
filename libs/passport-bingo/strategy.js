@@ -38,7 +38,7 @@ Strategy.prototype.userProfile = function (accessToken, done) {
         return done(new InternalOAuthError('Failed to fetch user profile', err));
       }
 
-      var loginId = body.trim('\n').split('\n').find(item => item.indexOf('userPrincipal') == 0).split(':')[1];
+      var loginId = body.trim('\n').split('\n').find(item => item.indexOf('userPrincipal') == 0).split(':')[1].split('@')[0];
       done(null, { loginId: loginId });
     });
 }
