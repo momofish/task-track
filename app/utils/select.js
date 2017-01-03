@@ -10,7 +10,9 @@ export default {
       dataSources: [
         {
           name: '项目',
-          data: projectService.getMyPartProjects,
+          data: () => projectService.getMyPartProjects()
+            .then(projects => projects.map(project => extend({display: projectService.formatProjectName(project) }, project))),
+          nameField: 'display',
           searchable: true
         }
       ],

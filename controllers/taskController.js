@@ -1,6 +1,8 @@
-var mongoose = require("mongoose");
-var Task = require("../models").Task;
-var moment = require('moment');
+import mongoose from 'mongoose';
+import moment from 'moment';
+
+import { api, route } from '../utils';
+import { Task, Workload } from '../models';
 
 module.exports = function (router) {
   router.route('/tasks/:category/:filter').get(function (req, res, next) {
@@ -38,14 +40,20 @@ module.exports = function (router) {
 
       res.send(task);
     });
-  }).delete(function (req, res, next) {
-    var id = req.params.id;
+  }).delete(route.wrap(async (req, res, next) => {
+    let {id} = req.params;
+    
+    // check for workload
+    let workload = await Workload.findOne({task: id});
+    if(workload)
+      return next(new Error('已填工作量，无法删除'))
+
     Task.findByIdAndRemove(id, function (err) {
       if (err) return next(err);
 
       res.sendStatus(204);
     });
-  });
+  }));
 
   router.route('/tasks')
     .put(function (req, res, next) {

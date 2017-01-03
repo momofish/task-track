@@ -53,7 +53,11 @@ class TaskDetail extends Component {
 
   selectProject(event) {
     event.preventDefault();
+
     let task = this.state.task;
+    if (task.project)
+      return;
+
     select.selectProject(event.currentTarget, task.project, (project) => {
       Actions.updateTask({
         _id: task._id, project: project._id
@@ -121,9 +125,9 @@ class TaskDetail extends Component {
 
   render() {
     let task = this.state.task || this.props.task;
-    let project = task.project || { name: '未分配项目' };
+    let project = task.project;
     let packet = task.packet;
-    if (typeof packet == 'string' && project.packets)
+    if (typeof packet == 'string' && project && project.packets)
       packet = project.packets.filter(pack => pack._id == packet).pop();
     packet = packet || { name: "(无工作包)" }
     let owner = task.owner || { name: '未分配人员' };
@@ -136,12 +140,8 @@ class TaskDetail extends Component {
     return (
       <Modal ref='modal' onHidden={this.dismiss.bind(this)}
         header={<div className='flex flex-horizontal'>
-          <Link to={`/tasks/projects/${project._id}`}
-            onClick={this.selectProject.bind(this)}>
-            <Icon className='glyphicon glyphicon-menu-down' onClick={this.selectProject.bind(this)} />&nbsp;
-            {projectService.formatProjectName(project)}&nbsp;
-          </Link>
-          <IconText icon="folder-close" text={packet.name} onClick={this.selectPacket.bind(this)} />
+          <IconText icon='menu-down' text={projectService.formatProjectName(project) || '未分配项目'} onClick={this.selectProject.bind(this)} />
+          {task.project && <IconText icon='folder-close' text={packet.name} onClick={this.selectPacket.bind(this)} />}
           <div className='flex flex-end modal-header-content'>
             <IconText icon='option-vertical' iconClassName='circle' tooltip='更多'
               onClick={this.selectMenu.bind(this)} />
