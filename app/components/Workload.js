@@ -256,7 +256,8 @@ export default class Workload extends Component {
                         let workload = workloadsByDate[day] || {};
                         return (
                           <td key={day}>
-                            <input disabled={!task.project.id || !needWorkloads[day] || moment(day) < moment(task.startDate || '1900-01-01') || moment(day) > moment(task.endDate || '2099-01-01')}
+                            <input disabled={!task.project.id || !needWorkloads[day]
+                              || !workload.workload && (moment(day) < moment(task.startDate || '1900-01-01') || moment(day) > moment(task.endDate || '2099-01-01'))}
                               title={workload.status && `[${APPROVE_STATUS_NAME[workload.status]}]${workload.opinion || ''}`}
                               className={`form-control input-sm ${APPROVE_STATUS_CLASS[workload.status]}`}
                               onChange={this.changeWorkload.bind(this, task, day)}

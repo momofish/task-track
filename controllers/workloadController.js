@@ -101,18 +101,6 @@ module.exports = function (router) {
       let listWorkloadUri = `${workloadServiceBaseUri}/ListWorkload?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`;
       let worksheet = await api.fetch(listWorkloadUri);
 
-      let tasks = await Task.find({
-        $and: [
-          { $or: [{ owner: user._id }, { members: { $in: [user._id] } }] },
-          { $or: [{ startDate: { $lte: moment(endDate) } }, { startDate: { $exists: false } }] },
-          { $or: [{ endDate: { $gte: moment(startDate) } }, { endDate: { $exists: false } }] },
-          { $or: [{ startDate: { $exists: true } }, { endDate: { $exists: true } }] },
-          { project: { $exists: true } }
-        ]
-      }).select('_id title startDate endDate project')
-        .populate('project', 'id name');
-      worksheet.tasks = tasks.filter(task => task.project.id);
-
       let aWorkloads = await Workload.find({
         $and: [
           { owner: user._id },
@@ -128,6 +116,21 @@ module.exports = function (router) {
             .mapValues(wl => wl.pop())
         ).value();
       worksheet.workloads = Object.assign(worksheet.workloads, workloads);
+
+      let tasks = await Task.find({
+        $or: [{
+          $and: [
+            { $or: [{ owner: user._id }, { members: { $in: [user._id] } }] },
+            { $or: [{ startDate: { $lte: moment(endDate) } }, { startDate: { $exists: false } }] },
+            { $or: [{ endDate: { $gte: moment(startDate) } }, { endDate: { $exists: false } }] },
+            { $or: [{ startDate: { $exists: true } }, { endDate: { $exists: true } }] },
+            { project: { $exists: true } }
+          ]
+        }, { _id: { $in: _.keys(worksheet.workloads) } }],
+
+      }).select('_id title startDate endDate project')
+        .populate('project', 'id name');
+      worksheet.tasks = tasks.filter(task => task.project.id);
 
       res.send(worksheet);
     }))

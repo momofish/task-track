@@ -18,9 +18,11 @@ var config = require('./config');
 var models = require('./models');
 var authenticate = require('./middlewares/authenticate');
 var OAuth2Strategy = require('./libs/passport-bingo').Strategy;
+var moment = require('moment');
 
 // global config
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+moment.locale('zh-cn');
 
 // global vars
 var production = process.env.NODE_ENV === 'production';
