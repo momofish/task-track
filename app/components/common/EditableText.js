@@ -65,7 +65,7 @@ class EditableText extends Component {
       </div> :
       <a href='javascript:' className={`form-control-static ${className}`} style={style}
         onClick={() => this.setState({ isEdit: true })} >
-        <span dangerouslySetInnerHTML={{
+        <div dangerouslySetInnerHTML={{
           __html: (multiline && value ? this.md.render(value) : value) || placeholder
         }} />
         {actionIcon && <Icon icon={actionIcon} onClick={event => {

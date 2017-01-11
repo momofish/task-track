@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export const taskTreat = {
   0: { name: '新任务' },
-  10: { name: '马上做', style: 'success' },
+  10: { name: '现在做', style: 'success' },
   20: { name: '下一步做', collapsed: true, style: 'info' },
   30: { name: '以后再做', collapsed: true, style: 'warning' },
 }

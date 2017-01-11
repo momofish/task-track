@@ -52,11 +52,11 @@ class Modal extends Component {
   render() {
     let realOptions = options || {};
     let content = this.props.children || realOptions.content;
-    let {header, body, footer} = this.props;
+    let {header, body, footer, size} = this.props;
 
     return (
       <div ref='modal' className='modal fade'>
-        <div className='modal-dialog'>
+        <div className={`modal-dialog ${size ? `modal-${size}` : ''}`}>
           <div className='modal-content'>
             {header && <div className="modal-header">
               <button type='button' className='close' data-dismiss='modal'>

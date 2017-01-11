@@ -19,7 +19,7 @@ class TaskDetailActions {
 
   updateTask(task, taskPopulated) {
     taskService.updateTask(task)
-      .then(() => this.actions.updateTaskSuccess(taskPopulated));
+      .then((result) => this.actions.updateTaskSuccess(result));
   }
 
   deleteTask({id, component}) {

@@ -104,7 +104,7 @@ class Selector extends Component {
   }
 
   render() {
-    let {dataSources} = this.props;
+    let {dataSources, top = 5} = this.props;
     let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
     let {nameField = 'name', searchable} = dataSource;
@@ -133,7 +133,7 @@ class Selector extends Component {
           <ul className='selector-list'>
             {items && items.length ? items
               .filter(item => !termReg || item[nameField].search(termReg) >= 0)
-              .slice(0, 5)
+              .slice(0, top)
               .map((item, i) => {
                 let isSelected = this.getSelected(item, selecting) != null;
                 return (<li key={item._id || i} className={isSelected ? 'active' : null}>

@@ -60,7 +60,7 @@ class TaskDetail extends Component {
 
     select.selectProject(event.currentTarget, task.project, (project) => {
       Actions.updateTask({
-        _id: task._id, project: project._id
+        _id: task._id, project
       }, { project });
     });
   }
@@ -73,8 +73,7 @@ class TaskDetail extends Component {
     }
     select.selectMember(event.currentTarget, selected, selecting => {
       let newTask = { _id: task._id };
-      newTask[field] = selected instanceof Array ?
-        selecting.map(m => m._id) : selecting._id;
+      newTask[field] = selecting;
       let populated = {};
       populated[field] = selecting;
       Actions.updateTask(newTask, populated);
@@ -101,12 +100,13 @@ class TaskDetail extends Component {
 
   selectPacket(event) {
     let {task} = this.state;
-    let {project} = task;
+    let {packets} = task.project;
+    packets = packets.slice().reverse();
     select.selectMenu(event.currentTarget, { _id: task.packet }, selecting => {
       Actions.updateTask({
         _id: task._id, packet: selecting._id
       }, { packet: selecting._id });
-    }, { data: project.packets.map(pack => assign({ icon: pack.active ? 'folder-open' : 'folder-close' }, pack)) });
+    }, { data: packets.map(pack => assign({ icon: pack.active ? 'folder-open' : 'folder-close' }, pack)) });
   }
 
   addSubTask(quick) {

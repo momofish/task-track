@@ -4,5 +4,6 @@ module.exports = {
   Project: require('./project'),
   Task: require('./task'),
   Team: require('./team'),
-  Workload: require('./workload')
+  Workload: require('./workload'),
+  Article: require('./article')
 }

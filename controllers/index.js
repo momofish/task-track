@@ -10,4 +10,5 @@ module.exports = function(app) {
   require('./deptController')(router);
   require('./userController')(router);
   require('./workloadController')(router);
+  require('./articleController')(router);
 }

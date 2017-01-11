@@ -14,7 +14,7 @@ module.exports = function (router) {
     var id = req.params.id;
     if (id == 'current')
       id = req.user._id;
-    User.findById(id).populate('dept', 'name').exec(function (err, user) {
+    User.findById(id).select('name').populate('dept', 'name').exec(function (err, user) {
       if (err) return next(err);
 
       res.send(user);

@@ -42,10 +42,10 @@ module.exports = function (router) {
     });
   }).delete(route.wrap(async (req, res, next) => {
     let {id} = req.params;
-    
+
     // check for workload
-    let workload = await Workload.findOne({task: id});
-    if(workload)
+    let workload = await Workload.findOne({ task: id });
+    if (workload)
       return next(new Error('已填工作量，无法删除'))
 
     Task.findByIdAndRemove(id, function (err) {
@@ -76,14 +76,18 @@ module.exports = function (router) {
       if (task.treat == 10 && oldTask.treat != task.treat && !task.startDate) {
         task.startDate = moment().startOf('day');
       }
-      // 设置完成时记录结束日期
-      if (task.completed && oldTask.completed != task.completed) {
+      // 设置完成时，或所有检查点标记完成记录结束日期
+      if (task.completed && oldTask.completed != task.completed ||
+        task.subTasks && task.subTasks.length && !task.subTasks.some(s => !s.completed) && oldTask.subTasks.some(s => !s.completed)) {
+        task.completed = true;
         task.endDate = moment().startOf('day');
+        if(!oldTask.startDate)
+          task.startDate = moment().startOf('day');
       }
       Task.update({ _id: task._id }, task, function (err) {
         if (err) return next(err);
 
-        res.sendStatus(204);
+        res.send(task);
       });
       return;
     });

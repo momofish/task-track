@@ -104,7 +104,8 @@ export default {
         }
       ],
       selected,
-      onSelect
+      onSelect,
+      top: 20
     }, options));
   },
 
