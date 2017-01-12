@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node server.js",
     "watch": "nodemon server.js",
+    "dev": "gulp & nodemon server.js",
     "postinstall": "bower install && gulp build"
   },
   "babel": {
