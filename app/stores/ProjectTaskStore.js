@@ -34,8 +34,8 @@ class ProjectTaskStore {
             completed: task.completed,
             checked: task.completed,
             tags: [
-              { code: 'dueDate', type: "label", label: task.dueDate && moment(task.dueDate).format('L'), style: "danger", data: task.dueDate },
               task.owner && { code: 'owner', type: "label", label: task.owner.name, style: "info", data: task.owner },
+              { code: 'dueDate', type: "label", label: task.dueDate && moment(task.dueDate).format('M/D'), style: "danger", data: task.dueDate },
               grouper === 'treat' && { code: 'treat', type: "label", icon: 'flag', style: groupConfig[key].style || 'default', data: task.treat || 0 },
             ],
             data: task

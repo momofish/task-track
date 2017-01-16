@@ -21,7 +21,7 @@ class CalendarStore {
       if (task.endDate) end = task.endDate;
 
       return {
-        title: task.title,
+        title: `${task.title}`,
         allDay: true,
         start: start && moment(start),
         end: end && moment(end).add(1, 'd'),

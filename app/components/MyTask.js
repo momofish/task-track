@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import moment from 'moment';
 
 import { GroupList, PadList, QuickAdd } from './common';
 import MyTaskStore from '../stores/MyTaskStore';
@@ -12,7 +13,12 @@ const selectors = [{
   key: 'project',
   idGetter: project => project._id,
   nameGetter: project => project.name,
-  type: 'selectProject', label: '选择项目'
+  type: 'selectProject', label: '项目'
+}, {
+  key: 'dueDate',
+  idGetter: date => date,
+  nameGetter: date => moment(date).format('L'),
+  type: 'selectDate', label: '截止日期'
 }];
 
 class MyTask extends Component {
@@ -53,11 +59,15 @@ class MyTask extends Component {
 
   sortTask(option) {
     let {group, index, item} = option;
-    Actions.updateTask({ _id: item.data._id, treat: _.toPairs(taskTreat)[group][0]});
+    Actions.updateTask({ _id: item.data._id, treat: _.toPairs(taskTreat)[group][0] });
   }
 
   checkTask(item, event) {
     let task = item.data;
+
+    if (!task.completed && !confirm('确定标记任务为"已完成"'))
+      return;
+
     Actions.updateTask({ _id: task._id, completed: !task.completed });
   }
 

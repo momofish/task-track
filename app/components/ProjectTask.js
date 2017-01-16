@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
+import moment from 'moment';
 
-import {GroupList, PadList, QuickAdd, TabList} from './common';
+import { GroupList, PadList, QuickAdd, TabList } from './common';
 import Store from '../stores/ProjectTaskStore';
 import Actions from '../actions/ProjectTaskActions';
 import TaskDetail from './TaskDetail';
-import {select} from '../utils';
-import {taskTreat} from '../models';
-import {projectService} from '../services'
+import { select } from '../utils';
+import { taskTreat } from '../models';
+import { projectService } from '../services'
 
 class ProjectTask extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class ProjectTask extends Component {
 
   addTask(quick, form) {
     let {project, packet} = this.state;
-    let task = { title: quick.title, owner: quick.owner, project: this.state.project, packet };
+    let task = Object.assign({}, quick, { project: this.state.project, packet });
     Actions.addTask(task, form);
   }
 
@@ -48,7 +49,7 @@ class ProjectTask extends Component {
 
   sortTask(option) {
     let {group, index, item} = option;
-    Actions.updateTask({ _id: item.data._id, treat: _.toPairs(taskTreat)[group][0]});
+    Actions.updateTask({ _id: item.data._id, treat: _.toPairs(taskTreat)[group][0] });
   }
 
   clickTag(item, tag, event) {
@@ -98,6 +99,11 @@ class ProjectTask extends Component {
       nameGetter: owner => owner.name,
       type: 'selectMember', label: '负责人',
       options: { _id: project._id }
+    }, {
+      key: 'dueDate',
+      idGetter: date => date,
+      nameGetter: date => moment(date).format('L'),
+      type: 'selectDate', label: '截止日期'
     }];
 
     return (
@@ -116,18 +122,18 @@ class ProjectTask extends Component {
             </button>
           </div>
         </div>
-        <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this) } selectors={selectors} />
-        <TabList data={packets.map(pack => ({ name: pack.name, collapse: !pack.active, active: pack._id == packet, packet: pack })) } onSelect={this.selectPacket.bind(this) } />
+        <QuickAdd data={quickAdd} placeHolder='快速添加新任务' onSubmit={this.addTask.bind(this)} selectors={selectors} />
+        <TabList data={packets.map(pack => ({ name: pack.name, collapse: !pack.active, active: pack._id == packet, packet: pack }))} onSelect={this.selectPacket.bind(this)} />
         {filter.mode == 'pad' ?
           <PadList data={taskGroups}
             onSort={this.sortTask.bind(this)}
             onSelect={this.selectTask}
-            onClickTag={this.clickTag.bind(this) }
-            onCheck={this.checkTask.bind(this) } /> :
+            onClickTag={this.clickTag.bind(this)}
+            onCheck={this.checkTask.bind(this)} /> :
           <GroupList data={taskGroups}
             onSelect={this.selectTask}
-            onClickTag={this.clickTag.bind(this) }
-            onCheck={this.checkTask.bind(this) } />
+            onClickTag={this.clickTag.bind(this)}
+            onCheck={this.checkTask.bind(this)} />
         }
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           Actions.selectTask();

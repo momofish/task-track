@@ -2,14 +2,18 @@ import moment from 'moment';
 
 export const taskTreat = {
   0: { name: '新任务' },
-  10: { name: '现在做', style: 'success' },
+  10: { name: '进行中', style: 'success' },
   20: { name: '下一步做', collapsed: true, style: 'info' },
   30: { name: '以后再做', collapsed: true, style: 'warning' },
 }
 
 export const myTaskFilters = [
   {
-    query: 'uncompleted', name: '看板视图', mode: 'pad',
+    query: 'uncompleted', name: '待处理任务', mode: 'pad',
+    grouper: 'treat', groupConfig: taskTreat
+  },
+  {
+    query: 'all', name: '所有任务', mode: 'pad',
     grouper: 'treat', groupConfig: taskTreat
   },
   {
@@ -20,21 +24,19 @@ export const myTaskFilters = [
     query: 'uncompleted', name: '按项目',
     grouper: task => task.project ? task.project.name : '未分配项目'
   },
-  {
-    query: 'completed', name: '已完成任务'
-  },
-  {
-    query: 'all', name: '所有任务'
-  }
 ]
 
 export const projectTaskFilters = [
   {
-    query: 'uncompleted', name: '看板视图', mode: 'pad',
+    query: 'uncompleted', name: '待处理任务', mode: 'pad',
     grouper: 'treat', groupConfig: taskTreat
   },
   {
-    query: 'uncompleted', name: '按分配',
+    query: 'all', name: '所有任务', mode: 'pad',
+    grouper: 'treat', groupConfig: taskTreat
+  },
+  {
+    query: 'uncompleted', name: '按人员',
     grouper: task => task.owner ? task.owner.name : '未分配人员'
   },
   {
@@ -44,9 +46,6 @@ export const projectTaskFilters = [
   {
     query: 'completed', name: '已完成任务'
   },
-  {
-    query: 'all', name: '所有任务'
-  }
 ]
 
 export const taskCalendarFilters = [
