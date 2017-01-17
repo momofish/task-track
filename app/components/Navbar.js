@@ -23,12 +23,13 @@ class Navbar extends Component {
       <nav className='navbar navbar-vertical-left'>
         <div className='navbar-header'>
           <Link to='/' className='navbar-brand'>
-            T T
+            W
           </Link>
         </div>
         <div className='navbar-content'>
           <ul className='nav navbar-nav'>
             <li><Link to='/tasks' activeClassName='active'><i className='glyphicon glyphicon-tasks' /></Link></li>
+            <li><Link to='/know' activeClassName='active'><i className='glyphicon glyphicon-ok' /></Link></li>
           </ul>
         </div>
         <div className='navbar-footer'>
