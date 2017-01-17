@@ -1,4 +1,4 @@
-import React, {Component} from 'React';
+import React, { Component } from 'React';
 
 export default class MyQuestions extends Component {
   render() {

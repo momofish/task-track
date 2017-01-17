@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, IndexRoute, IndexRedirect} from 'react-router';
+import { Route, IndexRoute, IndexRedirect } from 'react-router';
 
 import App from './components/App';
 import Home from './components/Home';
@@ -26,5 +26,5 @@ export default (
       <Route path='q/my' component={k.MyQuestions} />
       <Route path='q/:category' component={k.Questions} />
     </Route>
-   </Route>
+  </Route>
 );

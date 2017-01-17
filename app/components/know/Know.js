@@ -6,21 +6,23 @@ export default class Know extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {sidebar:{
-      title: "知识",
-      searchbar: { onSearch: () => { } },
-      sections: [
-        {
-          header: { label: '问答' },
-          body: [
-            { label: '最新问答', icon: 'briefcase', to: '/know/q/latest' },
-            { label: '热门问答', icon: 'briefcase', to: '/know/q/hot' },
-            { label: '未回答问答', icon: 'briefcase', to: '/know/q/unanswered' },
-            { label: '我的问答', icon: 'user', to: '/know/q/my' },
-          ]
-        }
-      ]
-    } };
+    this.state = {
+      sidebar: {
+        title: "知识",
+        searchbar: { onSearch: () => { } },
+        sections: [
+          {
+            header: { label: '问答' },
+            body: [
+              { label: '最新问答', icon: 'briefcase', to: '/know/q/latest' },
+              { label: '热门问答', icon: 'briefcase', to: '/know/q/hot' },
+              { label: '未回答问答', icon: 'briefcase', to: '/know/q/unanswered' },
+              { label: '我的问答', icon: 'user', to: '/know/q/my' },
+            ]
+          }
+        ]
+      }
+    };
   }
 
   render() {

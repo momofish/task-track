@@ -18,12 +18,11 @@ class Home extends Component {
   }
 
   render() {
-    let {welcome} = this.state;
     return (
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> 欢迎访问
+            <i className='glyphicon glyphicon-tasks' /> Task Track
           </h2>
         </div>
         <main className='welcome-masthead'>
