@@ -1,6 +1,6 @@
 import React, { Component } from 'React';
 
-export default class MyQuestions extends Component {
+export default class MyQuestion extends Component {
   render() {
     return (
       <div className='container-fluid flex flex-verticle'>

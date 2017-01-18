@@ -1,6 +1,6 @@
 import Home from './Home';
 import Know from './Know';
 import Questions from './Questions';
-import MyQuestions from './MyQuestions';
+import MyQuestion from './MyQuestion';
 
-export { Home, Know, Questions, MyQuestions }
+export { Home, Know, Questions, MyQuestion }

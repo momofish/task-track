@@ -1,0 +1,123 @@
+/* layout */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.app-container,.app-content,.main-container,.main-content  {
+  display: flex;
+  flex: 1;
+}
+.flex {
+  display: flex;
+  flex: 1;
+}
+.flex.flex-verticle {
+  flex-direction: column;
+}
+.flex.flex-horizontal {
+  flex-direction: row;
+}
+.flex-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+.flex-hscroll {
+  position: relative;
+  flex: 1;
+  overflow-x: auto;
+}
+.flex > .flex-end {
+  justify-content: flex-end;
+}
+.flex > .center {
+  justify-content: center;
+}
+.scroll-container{
+  position: absolute;
+  top: 0;
+  left: 0; 
+  right: 0; 
+  bottom: 0;
+  white-space: nowrap;
+}
+
+/*nav bar*/
+.navbar-vertical-left {
+  display: flex;
+  flex-direction: column;
+  width: 60px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  z-index: 999;
+}
+.navbar-vertical-left .navbar-header {
+  width: 100%;
+  margin-bottom: 60px;
+}
+.navbar-vertical-left .navbar-content {
+  flex: 1;
+}
+.navbar-vertical-left a.navbar-brand {
+  color: #fff;
+}
+.navbar-vertical-left .navbar-nav {
+  width: 100%;
+  height: 60%;
+  display: block;
+  margin: 0;
+}
+.navbar-vertical-left .navbar-nav:before,
+.navbar-vertical-left .navbar-nav:after {
+  display: none;
+}
+.navbar-vertical-left .navbar-nav > li {
+  height: 60px;
+  float: none;
+}
+.navbar-vertical-left .navbar-nav > li > a {
+  vertical-align: middle;
+}
+.navbar-vertical-left {
+  background: #7266bb;
+  color: #ecf0f1;
+}
+.navbar-vertical-left .navbar-nav a {
+  background: #7266bb;
+}
+.navbar-vertical-left .navbar-nav a:focus,
+.navbar-vertical-left .navbar-nav a:hover {
+  background: #92a0ab;
+}
+.navbar-vertical-left .navbar-nav a.active,
+.navbar-vertical-left .navbar-nav a.active:focus,
+.navbar-vertical-left .navbar-nav a.active:hover {
+  background: #58666f;
+}
+.navbar-vertical-left .navbar-nav > li > a > i {
+  color: #ecf0f1;
+  font-size: 28px;
+}
+.navbar-vertical-left .navbar-footer {
+  a {
+    display: block;
+    height: 48px;
+    width: 48px;
+    margin: 6px;
+    padding: 3px;
+    color: #fff;
+    border-radius: 24px;
+    background: #5bc0de;
+    line-height: 42px;
+    text-align: center;
+  }
+}
+
+.main-content .nav {
+  margin-bottom: 10px;
+}

@@ -1,0 +1,172 @@
+/* listitem */
+.list-item {
+  padding: 2px;
+  cursor: pointer;
+  border-left: solid 2px transparent;
+}
+.list-item:hover {
+  background: #fff;
+  border-left-color: #7266bb;
+}
+.list-item > input{
+  height: 20px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+.item-content {
+  display: flex;
+  flex: 1;
+}
+
+.meta {
+  display: block;
+}
+
+.item-title {
+  flex: 1;
+  display: flex;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  font-weight: normal;
+  font-size: 15px;
+  padding: auto;
+  margin: auto;
+}
+.item-title > input[type="checkbox"] {
+  margin-top: 6px;
+  margin-right: 6px;
+}
+.item-title > form {
+  flex: 1;
+}
+.item-title .form-control-static {
+  padding: 0;
+  min-height: auto;
+}
+.item-tags {
+  display: inline-block;
+}
+
+/* tool */
+.tag {
+  display: inline-block;
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  margin-left: 6px;
+  color: #fff;
+  background-color: #7266bb;
+  max-width: 100px;
+  .text-overflow();
+}
+.tag:first-of-type {
+  margin-left: 0;
+}
+.tag.tag-success {
+  background-color: #76b480;
+}
+.tag.tag-danger {
+  background-color: #f1867e;
+}
+.tag.tag-info {
+  background-color: #5bc0de;
+}
+.tag.tag-warning {
+  background-color: #f0ad4e;
+}
+.tag .glyphicon {
+  color: #fff;
+}
+.tag.tag-default .glyphicon {
+  color: #b9b9b9;
+}
+
+/* group list */
+.group-list {
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 20px;
+  padding: 0;
+  padding-bottom: 24px;
+}
+.group-list .list-header {
+  padding: 5px 0;
+}
+.group-list .list-body {
+  list-style-type: none;
+  font-size: 15px;
+  padding: 0;
+}
+.group-list .list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: solid 1px #e6e6e6;
+  border-left: solid 2px #fff;
+  cursor: pointer;
+}
+.group-list .list-item > input {
+  margin: 0 5px;
+}
+.group-list .list-item:hover {
+  background: #f6f8f8;
+  border-left-color: #7266bb;
+}
+
+/*pad list*/
+.pad-list {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1.5;
+  width: 280px;
+  height: 100%;
+  padding-right: 16px;
+}
+.pad-list:last-of-type {
+  padding-right: 0px;
+}
+.pad-list .list-header {
+  display: block;
+}
+.pad-list .list-body {
+  list-style-type: none;
+  font-size: 14px;
+  padding: 0;
+  min-height: 30px;
+}
+.pad-list .list-item {
+  background: #fff;
+  padding: 5px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+.pad-list .list-item:hover {
+  background: #fbfbfb;
+}
+.pad-list .item-tags {
+  margin-left: 20px;
+}
+.pad-list .item-title {
+  display: block;
+}
+.pad-list .item-content {
+  display: block;
+}
+
+/* common-list */
+.common-list .list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: solid 1px #e6e6e6;
+  border-left: solid 2px #fff;
+  cursor: pointer;
+}
+.common-list .list-item > input {
+  margin: 0 5px;
+}
+.common-list .list-item:hover {
+  background: default;
+  border-left-color: default;
+}

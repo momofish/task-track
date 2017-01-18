@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
+
 import {Modal} from './common';
 import ArticleViewer from './ArticleViewer';
 
@@ -32,6 +34,7 @@ class Home extends Component {
           <div className='lead'>
             <p>更简单的任务管理</p>
             <p>快速分配任务，看板视图，工作量填报神器</p>
+            <Link to='/tasks/my' className='btn btn-info'>立即开启</Link>
           </div>
         </main>
         <div className='welcome-features'>

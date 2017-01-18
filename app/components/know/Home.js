@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 export default class Home extends Component {
   constructor(props) {
@@ -12,16 +13,16 @@ export default class Home extends Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> Task Track
+            <i className='glyphicon glyphicon-tasks' /> 大牛
           </h2>
         </div>
-        <main className='welcome-masthead orange'>
+        <main className='welcome-masthead know'>
           <div className='logo'>
-            <img src='/favicon.png' />
+            <img src='/icon/know.png' />
           </div>
           <div className='lead'>
-            <p></p>
-            <p></p>
+            <p>大牛在此</p>
+            <Link to='/know/q/latest' className='btn btn-info'>开始解惑</Link>
           </div>
         </main>
       </div>

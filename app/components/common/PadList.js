@@ -22,8 +22,8 @@ class PadList extends Component {
     let that = this;
     let {padList} = this.refs;
     
-    if (!this.state.regedSort && padList.querySelectorAll('.pad-body').length) {
-      for (let list of padList.querySelectorAll('.pad-body')) {
+    if (!this.state.regedSort && padList.querySelectorAll('.list-body').length) {
+      for (let list of padList.querySelectorAll('.list-body')) {
         Sortable.create(list, {
           group: {
             pull: 'clone'
@@ -58,10 +58,10 @@ class PadList extends Component {
           {groups.map((group, i) => (
             <div className='pad-list' key={i}>
               <div className='well-wrap'>
-                <div className='pad-header'>{group.header.label}</div>
-                <ul className={`pad-body`} data={i}>
+                <div className='list-header'>{group.header.label}</div>
+                <ul className={`list-body`} data={i}>
                   {group.body.map((item, j) => (
-                    <ListItem className='pad-item' item={item} key={j}
+                    <ListItem item={item} key={j}
                       onCheck={this.props.onCheck}
                       onClick={this.handleSelect.bind(this, item.data)}
                       onClickTag={this.handleClickTag.bind(this)} />

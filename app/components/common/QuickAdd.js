@@ -24,10 +24,12 @@ class QuickAdd extends Component {
     let {selectors, onSubmit} = this.props;
 
     if (title && onSubmit) {
-      let invalidSelector = selectors.find(selector => !(this.state[selector.key] && selector.idGetter(this.state[selector.key])));
-      if (invalidSelector) {
-        toastr.info(`请选择${invalidSelector.label}`);
-        return;
+      if (selectors) {
+        let invalidSelector = selectors.find(selector => !(this.state[selector.key] && selector.idGetter(this.state[selector.key])));
+        if (invalidSelector) {
+          toastr.info(`请选择${invalidSelector.label}`);
+          return;
+        }
       }
 
       onSubmit(this.state, this.refs.form);

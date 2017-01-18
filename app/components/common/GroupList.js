@@ -33,14 +33,14 @@ class GroupList extends Component {
       <div className={classnames('flex-scroll', className) } style={style}>
         {groups.map((group, i) => (
           <div className='group-list' key={i}>
-            <a className='group-header' data-toggle='collapse'
+            <a className='list-header' data-toggle='collapse'
               onClick={this.handleCollapse.bind(this, group) }
-              href={`.group-list:nth-child(${i + 1}) > .group-body`}>
+              href={`.group-list:nth-child(${i + 1}) > .list-body`}>
               <i className={`glyphicon glyphicon-triangle-${group.collapsed ? 'right' : 'bottom'}`} /> {group.header.label + ` (${group.body.length})`}
             </a>
-            <ul className={`group-body collapse ${!group.collapsed ? 'in' : ''}`}>
+            <ul className={`list-body collapse ${!group.collapsed ? 'in' : ''}`}>
               {group.body.map((item, j) => (
-                <ListItem className='group-item' item={item} key={j}
+                <ListItem item={item} key={j}
                   onCheck={this.props.onCheck}
                   onClick={this.handleSelect.bind(this, item.data) }
                   onClickTag={this.handleClickTag.bind(this) } />

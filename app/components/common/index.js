@@ -15,7 +15,10 @@ import IconText from './IconText';
 import Selector from './Selector';
 import Progress from './Progress';
 import TabList from './TabList';
+import PagedList from './PagedList';
 
-export {DatePicker, EditableText, FormItem, GroupList, ListItem,
-Icon, Button, GroupButton, Modal, Overlay, PopBox, PadList, IconText, Selector, QuickAdd,
-Progress, TabList};
+export {
+  DatePicker, EditableText, FormItem, GroupList, ListItem,
+  Icon, Button, GroupButton, Modal, Overlay, PopBox, PadList, IconText, Selector, QuickAdd,
+  Progress, TabList, PagedList
+};

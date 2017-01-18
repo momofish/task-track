@@ -23,7 +23,7 @@ export default (
     </Route>
     <Route path='know' component={k.Know}>
       <IndexRoute component={k.Home} />
-      <Route path='q/my' component={k.MyQuestions} />
+      <Route path='q/my' component={k.MyQuestion} />
       <Route path='q/:category' component={k.Questions} />
     </Route>
   </Route>

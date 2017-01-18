@@ -8,7 +8,7 @@ export default class Know extends Component {
 
     this.state = {
       sidebar: {
-        title: "知识",
+        title: "大牛",
         searchbar: { onSearch: () => { } },
         sections: [
           {
