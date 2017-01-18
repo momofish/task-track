@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import Markdown from 'markdown-it'
 
 import { Icon } from '.';
@@ -41,7 +42,7 @@ class EditableText extends Component {
     let {value, isEdit} = this.state;
 
     return isEdit ?
-      <div onSubmit={this.submit.bind(this)} className={editClassName} style={style}>
+      <div onSubmit={this.submit.bind(this)} className={classnames('form-control-static', editClassName)} style={style}>
         <div className='form-group'>
           {
             multiline ?
@@ -63,7 +64,7 @@ class EditableText extends Component {
           取消
         </button>
       </div> :
-      <a href='javascript:' className={`form-control-static ${className}`} style={style}
+      <a href='javascript:' className={classnames('form-control-static', className)} style={style}
         onClick={() => this.setState({ isEdit: true })} >
         <div dangerouslySetInnerHTML={{
           __html: (multiline && value ? this.md.render(value) : value) || placeholder

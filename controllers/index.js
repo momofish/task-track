@@ -11,4 +11,6 @@ module.exports = function(app) {
   require('./userController')(router);
   require('./workloadController')(router);
   require('./articleController')(router);
+
+  require('./questionController')(router);
 }

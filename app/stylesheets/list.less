@@ -14,17 +14,37 @@
   margin-right: 10px;
 }
 .item-content {
-  display: flex;
+  display: block;
+  position: relative;
   flex: 1;
 }
-
-.meta {
+.item-indicators li {
+  float: left;
+  text-align: center;
+  margin: 0 16px 0 0;
+  padding: 0 6px;
+}
+.item-indicators li small {
   display: block;
+}
+.item-indicators li.error {
+  background: #ad3a37;
+  color: #fff;
+}
+.item-sub {
+  display: block;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  font-weight: normal;
+  font-size: 15px;
+  color: #999;
+  padding: auto;
+  margin: auto;
 }
 
 .item-title {
   flex: 1;
-  display: flex;
+  display: inline-block;
   line-height: 1.5;
   white-space: pre-wrap;
   font-weight: normal;
@@ -39,12 +59,10 @@
 .item-title > form {
   flex: 1;
 }
-.item-title .form-control-static {
-  padding: 0;
-  min-height: auto;
-}
 .item-tags {
   display: inline-block;
+  position: absolute;
+  right: 0;
 }
 
 /* tool */
@@ -80,6 +98,16 @@
 }
 .tag.tag-default .glyphicon {
   color: #b9b9b9;
+}
+
+/* editable */
+.editable .item-title {
+  display: flex;
+}
+.editable .form-control-static {
+  flex: 1;
+  padding: 0;
+  min-height: auto;
 }
 
 /* group list */
@@ -153,6 +181,9 @@
 .pad-list .item-content {
   display: block;
 }
+.pad-list .item-tags {
+  position: relative;
+}
 
 /* common-list */
 .common-list .list-item {
@@ -161,7 +192,7 @@
   padding: 8px;
   border-bottom: solid 1px #e6e6e6;
   border-left: solid 2px #fff;
-  cursor: pointer;
+  cursor: default;
 }
 .common-list .list-item > input {
   margin: 0 5px;

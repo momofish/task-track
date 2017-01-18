@@ -6,5 +6,9 @@ import userService from './userService';
 import workloadService from './workloadService';
 import articleService from './articleService';
 
-export {taskService, projectService, teamService, 
-  deptService, userService, workloadService, articleService};
+import questionService from './questionService';
+
+export {
+  taskService, projectService, teamService, deptService, userService, workloadService, articleService,
+  questionService
+};

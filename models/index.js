@@ -5,5 +5,7 @@ module.exports = {
   Task: require('./task'),
   Team: require('./team'),
   Workload: require('./workload'),
-  Article: require('./article')
+  Article: require('./article'),
+
+  Question: require('./question'),
 }

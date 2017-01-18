@@ -16,23 +16,26 @@ class ListItem extends Component {
 
     return (
       <li className={classnames('list-item', className)} onClick={onClick} title={item.description}>
-        <ul></ul>
-        <div className='item-content'>
-          {item.meta}
+        {item.indicators && <ul className='item-indicators'>
+          {item.indicators.map((indicator, i) =>
+            <li key={i} className={classnames(indicator.className)}>{indicator.value}<small>{indicator.label}</small></li>
+          )}</ul>}
+        <span className='item-content'>
+          {item.sub && <h3 className='item-sub'>{item.sub}</h3>}
           <h3 className={classnames('item-title', { completed: item.completed })}>
             {onCheck && <input type='checkbox' checked={item.checked} onChange={this.check.bind(this, item)} onClick={this.checkClick} />}
             {item.label}
           </h3>
-          <ul className='item-tags'>
-            {(item.tags || []).filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
+          {item.tags && <ul className='item-tags'>
+            {item.tags.filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
               <li key={k} className={`tag tag-${tag.style}`} title={tag.label}
                 onClick={event => onClickTag(item, tag, event)}>
                 {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
                 {tag.label}
               </li>
             ))}
-          </ul>
-        </div>
+          </ul>}
+        </span>
       </li>
     );
   }

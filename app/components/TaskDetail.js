@@ -187,8 +187,8 @@ class TaskDetail extends Component {
                   <Progress bar={{ type: 'success', ratio: completeRatio }} />
                   <ul>
                     {task.subTasks.map((subTask, i) =>
-                      <ListItem key={i} className='list-item flex' item={{
-                        label: <EditableText style={{ flex: 1, position: 'relative' }} value={subTask.name}
+                      <ListItem key={i} className='editable' item={{
+                        label: <EditableText value={subTask.name}
                           actionIcon='trash'
                           onAction={this.editSubTask.bind(this, text => task.subTasks.splice(i, 1))}
                           onChange={this.editSubTask.bind(this, text => subTask.name = text.value)} />,
