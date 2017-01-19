@@ -15,15 +15,16 @@ export default class Questions extends Component {
   }
 
   async componentDidMount() {
-    this.getData();
+    let {params} = this.props;
+    this.getData(params);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getData();
+    let {params} = nextProps;
+    this.getData(params);
   }
 
-  async getData() {
-    let {params} = this.props;
+  async getData(params) {
     let {category} = params;
     let questions = await questionService.getQuestions(category);
     this.setState({ questions: this.map2PagedList(questions) });
@@ -40,7 +41,10 @@ export default class Questions extends Component {
         </h3>,
         indicators: [
           { value: question.reward || 0, label: '悬赏', className: 'info' },
-          { value: question.answers || 0, label: '回答', className: question.answers ? 'success' : 'error' },
+          {
+            value: question.answers || 0, label: question.resolved ? <i className='glyphicon glyphicon-ok' /> : '回答',
+            className: question.resolved ? 'complete' : question.answers ? 'success' : 'error'
+          },
           { value: question.visits || 0, label: '浏览' },
         ]
       }))
