@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { select } from '../../utils';
-import { assign } from 'lodash';
 import { assign, find } from 'lodash';
 
 class QuickAdd extends Component {
@@ -26,9 +25,7 @@ class QuickAdd extends Component {
 
     if (title && onSubmit) {
       if (selectors) {
-        let invalidSelector = selectors.find(selector => !(this.state[selector.key] && selector.idGetter(this.state[selector.key])));
         let invalidSelector = find(selectors, (selector => !(this.state[selector.key] && selector.idGetter(this.state[selector.key]))));
->>>>>>> master
         if (invalidSelector) {
           toastr.info(`请选择${invalidSelector.label}`);
           return;
