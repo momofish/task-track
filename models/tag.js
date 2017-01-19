@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var Types = Schema.Types;
 
 var schema = new Schema({
-  title: { type: String, index: true }, 
+  name: { type: String, index: true }, 
   createdOn: Date
 });
 
