@@ -21,6 +21,10 @@ export const myTaskFilters = [
     grouper: 'treat', groupConfig: taskTreat
   },
   {
+    query: 'uncompleted', name: '按截止日期',
+    grouper: task => task.dueDate ? moment(task.dueDate).fromNow() : '无截止日期'
+  },
+  {
     query: 'uncompleted', name: '按项目',
     grouper: task => task.project ? task.project.name : '未分配项目'
   },

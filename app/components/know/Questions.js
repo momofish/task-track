@@ -1,5 +1,6 @@
 import React, { Component } from 'React';
 import { Link } from 'react-router';
+import moment from 'moment';
 
 import { PagedList } from '../common';
 import { questionService } from '../../services'
@@ -32,13 +33,15 @@ export default class Questions extends Component {
     return {
       list: questions.map(question => ({
         label: question.title,
-        tags: question.tags,
-        sub: <span>
-          <Link to=''>{question.author.name}</Link> - <Link to=''></Link>
-        </span>,
+        tags: question.tags.map(tag => ({ label: tag.title, style: 'info' })),
+        sub:
+        <h3 className='item-sub'>
+          <Link to=''>{question.author.name}</Link> - <Link to=''>{`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}</Link>
+        </h3>,
         indicators: [
-          { value: question.answers || 0, label: '回答', className: 'error' },
-          { value: question.visitors || 0, label: '浏览' },
+          { value: question.reward || 0, label: '悬赏', className: 'info' },
+          { value: question.answers || 0, label: '回答', className: question.answers ? 'success' : 'error' },
+          { value: question.visits || 0, label: '浏览' },
         ]
       }))
     };
@@ -53,6 +56,7 @@ export default class Questions extends Component {
           <h2>
             <i className='glyphicon glyphicon-tasks' /> 问答
           </h2>
+          <button type="button" className="btn btn-primary pull-right">提问</button>
         </div>
         <PagedList data={questions}></PagedList>
       </div>

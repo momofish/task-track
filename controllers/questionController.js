@@ -5,7 +5,7 @@ import { api, route } from '../utils';
 import { Question } from '../models';
 
 module.exports = function (router) {
-  router.route('/questions/:category').get(function (req, res, next) {
+  router.route('/questions/:category').get(route.wrap(async (req, res, next) => {
     var user = req.user;
     var category = req.params.category;
     var params = {};
@@ -13,12 +13,10 @@ module.exports = function (router) {
     if (category == 'my')
       params.author = user._id;
 
-    Question.find(params)
-      .select('title answers visitors author')
-      .populate('author', 'id name').exec(function (err, tasks) {
-        if (err) return next(err);
+    let questions = await Question.find(params)
+      .select('-comments')
+      .populate('author tags', 'id name title')
 
-        res.send(tasks);
-      });
-  });
+    res.send(questions);
+  }));
 }

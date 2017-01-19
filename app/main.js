@@ -3,6 +3,7 @@ import Router from 'react-router';
 import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import moment from 'moment';
+import _ from 'moment/locale/zh-cn';
 
 import routes from './routes';
 import Navbar from './components/Navbar';

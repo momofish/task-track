@@ -56,7 +56,7 @@ class Sidebar extends Component {
         <div className='sidebar-header'>
           <span>{data.title}</span>
           <button type="button" className="btn btn-link pull-right"
-            onClick={event => onAdd(event)}>
+            onClick={event => onAdd && onAdd(event)}>
             <span className='glyphicon glyphicon-plus'></span>
           </button>
         </div>
