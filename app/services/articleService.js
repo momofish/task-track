@@ -1,4 +1,4 @@
-import {get, put} from './commonService';
+import {get, put} from './apiService';
 import moment from 'moment';
 
 const resourceUrl = '/api/articles';

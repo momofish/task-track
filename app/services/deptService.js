@@ -1,4 +1,4 @@
-import {get} from './commonService';
+import {get} from './apiService';
 
 const resourceUrl = '/api/teams';
 

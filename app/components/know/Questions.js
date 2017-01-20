@@ -37,7 +37,7 @@ export default class Questions extends Component {
         tags: question.tags.map(tag => ({ label: tag.name, style: 'info' })),
         sub:
         <h3 className='item-sub'>
-          <Link to=''>{question.author.name}</Link> - <Link to=''>{`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}</Link>
+          <Link to=''>{(question.author || { name: '匿名' }).name}</Link> - <Link to=''>{`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}</Link>
         </h3>,
         indicators: [
           { value: question.reward || 0, label: '悬赏', className: 'info' },
@@ -60,7 +60,7 @@ export default class Questions extends Component {
           <h2>
             <i className='glyphicon glyphicon-tasks' /> 问答
           </h2>
-          <button type="button" className="btn btn-primary pull-right">提问</button>
+          <Link type="button" className="btn btn-primary pull-right" to='/know/q/add'>提问</Link>
         </div>
         <PagedList data={questions}></PagedList>
       </div>

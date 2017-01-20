@@ -1,4 +1,4 @@
-import { get, save } from './commonService';
+import { get, save } from './apiService';
 
 const resourceUrl = '/api/projects';
 

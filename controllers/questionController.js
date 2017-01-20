@@ -34,9 +34,8 @@ module.exports = function (router) {
       });
     }
 
-    console.log(params)
     let questions = await Question.find(params)
-      .select('-comments')
+      .select('-comments -content')
       .populate('author tags', 'id name title')
 
     res.send(questions);

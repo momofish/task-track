@@ -104,7 +104,7 @@ class Selector extends Component {
   }
 
   render() {
-    let {dataSources, top = 5} = this.props;
+    let {dataSources, top = 10} = this.props;
     let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
     let {nameField = 'name', searchable} = dataSource;

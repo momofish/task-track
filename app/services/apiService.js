@@ -3,7 +3,7 @@ import Promise from 'promise';
 function handleError(reject) {
   return reason => {
     if (reject(...arguments) == undefined) {
-      var message = reason.responseJSON && reason.responseJSON.message;
+      var message = reason.responseJSON && reason.responseJSON.message || reason.statusText;
       toastr.error(message);
     }
   }

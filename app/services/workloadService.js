@@ -1,4 +1,4 @@
-import {get, post} from './commonService';
+import {get, post} from './apiService';
 import moment from 'moment';
 
 const resourceUrl = '/api/workload';

@@ -24,6 +24,7 @@ export default (
     <Route path='know' component={k.Know}>
       <IndexRoute component={k.Home} />
       <Route path='q/my' component={k.MyQuestion} />
+      <Route path='q/add' component={k.QuestionEditor} />
       <Route path='q/:category' component={k.Questions} />
     </Route>
   </Route>

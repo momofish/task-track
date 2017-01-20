@@ -1,4 +1,4 @@
-import {get, put, post, remove} from './commonService';
+import {get, put, post, remove} from './apiService';
 
 const resourceUrl = '/api/tasks';
 
