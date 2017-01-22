@@ -43,7 +43,7 @@ export default class QuestionEditor extends Component {
 
     let {question} = this.state;
     await questionService.saveQuestion(question);
-    this.goto(null, '/know/q/latest');
+    this.goto('/know/q/latest');
   }
 
   render() {
