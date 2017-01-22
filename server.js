@@ -99,6 +99,7 @@ app.use(session({
 }));
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());

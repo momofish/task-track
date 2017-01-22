@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 
 export default class QuestionEditor extends Component {
   componentDidMount() {
-    editormd('editormd');
+    editormd('editormd', {
+      height  : 640,
+      path: "/editor.md/lib/" // Autoload modules mode, codemirror, marked... dependents libs path
+    });
   }
 
   render() {
