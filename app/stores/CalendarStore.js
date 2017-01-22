@@ -8,7 +8,7 @@ class CalendarStore {
   constructor() {
     this.bindActions(CalendarActions);
 
-    this.category = 'my';
+    this.category = 'mypart';
     this.filter = taskCalendarFilters[0];
     this.tasks = [];
     this.events = [];

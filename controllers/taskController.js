@@ -10,20 +10,26 @@ module.exports = function (router) {
     var category = req.params.category;
     var filter = req.params.filter;
     var params = {};
+    var complex = null;
+
     if (category == 'my')
       params.owner = user._id;
     else if (category == 'part')
       params.members = { $elemMatch: { $in: [user._id] } };
+    else if (category == 'mypart')
+      complex = { $or: [{ owner: user._id }, { members: { $elemMatch: { $in: [user._id] } } }] }
     else {
       let parts = category.split('_');
       params.project = parts[0];
       params.packet = parts[1] || null;
     }
+
     if (filter == 'uncompleted')
       params.completed = false;
     else if (filter == 'completed')
       params.completed = true;
-    Task.find(params)
+
+    Task.find(complex ? { $and: [complex, params] } : params)
       .select('completed project owner title treat dueDate startDate endDate')
       .populate('owner project', 'id name').exec(function (err, tasks) {
         if (err) return next(err);
@@ -81,7 +87,7 @@ module.exports = function (router) {
         task.subTasks && task.subTasks.length && !task.subTasks.some(s => !s.completed) && oldTask.subTasks.some(s => !s.completed)) {
         task.completed = true;
         task.endDate = moment().startOf('day');
-        if(!oldTask.startDate)
+        if (!oldTask.startDate)
           task.startDate = moment().startOf('day');
       }
       Task.update({ _id: task._id }, task, function (err) {
