@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class FormItem extends Component {
   render() {
-    let {label, content, className} = this.props;
+    let {label, content, className, noLabel} = this.props;
 
     return (
       <div className={`form-item ${className}`}>
-        <div className='item-label'>{label}</div>
+        {!noLabel && <div className='item-label'>{label}</div>}
         {content instanceof Array ? content.map((inner, i) =>
           <div key={i} className='item-content'>
             {inner}

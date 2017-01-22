@@ -27,7 +27,7 @@ class ListItem extends Component {
             {item.label}
           </h3>
           {item.tags && <ul className='item-tags'>
-            {item.tags.filter(tag => tag.label).map((tag, k) => (
+            {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (
               <li key={k} className={`tag tag-${tag.style}`} title={tag.label}
                 onClick={event => onClickTag && onClickTag(item, tag, event)}>
                 {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
