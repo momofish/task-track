@@ -25,8 +25,8 @@ export default class Questions extends Component {
   }
 
   async getData(params) {
-    let {category} = params;
-    let questions = await questionService.getQuestions(category);
+    let {category, filter} = params;
+    let questions = await questionService.getQuestions(category, filter);
     this.setState({ questions: this.map2PagedList(questions) });
   }
 
@@ -34,10 +34,10 @@ export default class Questions extends Component {
     return {
       list: questions.map(question => ({
         label: question.title,
-        tags: question.tags.map(tag => ({ label: tag.name, style: 'info' })),
+        tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${tag._id}` })),
         sub:
         <h3 className='item-sub'>
-          <Link to=''>{(question.author || { name: '匿名' }).name}</Link> - <Link to=''>{`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}</Link>
+          <Link to={`/know/q/u/${question.author._id}`}>{(question.author || { name: '匿名' }).name}</Link> - {`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
         </h3>,
         indicators: [
           { value: question.reward || 0, label: '悬赏', className: 'info' },

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
+import { IconText } from '.';
+
 class ListItem extends Component {
   check(item, event) {
     let {onCheck} = this.props;
@@ -30,8 +32,7 @@ class ListItem extends Component {
             {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (
               <li key={k} className={`tag tag-${tag.style}`} title={tag.label}
                 onClick={event => onClickTag && onClickTag(item, tag, event)}>
-                {tag.icon && <i className={`${'glyphicon glyphicon-' + tag.icon}`} />}
-                {tag.label}
+                <IconText icon={tag.icon} text={tag.label} to={tag.to} />
               </li>
             ))}
           </ul>}

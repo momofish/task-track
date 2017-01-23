@@ -34,8 +34,14 @@ module.exports = function (router) {
           tag: { $in: [(tag || {})._id] }
         });
       }
+      else if (category == 'u') { // 按用户
+        assign(params, {
+          author: filter
+        });
+      }
 
       let questions = await Question.find(params)
+        .sort('-createdOn')
         .select('-comments -content')
         .populate('author tags', 'id name title')
 

@@ -5,7 +5,7 @@ const resourceUrl = '/api/questions';
 
 export default {
   getQuestions(category, filter) {
-    return get(`${resourceUrl}/${category}`);
+    return get(`${resourceUrl}/${category}/${filter}`);
   },
 
   saveQuestion(question) {
