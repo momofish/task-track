@@ -7,10 +7,10 @@ export default class Pagination extends Component {
   render() {
     let {pagination, to} = this.props;
 
-    if (!pagination)
+    if (!pagination || pagination.totalCount / pagination.pageSize <= 1)
       return null;
 
-    let {pageNo = 1, pageSize, totalCount} = this.props.pagination;
+    let {pageNo = 1, pageSize, totalCount} = pagination;
     let pageCount = Math.ceil(totalCount / pageSize);
     let pageWindow = 5;
     let pageNoMin = pageNo - (pageWindow - 1) / 2;
@@ -19,13 +19,11 @@ export default class Pagination extends Component {
     pageNoMax = pageNoMax > pageCount ? pageCount : pageNoMax;
 
     return (
-      <nav>
-        <ul className="pagination pagination-sm">
-          <li className={classnames({ disabled: pageNo <= 1 })}><Link to={`${to}`}>&laquo;</Link></li>
-          {times(pageNoMax - pageNoMin + 1, n => <li key={n} className={classnames({ active: pageNo == pageNoMin + n })}><Link to={`${to}/${pageNoMin + n}`}>{pageNoMin + n}</Link></li>)}
-          <li className={classnames({ disabled: pageNo >= pageCount })}><Link to={`${to}/${pageCount}`}>&raquo;</Link></li>
-        </ul>
-      </nav>
+      <ul className="pagination pagination-sm">
+        <li className={classnames({ disabled: pageNo <= 1 })}><Link to={`${to}`}>&laquo;</Link></li>
+        {times(pageNoMax - pageNoMin + 1, n => <li key={n} className={classnames({ active: pageNo == pageNoMin + n })}><Link to={`${to}/${pageNoMin + n}`}>{pageNoMin + n}</Link></li>)}
+        <li className={classnames({ disabled: pageNo >= pageCount })}><Link to={`${to}/${pageCount}`}>&raquo;</Link></li>
+      </ul>
     );
   }
 }

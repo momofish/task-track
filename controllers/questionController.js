@@ -37,7 +37,7 @@ module.exports = function (router) {
         assign(params, { author: filter });
       }
 
-      let pageSize = 2;
+      let pageSize = 20;
 
       let totalCount = await Question.find(params).count();
       let list = await Question.find(params)

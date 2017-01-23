@@ -59,7 +59,7 @@ export default class QuestionEditor extends Component {
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className="form-control" placeholder="标题，一句话说清问题" value={title} onChange={this.changeEntity.bind(this, 'title')} />
+            <input className="form-control" placeholder="标题，一句话说清问题" defaultValue={title} onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
           <div id='editormd'>
             <textarea ref='editormd' style={{ display: 'none' }} value={content} />
