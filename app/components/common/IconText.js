@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Router, Link, browserHistory } from 'react-router';
 import classnames from 'classnames';
 
 import Icon from './Icon';
 
 class IconText extends Component {
   click(event) {
-    let {onClick, to, history} = this.props;
+    let {onClick, to} = this.props;
 
     if (onClick) {
       onClick(event);
       return;
     }
 
-    //if (to) history.pushState(null, to);
+    if (to) browserHistory.push(to);
   }
 
   render() {

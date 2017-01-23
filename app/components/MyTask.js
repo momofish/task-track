@@ -80,7 +80,7 @@ class MyTask extends Component {
       }, { align: 'right', data: taskTreat });
     }
     else if (tag.code === 'project') {
-      this.props.history.pushState(null, `/tasks/projects/${tag.data._id}`);
+      this.props.router.push(`/tasks/projects/${tag.data._id}`);
     }
     else if (tag.code === 'dueDate') {
       select.selectDate(event.currentTarget, tag.data, dueDate => {

@@ -31,7 +31,7 @@ module.exports = function (router) {
       else if (category == 't') { // 按tag
         let tag = await Tag.findOne({ name: filter });
         assign(params, {
-          tag: { $in: [(tag || {})._id] }
+          tags: { $in: [(tag || {})._id] }
         });
       }
       else if (category == 'u') { // 按用户

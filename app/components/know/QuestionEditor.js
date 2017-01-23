@@ -30,12 +30,12 @@ export default class QuestionEditor extends Component {
   }
 
   goto(url) {
-    let {history} = this.props;
+    let {router} = this.props;
     if (url) {
-      history.pushState(null, url);
+      router.push(url);
       return;
     }
-    history.goBack();
+    router.goBack();
   }
 
   async handleSubmit(event) {

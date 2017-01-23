@@ -34,7 +34,7 @@ export default class Questions extends Component {
     return {
       list: questions.map(question => ({
         label: question.title,
-        tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${tag._id}` })),
+        tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${tag.name}` })),
         sub:
         <h3 className='item-sub'>
           <Link to={`/know/q/u/${question.author._id}`}>{(question.author || { name: '匿名' }).name}</Link> - {`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}

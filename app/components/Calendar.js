@@ -56,7 +56,6 @@ class Calendar extends Component {
           </div>
         </div>
         <BigCalendar className='flex-scroll calendar' selectable events={events}
-          culture='zh' defaultView='month'
           views={['month', 'week', 'agenda']}
           onSelectEvent={event => this.selectTask(event.data) }
           />
