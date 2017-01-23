@@ -2,14 +2,17 @@ import mongoose from 'mongoose';
 import moment from 'moment';
 import { assign } from 'lodash'
 
-import { api, route } from '../utils';
+import { api, route, paging } from '../utils';
 import { Question, Tag } from '../models';
 
 module.exports = function (router) {
-  router.route('/questions/:category/:filter?')
+  router.route('/questions/:category/:filter?/:pageNo?')
     .get(route.wrap(async (req, res, next) => {
       let {user} = req;
-      let {category, filter} = req.params;
+      let {category, filter, pageNo = 1} = req.params;
+      console.log(req.params)
+      pageNo = parseInt(pageNo);
+
       let params = {};
 
       if (category == 'latest') { // 最近：1个月内
@@ -24,28 +27,27 @@ module.exports = function (router) {
         });
       }
       else if (category == 'unanswered') {  // 未回答的
-        assign(params, {
-          answers: 0
-        });
+        assign(params, { answers: 0 });
       }
       else if (category == 't') { // 按tag
         let tag = await Tag.findOne({ name: filter });
-        assign(params, {
-          tags: { $in: [(tag || {})._id] }
-        });
+        assign(params, { tags: { $in: [(tag || {})._id] } });
       }
       else if (category == 'u') { // 按用户
-        assign(params, {
-          author: filter
-        });
+        assign(params, { author: filter });
       }
 
-      let questions = await Question.find(params)
-        .sort('-createdOn')
-        .select('-comments -content')
-        .populate('author tags', 'id name title')
+      let pageSize = 2;
 
-      res.send(questions);
+      let totalCount = await Question.find(params).count();
+      let list = await Question.find(params)
+        .sort('-createdOn')
+        .skip((pageNo - 1) * pageSize)
+        .limit(pageSize)
+        .select('-comments -content')
+        .populate('author tags', 'id name title');
+
+      res.send({ pagination: { pageNo, pageSize, totalCount }, list: list });
     }));
 
   router.route('/questions')

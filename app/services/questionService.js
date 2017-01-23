@@ -4,8 +4,8 @@ import moment from 'moment';
 const resourceUrl = '/api/questions';
 
 export default {
-  getQuestions(category, filter) {
-    return get(`${resourceUrl}/${category}/${filter}`);
+  getQuestions(category, filter, pageNo) {
+    return get(`${resourceUrl}/${category}/${filter || 'index'}/${pageNo || ''}`);
   },
 
   saveQuestion(question) {

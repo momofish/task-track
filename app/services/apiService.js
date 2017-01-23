@@ -12,7 +12,7 @@ function handleError(reject) {
 export function get(url, id) {
   return new Promise((resolve, reject) =>
     $.ajax({
-      url: `${url}/${id || ''}`,
+      url: `${url}${id ? `/${id}` : ''}`,
       cache: false,
       success: resolve, error: handleError(reject)
     })
