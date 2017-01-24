@@ -33,7 +33,9 @@ export default class Questions extends Component {
 
   transPagedList(pagedList) {
     pagedList.list = pagedList.list.map(question => ({
+      data: question,
       label: question.title,
+      to: `/know/q/v/${question._id}`,
       tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${tag.name}` })),
       sub:
       <h3 className='item-sub'>
@@ -63,7 +65,9 @@ export default class Questions extends Component {
           </h2>
           <Link type="button" className="btn btn-primary pull-right" to='/know/q/add'>提问</Link>
         </div>
-        <PagedList data={pagedList} to={`/know/q/${category}/${filter || 'index'}`}></PagedList>
+        <PagedList className='flex-scroll' data={pagedList}
+          toPage={`/know/q/${category}/${filter || 'index'}`}
+          />
       </div>
     )
   }

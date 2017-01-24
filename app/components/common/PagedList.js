@@ -5,15 +5,15 @@ import { ListItem, Pagination } from '.';
 
 export default class PagedList extends Component {
   render() {
-    let {data, className, to} = this.props;
+    let {data, className, toPage, to, onClick} = this.props;
     let {list, pagination} = data;
 
     return (
-      <div>
-        <ul className={classnames('common-list', className)}>
-          {list && list.map((item, i) => <ListItem key={i} item={item} />)}
+      <div className={classnames('common-list', className)}>
+        <ul>
+          {list && list.map((item, i) => <ListItem key={i} item={item} onClick={onClick && onClick.bind(item)} />)}
         </ul>
-        <Pagination pagination={pagination} to={to} />
+        <Pagination pagination={pagination} toPage={toPage} />
       </div>
     );
   }

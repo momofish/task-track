@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
-import {Icon} from '.';
+import { Icon } from '.';
 
 class Button extends Component {
   render() {
     let {type = 'button', className, icon, text, onClick} = this.props;
     return (
-      <button {...this.props} type={type} className={classnames('btn btn-default', className) }>
-         {icon && <Icon icon={icon} />}
-         {text}
+      <button onClick={onClick} type={type} className={classnames('btn btn-default', className)}>
+        {icon && <Icon icon={icon} />}
+        {text}
       </button>
     );
   }

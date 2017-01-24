@@ -62,6 +62,7 @@
   color: #b9b9b9;
 }
 .page-header {
+  position: relative;
   padding: 10px 0;
   margin: 0 0 10px 0;
 }
@@ -247,9 +248,10 @@ a:hover .action-icon {
   background-color: #f4f4f4;
   border-left-color: #7266bb;
 }
-.selector-list > li a,
-.selector-list > li a:hover,
-.selector-list > li a:active {
+.selector-list > li span,
+.selector-list > li span:hover,
+.selector-list > li span:active {
+  cursor: pointer;
   display: block;
   padding: 10px 10px;
   text-decoration: none;
@@ -348,9 +350,6 @@ a:hover .action-icon {
   border-right: none;
 }
 
-.article {
-  margin: auto 20px;
-}
 .markdown img {
   max-width: 100%;
 }

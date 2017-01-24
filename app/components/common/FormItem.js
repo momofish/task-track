@@ -5,7 +5,7 @@ class FormItem extends Component {
     let {label, content, className, noLabel} = this.props;
 
     return (
-      <div className={`form-item ${className}`}>
+      <div className={`form-item ${className || ''}`}>
         {!noLabel && <div className='item-label'>{label}</div>}
         {content instanceof Array ? content.map((inner, i) =>
           <div key={i} className='item-content'>

@@ -5,7 +5,7 @@ import { times } from 'lodash';
 
 export default class Pagination extends Component {
   render() {
-    let {pagination, to} = this.props;
+    let {pagination, toPage} = this.props;
 
     if (!pagination || pagination.totalCount / pagination.pageSize <= 1)
       return null;
@@ -20,9 +20,9 @@ export default class Pagination extends Component {
 
     return (
       <ul className="pagination pagination-sm">
-        <li className={classnames({ disabled: pageNo <= 1 })}><Link to={`${to}`}>&laquo;</Link></li>
+        <li className={classnames({ disabled: pageNo <= 1 })}><Link to={`${toPage}`}>&laquo;</Link></li>
         {times(pageNoMax - pageNoMin + 1, n => <li key={n} className={classnames({ active: pageNo == pageNoMin + n })}><Link to={`${to}/${pageNoMin + n}`}>{pageNoMin + n}</Link></li>)}
-        <li className={classnames({ disabled: pageNo >= pageCount })}><Link to={`${to}/${pageCount}`}>&raquo;</Link></li>
+        <li className={classnames({ disabled: pageNo >= pageCount })}><Link to={`${toPage}/${pageCount}`}>&raquo;</Link></li>
       </ul>
     );
   }

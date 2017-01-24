@@ -6,11 +6,10 @@ import { api, route, paging } from '../utils';
 import { Question, Tag } from '../models';
 
 module.exports = function (router) {
-  router.route('/questions/:category/:filter?/:pageNo?')
+  router.route('/questions/:category/:filter/:pageNo?')
     .get(route.wrap(async (req, res, next) => {
       let {user} = req;
       let {category, filter, pageNo = 1} = req.params;
-      console.log(req.params)
       pageNo = parseInt(pageNo);
 
       let params = {};
@@ -48,6 +47,16 @@ module.exports = function (router) {
         .populate('author tags', 'id name title');
 
       res.send({ pagination: { pageNo, pageSize, totalCount }, list: list });
+    }));
+
+  router.route('/questions/:id')
+    .get(route.wrap(async (req, res, next) => {
+      let {id} = req.params;
+
+      let question = await Question.findById(id)
+        .populate('author tags', 'id name title');
+
+      res.send(question);
     }));
 
   router.route('/questions')

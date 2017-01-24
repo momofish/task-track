@@ -20,13 +20,13 @@ class IconText extends Component {
     let {icon, iconClassName, tooltip, text, className, onClick, children, to} = this.props;
 
     return (
-      <a href='javascript:'
+      <span
         className={classnames('icon-text', className)}
         onClick={this.click.bind(this)}>
         {icon && <Icon icon={icon} tooltip={tooltip} className={iconClassName} />}
         {text}
         {children}
-      </a>
+      </span>
     );
   }
 }
