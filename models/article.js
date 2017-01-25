@@ -7,10 +7,10 @@ var schema = new Schema({
   title: String,
   author: { type: Types.ObjectId, index: true, ref: 'User' },
   content: String,
-  createdOn: { type: Date, default: new Date() },
+  createdOn: { type: Date, default: Date.now },
   comments: [new Schema({
     author: { type: Types.ObjectId, index: true, ref: 'User' },
-    content: String, reply: String, createdOn: { type: Date, default: new Date() }
+    content: String, reply: String, createdOn: { type: Date, default: Date.now }
   })],
 }, { versionKey: false });
 

@@ -55,6 +55,7 @@ module.exports = function (router) {
 
       let question = await Question.findById(id)
         .populate('author tags comments.author', 'id name title');
+      await Question.update({ _id: id }, { $inc: { visits: 1 } })
 
       res.send(question);
     }));
@@ -86,8 +87,15 @@ module.exports = function (router) {
         throw new Error('问题不存在');
 
       let value = req.body;
-      value.author = user;
+      Object.assign(value, {
+        author: user
+      });
       question[field].push(value);
+      if (field == 'comments') {
+        question.answers = question[field].length;
+        question.answeredOn = new Date();
+        question.answeredBy = user;
+      }
 
       await question.save();
 

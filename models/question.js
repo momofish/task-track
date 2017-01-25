@@ -13,7 +13,7 @@ var schema = new Schema({
   visits: { type: Number, default: 0 },
   resolved: { type: Boolean, default: false },
   tags: [{ type: Types.ObjectId, index: true, ref: 'Tag' }],
-  createdOn: { type: Date, index: true, default: new Date() },
+  createdOn: { type: Date, index: true, default: Date.now },
   answeredOn: Date,
   answeredBy: { type: Types.ObjectId, index: true, ref: 'User' }
 });
