@@ -32,24 +32,7 @@ export default class Questions extends Component {
   }
 
   transPagedList(pagedList) {
-    pagedList.list = pagedList.list.map(question => ({
-      data: question,
-      label: question.title,
-      to: `/know/q/v/${question._id}`,
-      tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${tag.name}` })),
-      sub:
-      <h3 className='item-sub'>
-        <Link to={`/know/q/u/${question.author._id}`}>{(question.author || { name: '匿名' }).name}</Link> - {`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
-      </h3>,
-      indicators: [
-        { value: question.reward || 0, label: '悬赏', className: 'info' },
-        {
-          value: question.answers || 0, label: question.resolved ? <i className='glyphicon glyphicon-ok' /> : '回答',
-          className: question.resolved ? 'complete' : question.answers ? 'success' : 'error'
-        },
-        { value: question.visits || 0, label: '浏览' },
-      ]
-    }));
+    pagedList.list = pagedList.list.map(questionService.mapItem);
   }
 
   render() {
@@ -61,7 +44,7 @@ export default class Questions extends Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> 问答
+            <i className='glyphicon glyphicon-list' /> 问答
           </h2>
           <Link type="button" className="btn btn-primary pull-right" to='/know/q/add'>提问</Link>
         </div>

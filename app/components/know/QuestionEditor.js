@@ -15,11 +15,7 @@ export default class QuestionEditor extends Component {
     let that = this;
     editormd('editormd', {
       height: 640,
-      path: "/editor.md/lib/",
-      onchange: function () {
-        question.content = this.getMarkdown();
-        that.forceUpdate();
-      }
+      path: "/editor.md/lib/"
     });
   }
 
@@ -42,6 +38,11 @@ export default class QuestionEditor extends Component {
     event.preventDefault();
 
     let {question} = this.state;
+    question.content = this._questionText.value;
+    if (!question.content) {
+      alert(`请输入内容`);
+      return;
+    }
     await questionService.saveQuestion(question);
     this.goto('/know/q/latest');
   }
@@ -62,10 +63,10 @@ export default class QuestionEditor extends Component {
             <input className="form-control" placeholder="标题，一句话说清问题" defaultValue={title} onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
           <div id='editormd'>
-            <textarea ref='editormd' style={{ display: 'none' }} value={content} />
+            <textarea ref={text => this._questionText = text} style={{ display: 'none' }} />
           </div>
           <FormItem noLabel>
-            <button type='submit' disabled={!title || !content} className='btn btn-primary btn-sm'>发布问题</button>
+            <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布问题</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.goto.bind(this, null)}>舍弃</button>
           </FormItem>
         </div>

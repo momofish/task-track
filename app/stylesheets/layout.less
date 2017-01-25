@@ -122,12 +122,53 @@ body {
   margin-bottom: 10px;
 }
 
-.article .item-tags {
+.article-viewer .item-tags {
   position: static;
-  margin-left: 24px;
-  margin-right: 12px;
 }
-.article .page-header h2 {
+.article-viewer .item-tags .tag {
+  overflow: visible;
+  margin-right: 5px;
+}
+.article-viewer .page-header h2 {
   width: 100%;
   max-width: 100%;
+}
+.article-viewer article {
+    display: -webkit-box;
+    margin-bottom: 20px;
+}
+.article-viewer article .content {
+  margin-bottom: 15px;
+}
+.article-viewer article .options {
+  color: #999;
+}
+.article-viewer article .options > li {
+  display: inline-block;
+  margin-right: 10px;
+}
+.comments h4 {
+  border-bottom: solid 2px #ccc;
+  padding-bottom: 10px;
+}
+.comments article {
+  border-bottom: solid 1px #eee;
+}
+.article-viewer-column {
+  width: 60px;
+}
+.add-comment {
+  flex: 1;
+}
+.vote-widget {
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f3f3f3;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.3);
+}
+.vote-widget .glyphicon {
+  cursor: pointer;
 }

@@ -1,5 +1,6 @@
 @import '../../bower_components/bootstrap/less/bootstrap';
 @import '../../bower_components/toastr/toastr';
+@import (less) '../../node_modules/highlight.js/styles/default.css';
 @import (less) '../../bower_components/magnific-popup/dist/magnific-popup.css';
 @import (less) '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -353,18 +354,12 @@ a:hover .action-icon {
 .markdown img {
   max-width: 100%;
 }
-.comments {
-  margin-top: 60px;
-}
 .comments h3 {
   padding-bottom: 12px;
   border-bottom: solid 1px #f0ad4e;
 }
-.comments li {
+.comments > ul > li {
   border-bottom: solid 1px #e6e6e6;
-}
-.add-comment {
-  margin-top: 50px;
 }
 .editormd {
   z-index: 1000;

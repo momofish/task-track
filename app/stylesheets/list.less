@@ -78,10 +78,12 @@
   right: 0;
   margin-bottom: 0px;
 }
+.item-tags > li {
+  display: inline-block;
+}
 
 /* tool */
 .tag {
-  display: inline-block;
   border-radius: 2px;
   padding: 2px 4px;
   font-size: 11px;
@@ -91,6 +93,7 @@
   background-color: #7266bb;
   max-width: 100px;
   .text-overflow();
+  cursor: pointer;
 }
 .tag .icon-text {
   margin-right: 0;
@@ -220,4 +223,10 @@
 .common-list .list-item:hover {
   background: default;
   border-left-color: default;
+}
+.common-list .list-item .item-tags {
+  position: static;
+}
+.common-list .list-item .tag {
+  overflow: visible;
 }

@@ -43,7 +43,7 @@ class ArticleViewer extends Component {
       <div className='article'>
         <div className='markdown' dangerouslySetInnerHTML={{ __html: html }}></div>
         <div className='comments'>
-          <h3>评论</h3>
+          <h4>评论</h4>
           <ul>
             {article && article.comments.length ? article.comments.map((comment, i) =>
               <li key={i}>

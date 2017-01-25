@@ -1,25 +1,21 @@
-import DatePicker from './DatePicker';
-import EditableText from './EditableText';
-import FormItem from './FormItem';
-import GroupList from './GroupList';
-import ListItem from './ListItem';
-import QuickAdd from './QuickAdd';
-import Icon from './Icon';
-import Button from './Button';
-import GroupButton from './GroupButton';
-import Modal from './Modal';
-import Overlay from './Overlay';
-import PopBox from './PopBox';
-import PadList from './PadList';
-import IconText from './IconText';
-import Selector from './Selector';
-import Progress from './Progress';
-import TabList from './TabList';
-import PagedList from './PagedList';
-import Pagination from './Pagination';
-
-export {
-  DatePicker, EditableText, FormItem, GroupList, ListItem,
-  Icon, Button, GroupButton, Modal, Overlay, PopBox, PadList, IconText, Selector, QuickAdd,
-  Progress, TabList, PagedList, Pagination
-};
+export { default as DatePicker } from './DatePicker';
+export { default as EditableText } from './EditableText';
+export { default as FormItem } from './FormItem';
+export { default as GroupList } from './GroupList';
+export { default as ListItem } from './ListItem';
+export { default as QuickAdd } from './QuickAdd';
+export { default as Icon } from './Icon';
+export { default as Button } from './Button';
+export { default as GroupButton } from './GroupButton';
+export { default as Modal } from './Modal';
+export { default as Overlay } from './Overlay';
+export { default as PopBox } from './PopBox';
+export { default as PadList } from './PadList';
+export { default as IconText } from './IconText';
+export { default as Selector } from './Selector';
+export { default as Progress } from './Progress';
+export { default as TabList } from './TabList';
+export { default as PagedList } from './PagedList';
+export { default as Pagination } from './Pagination';
+export { default as Article } from './Article';
+export { default as VoteWidget } from './VoteWidget';

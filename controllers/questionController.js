@@ -44,7 +44,7 @@ module.exports = function (router) {
         .skip((pageNo - 1) * pageSize)
         .limit(pageSize)
         .select('-comments -content')
-        .populate('author tags', 'id name title');
+        .populate('author tags', 'name title');
 
       res.send({ pagination: { pageNo, pageSize, totalCount }, list: list });
     }));
@@ -54,7 +54,7 @@ module.exports = function (router) {
       let {id} = req.params;
 
       let question = await Question.findById(id)
-        .populate('author tags', 'id name title');
+        .populate('author tags comments.author', 'id name title');
 
       res.send(question);
     }));
@@ -76,4 +76,21 @@ module.exports = function (router) {
 
       res.sendStatus(204);
     }));
+
+  router.route('/questions/:id/:field')
+    .put(route.wrap(async (req, res, next) => {
+      var user = req.user;
+      let {id, field} = req.params;
+      var question = await Question.findById(id);
+      if (!question)
+        throw new Error('问题不存在');
+
+      let value = req.body;
+      value.author = user;
+      question[field].push(value);
+
+      await question.save();
+
+      res.sendStatus(204);
+    }))
 }

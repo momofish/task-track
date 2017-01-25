@@ -1,14 +1,9 @@
-import projectService from './projectService';
-import taskService from './taskService';
-import teamService from './teamService';
-import deptService from './deptService';
-import userService from './userService';
-import workloadService from './workloadService';
-import articleService from './articleService';
+export { default as projectService } from './projectService';
+export { default as taskService } from './taskService';
+export { default as teamService } from './teamService';
+export { default as deptService } from './deptService';
+export { default as userService } from './userService';
+export { default as workloadService } from './workloadService';
+export { default as articleService } from './articleService';
 
-import questionService from './questionService';
-
-export {
-  taskService, projectService, teamService, deptService, userService, workloadService, articleService,
-  questionService
-};
+export { default as questionService } from './questionService';
