@@ -8,6 +8,6 @@ module.exports = {
   Article: require('./article'),
 
   Question: require('./question'),
-  Comment: require('./comment'),
+  Answer: require('./answer'),
   Tag: require('./tag'),
 }

@@ -41,19 +41,19 @@ export default class QuestionViewer extends Component {
     this.setState({ question });
   }
 
-  async addComment(event) {
+  async addAnswer(event) {
     event.preventDefault();
 
     let {params} = this.props;
-    let commentContent = this._commentText.value;
+    let answerContent = this._answerText.value;
 
-    if (!commentContent) {
+    if (!answerContent) {
       alert(`请输入内容`);
       return;
     }
 
-    await questionService.addComment(params.id, { content: commentContent });
-    this._commentText.value = '';
+    await questionService.addAnswer(params.id, { content: answerContent });
+    this._answerText.value = '';
     this.loadData(params.id);
   }
 
@@ -63,7 +63,7 @@ export default class QuestionViewer extends Component {
     if (!question)
       return <div />;
 
-    let {title, content, tags, comments, votes} = question;
+    let {title, content, tags, answers, votes} = question;
 
     return (
       <div className='container-fluid flex flex-verticle article-viewer flex-scroll'>
@@ -92,23 +92,23 @@ export default class QuestionViewer extends Component {
             `${moment(question.createdOn).fromNow()}提问`
           ]}
           />
-        <div className='comments'>
-          <h4>{comments.length}个回答</h4>
-          {comments.map((comment, i) => <Article key={i}
-            content={this.md.render(comment.content || '无内容')}
+        <div className='answers'>
+          <h4>{answers.length}个回答</h4>
+          {answers.map((answer, i) => <Article key={i}
+            content={this.md.render(answer.content || '无内容')}
             col={<VoteWidget votes={votes} />}
             options={[
-              <Link to={`/know/q/u/${comment.author._id}`}>{(comment.author || { name: '匿名' }).name}</Link>,
-              `${moment(comment.createdOn).fromNow()}回答`
+              <Link to={`/know/q/u/${answer.author._id}`}>{(answer.author || { name: '匿名' }).name}</Link>,
+              `${moment(answer.createdOn).fromNow()}回答`
             ]}
             />)}
         </div>
         <article>
           <div className='article-viewer-column'></div>
-          <form className='add-comment' onSubmit={this.addComment.bind(this)}>
+          <form className='add-answer' onSubmit={this.addAnswer.bind(this)}>
             <h4>我要回答</h4>
             <div className='form-group'>
-              <textarea ref={text => this._commentText = text} rows='10' className='form-control' />
+              <textarea ref={text => this._answerText = text} rows='10' className='form-control' />
             </div>
             <button className='btn btn-primary' type='submit'>提交</button>
           </form>

@@ -26,7 +26,7 @@ module.exports = function (router) {
         });
       }
       else if (category == 'unanswered') {  // 未回答的
-        assign(params, { answers: 0 });
+        assign(params, { answerNum: 0 });
       }
       else if (category == 't') { // 按tag
         let tag = await Tag.findOne({ name: filter });
@@ -43,7 +43,7 @@ module.exports = function (router) {
         .sort('-createdOn')
         .skip((pageNo - 1) * pageSize)
         .limit(pageSize)
-        .select('-comments -content')
+        .select('-answers -content')
         .populate('author tags', 'name title');
 
       res.send({ pagination: { pageNo, pageSize, totalCount }, list: list });
@@ -54,7 +54,7 @@ module.exports = function (router) {
       let {id} = req.params;
 
       let question = await Question.findById(id)
-        .populate('author tags comments.author', 'id name title');
+        .populate('author tags answers.author', 'id name title');
       await Question.update({ _id: id }, { $inc: { visits: 1 } })
 
       res.send(question);
@@ -91,8 +91,8 @@ module.exports = function (router) {
         author: user
       });
       question[field].push(value);
-      if (field == 'comments') {
-        question.answers = question[field].length;
+      if (field == 'answers') {
+        question.answerNum = question[field].length;
         question.answeredOn = new Date();
         question.answeredBy = user;
       }

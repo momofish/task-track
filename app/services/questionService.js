@@ -19,8 +19,8 @@ export default {
     return save(resourceUrl, question);
   },
 
-  addComment(id, comment) {
-    return put(`${resourceUrl}/${id}/comments`, comment);
+  addAnswer(id, answer) {
+    return put(`${resourceUrl}/${id}/answers`, answer);
   },
 
   mapItem(question) {
@@ -36,8 +36,8 @@ export default {
       indicators: [
         { value: question.reward || 0, label: '悬赏', className: 'info' },
         {
-          value: question.answers || 0, label: question.resolved ? <i className='glyphicon glyphicon-ok' /> : '回答',
-          className: question.resolved ? 'complete' : question.answers ? 'success' : 'error'
+          value: question.answerNum || 0, label: question.resolved ? <i className='glyphicon glyphicon-ok' /> : '回答',
+          className: question.resolved ? 'complete' : question.answerNum ? 'success' : 'error'
         },
         { value: question.visits || 0, label: '浏览' },
       ]
