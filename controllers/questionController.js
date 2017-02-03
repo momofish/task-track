@@ -35,6 +35,15 @@ module.exports = function (router) {
       else if (category == 'u') { // 按用户
         assign(params, { author: filter });
       }
+      else if (category == 'my') { // 我的问答
+        if (filter == 'answered')
+          assign(params, { answers: { $elemMatch: { author: [user._id] } } })
+        else
+          assign(params, { author: user });
+      }
+      else {
+        throw new Error('invalid params for questions')
+      }
 
       let pageSize = 20;
 

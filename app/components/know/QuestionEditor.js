@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { WithContext as ReactTags } from 'react-tag-input';
 
 import { FormItem } from '../common';
 import { questionService } from '../../services';
@@ -15,7 +16,7 @@ export default class QuestionEditor extends Component {
     let that = this;
     editormd('editormd', {
       height: 640,
-      path: "/editor.md/lib/"
+      path: '/editor.md/lib/'
     });
   }
 
@@ -60,7 +61,14 @@ export default class QuestionEditor extends Component {
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className="form-control" placeholder="标题，一句话说清问题" defaultValue={title} onChange={this.changeEntity.bind(this, 'title')} />
+            <input className='form-control' placeholder='标题，一句话说清问题' defaultValue={title} onChange={this.changeEntity.bind(this, 'title')} />
+          </FormItem>
+          <FormItem noLabel>
+            <ReactTags classNames={null} placeholder='标签'
+              tags={[{ id: 1, text: "Apples" }]}
+              handleDelete={() => { }}
+              handleAddition={() => { }}
+            />
           </FormItem>
           <div id='editormd'>
             <textarea ref={text => this._questionText = text} style={{ display: 'none' }} />

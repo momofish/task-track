@@ -21,7 +21,7 @@ export default class Pagination extends Component {
     return (
       <ul className="pagination pagination-sm">
         <li className={classnames({ disabled: pageNo <= 1 })}><Link to={`${toPage}`}>&laquo;</Link></li>
-        {times(pageNoMax - pageNoMin + 1, n => <li key={n} className={classnames({ active: pageNo == pageNoMin + n })}><Link to={`${to}/${pageNoMin + n}`}>{pageNoMin + n}</Link></li>)}
+        {times(pageNoMax - pageNoMin + 1, n => <li key={n} className={classnames({ active: pageNo == pageNoMin + n })}><Link to={`${toPage}/${pageNoMin + n}`}>{pageNoMin + n}</Link></li>)}
         <li className={classnames({ disabled: pageNo >= pageCount })}><Link to={`${toPage}/${pageCount}`}>&raquo;</Link></li>
       </ul>
     );
