@@ -7,3 +7,4 @@ export { default as workloadService } from './workloadService';
 export { default as articleService } from './articleService';
 
 export { default as questionService } from './questionService';
+export { default as tagService } from './tagService';

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 
 import Sidebar from '../Sidebar';
+import {select} from '../../utils';
 
 export default class Know extends Component {
   constructor(props) {
@@ -25,10 +27,23 @@ export default class Know extends Component {
     };
   }
 
+  handleAdd(event) {
+    select.selectMenu(event.currentTarget, null,
+      selecting => {
+        browserHistory.push(selecting.to);
+      }, {
+        align: 'right',
+        style: { width: 120 },
+        data: [
+          { to: '/know/q/add', name: '提问' },
+        ]
+      });
+  }
+
   render() {
     return (
       <div className='main-container'>
-        <Sidebar data={this.state.sidebar} />
+        <Sidebar data={this.state.sidebar} onAdd={this.handleAdd.bind(this)} />
         <div className='main-content'>
           {this.props.children}
         </div>

@@ -1,19 +1,37 @@
 import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
+import _ from 'lodash';
 
 import { FormItem } from '../common';
-import { questionService } from '../../services';
+import { questionService, tagService } from '../../services';
+import { select } from '../../utils';
 
 export default class QuestionEditor extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = { question: {} };
+    this.state = { question: {}, tags: null };
   }
 
   componentDidMount() {
-    let {question} = this.state;
-    let that = this;
+    let {question, tags} = this.state;
+
+    $('#tags').find('.form-control').focus(async input => {
+      if (!tags) {
+        tags = await tagService.getTags();
+      }
+      let dataSources = _.chain(tags)
+        .groupBy(tag => tag.category)
+        .toPairs()
+        .map(pair => ({ name: pair[0], data: pair[1] }))
+        .value();
+
+      select.selectData(input.target, null,
+        selecting => {
+
+        }, { dataSources })
+    });
+
     editormd('editormd', {
       height: 640,
       path: '/editor.md/lib/'
@@ -39,7 +57,7 @@ export default class QuestionEditor extends Component {
     event.preventDefault();
 
     let {question} = this.state;
-    question.content = this._questionText.value;
+    question.content = this.$content.value;
     if (!question.content) {
       alert(`请输入内容`);
       return;
@@ -61,21 +79,31 @@ export default class QuestionEditor extends Component {
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className='form-control' placeholder='标题，一句话说清问题' defaultValue={title} onChange={this.changeEntity.bind(this, 'title')} />
+            <input className='form-control' placeholder='标题，一句话说清问题' defaultValue={title}
+              onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
-          <FormItem noLabel>
-            <ReactTags classNames={null} placeholder='标签'
-              tags={[{ id: 1, text: "Apples" }]}
-              handleDelete={() => { }}
+          <FormItem noLabel id='tags'>
+            <ReactTags
+              placeholder='标签'
+              classNames={{
+                selected: 'input-group',
+                tag: 'input-group-addon',
+                remove: 'glyphicon',
+                tagInput: '',
+                tagInputField: 'form-control'
+              }}
+              tags={[]}
               handleAddition={() => { }}
+              handleDelete={() => { }}
             />
           </FormItem>
           <div id='editormd'>
-            <textarea ref={text => this._questionText = text} style={{ display: 'none' }} />
+            <textarea ref={text => this.$content = text} style={{ display: 'none' }} />
           </div>
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布问题</button>
-            <button type='button' className='btn btn-link btn-sm' onClick={this.goto.bind(this, null)}>舍弃</button>
+            <button type='button' className='btn btn-link btn-sm'
+              onClick={this.goto.bind(this, null)}>舍弃</button>
           </FormItem>
         </div>
       </form>

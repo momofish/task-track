@@ -1,7 +1,7 @@
-module.exports = function(app) {
+module.exports = function (app) {
   var router = require("express").Router();
   app.use('/api', router);
-  
+
   require('./systemController')(router);
 
   require('./projectController')(router);
@@ -13,4 +13,5 @@ module.exports = function(app) {
   require('./articleController')(router);
 
   require('./questionController')(router);
+  require('./tagController')(router);
 }

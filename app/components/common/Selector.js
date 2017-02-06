@@ -39,6 +39,9 @@ class Selector extends Component {
     }
 
     let dataSource = this.props.dataSources[dataSourceIndex];
+    if (!dataSource)
+      return;
+      
     let setItems = items => {
       this.cache[dataSourceIndex] = items;
       this.setState({ items });
@@ -105,6 +108,9 @@ class Selector extends Component {
 
   render() {
     let {dataSources, top = 10} = this.props;
+    if (!dataSources || !dataSources.length) {
+      return <div className='selector-container'></div>
+    }
     let {dataSourceIndex, items, term} = this.state;
     let dataSource = dataSources[dataSourceIndex];
     let {nameField = 'name', searchable} = dataSource;
@@ -118,9 +124,9 @@ class Selector extends Component {
             {dataSources.map((dataSource, i) =>
               <li key={i} data-toggle="tab"
                 className={dataSourceIndex == i ? 'active' : null}>
-                <a href='#' onClick={() => this.changeTab(i) }>{dataSource.name}</a>
+                <a href='#' onClick={() => this.changeTab(i)}>{dataSource.name}</a>
               </li>
-            ) }
+            )}
           </ul> : null
         }
         {searchable ?
@@ -137,11 +143,11 @@ class Selector extends Component {
               .map((item, i) => {
                 let isSelected = this.getSelected(item, selecting) != null;
                 return (<li key={item._id || i} className={isSelected ? 'active' : null}>
-                  <IconText text={item[nameField]} icon={item.icon} onClick={event => this.clickItem(item) }>
+                  <IconText text={item[nameField]} icon={item.icon} onClick={event => this.clickItem(item)}>
                     {multiple && isSelected && <i className='pull-right glyphicon glyphicon-ok' />}
                   </IconText>
                 </li>);
-              }) : items ? <li className='active'><IconText text='无更多数据' /></li> : null }
+              }) : items ? <li className='active'><IconText text='无更多数据' /></li> : null}
           </ul>
           {multiple &&
             <div className='button-group'>

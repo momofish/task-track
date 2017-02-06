@@ -4,6 +4,8 @@ var Types = Schema.Types;
 
 var schema = new Schema({
   name: { type: String, index: true, unique: true }, 
+  category: String,
+  active: Boolean,
   createdOn: Date
 });
 

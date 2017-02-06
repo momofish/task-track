@@ -109,6 +109,14 @@ export default {
     }, options));
   },
 
+  selectData(target, selected, onSelect, options) {
+    Selector.open(extend({
+      target,
+      selected,
+      onSelect
+    }, options));
+  },
+
   selectDate(target, selected, onSelect, options) {
     DatePicker.open(extend({
       target,

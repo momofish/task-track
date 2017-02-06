@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 class FormItem extends Component {
   render() {
-    let {label, content, className, noLabel} = this.props;
+    let {label, content, className, noLabel, id} = this.props;
 
     return (
-      <div className={`form-item ${className || ''}`}>
+      <div id={id} className={`form-item ${className || ''}`}>
         {!noLabel && <div className='item-label'>{label}</div>}
         {content instanceof Array ? content.map((inner, i) =>
           <div key={i} className='item-content'>
