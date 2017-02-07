@@ -8,7 +8,7 @@ class ArticleViewer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = { article: {} };
     this.md = new Markdown();
   }
 
@@ -45,7 +45,7 @@ class ArticleViewer extends Component {
         <div className='comments'>
           <h4>评论</h4>
           <ul>
-            {article && article.comments.length ? article.comments.map((comment, i) =>
+            {article.comments && article.comments.length ? article.comments.map((comment, i) =>
               <li key={i}>
                 <h5>{comment.author.name}<span className='pull-right'>{moment(comment.createdOn).format('MM-DD hh:mm')} #{i + 1}</span></h5>
                 <span dangerouslySetInnerHTML={{ __html: this.md.render(comment.content || '') }}></span>

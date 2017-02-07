@@ -19,9 +19,15 @@ class Sidebar extends Component {
     let searchbar;
     if (data.searchbar) {
       searchbar = (
-        <div className='searchbar'>
-          <input type='text' className='form-control' placeholder='搜索' />
-        </div>
+        <form className='searchbar' onSubmit={event => {
+          event.preventDefault();
+          let query = this.refs['query'];
+          let {onSearch} = data.searchbar;
+          if (onSearch) onSearch(query.value);
+          query.value = '';
+        }}>
+          <input ref='query' type='text' className='form-control' placeholder='搜索' />
+        </form>
       );
     }
 

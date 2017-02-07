@@ -10,7 +10,7 @@ export default class QuestionEditor extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = { question: {}, tags: null };
+    this.state = { question: { tags: [] }, tags: null };
   }
 
   componentDidMount() {
@@ -26,9 +26,9 @@ export default class QuestionEditor extends Component {
         .map(pair => ({ name: pair[0], data: pair[1] }))
         .value();
 
-      select.selectData(input.target, null,
+      select.selectData(input.target, question.tags,
         selecting => {
-
+          this.selectTags(selecting);
         }, { dataSources })
     });
 
@@ -36,6 +36,19 @@ export default class QuestionEditor extends Component {
       height: 640,
       path: '/editor.md/lib/'
     });
+  }
+
+  selectTags(tags) {
+    let {question} = this.state;
+    question.tags = tags;
+    this.forceUpdate();
+  }
+
+  deleteTag(i) {
+    let {question} = this.state;
+    let {tags} = question;
+    tags.splice(i, 1);
+    this.forceUpdate();
   }
 
   changeEntity(field, event) {
@@ -84,7 +97,7 @@ export default class QuestionEditor extends Component {
           </FormItem>
           <FormItem noLabel id='tags'>
             <ReactTags
-              placeholder='标签'
+              placeholder='标签' labelField={'name'}
               classNames={{
                 selected: 'input-group',
                 tag: 'input-group-addon',
@@ -92,9 +105,9 @@ export default class QuestionEditor extends Component {
                 tagInput: '',
                 tagInputField: 'form-control'
               }}
-              tags={[]}
+              tags={question.tags}
               handleAddition={() => { }}
-              handleDelete={() => { }}
+              handleDelete={this.deleteTag.bind(this)}
             />
           </FormItem>
           <div id='editormd'>

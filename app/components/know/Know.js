@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 
 import Sidebar from '../Sidebar';
-import {select} from '../../utils';
+import { select } from '../../utils';
 
 export default class Know extends Component {
   constructor(props) {
@@ -11,7 +11,11 @@ export default class Know extends Component {
     this.state = {
       sidebar: {
         title: "大牛",
-        searchbar: { onSearch: () => { } },
+        searchbar: {
+          onSearch: (query) => {
+            browserHistory.push(`/know/q/search/${encodeURIComponent(query)}`);
+          }
+        },
         sections: [
           {
             header: { label: '问答' },

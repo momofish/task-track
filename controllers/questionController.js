@@ -41,6 +41,9 @@ module.exports = function (router) {
         else
           assign(params, { author: user });
       }
+      else if (category == 'search') {
+        assign(params, { title: new RegExp(`${filter}`, 'i') })
+      }
       else {
         throw new Error('invalid params for questions')
       }

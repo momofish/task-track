@@ -49,8 +49,8 @@ export default class Questions extends Component {
           <Link type="button" className="btn btn-primary pull-right" to='/know/q/add'>提问</Link>
         </div>
         <PagedList className='flex-scroll' data={pagedList}
-          toPage={`/know/q/${category}/${filter || 'index'}`}
-          />
+          toPage={`/know/q/${category}/${encodeURIComponent(filter || 'index')}`}
+        />
       </div>
     )
   }

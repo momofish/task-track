@@ -5,7 +5,7 @@ module.exports = function (router) {
   router.route('/articles/~:key/:field?')
     .get(route.wrap(async (req, res) => {
       let {key} = req.params;
-      let article = await Article.findOne({ key }, 'answers').populate('answers.author', 'name');
+      let article = await Article.findOne({ key }, 'comments').populate('comments.author', 'name');
 
       res.send(article);
     }))

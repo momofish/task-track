@@ -12,7 +12,7 @@ export default {
   },
 
   getQuestions(category, filter, pageNo) {
-    return get(`${resourceUrl}/${category}/${filter || 'index'}/${pageNo || ''}`);
+    return get(`${resourceUrl}/${category}/${encodeURIComponent(filter || 'index')}/${pageNo || ''}`);
   },
 
   saveQuestion(question) {
@@ -28,7 +28,7 @@ export default {
       data: question,
       label: question.title,
       to: `/know/q/v/${question._id}`,
-      tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${tag.name}` })),
+      tags: question.tags.map(tag => ({ label: tag.name, style: 'info', to: `/know/q/t/${encodeURIComponent(tag.name)}` })),
       sub:
       <h3 className='item-sub'>
         <Link to={`/know/q/u/${question.author._id}`}>{(question.author || { name: '匿名' }).name}</Link> - {`${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
