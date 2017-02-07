@@ -5,7 +5,7 @@ import Markdown from 'markdown-it'
 import highlight from 'highlight.js'
 
 import { IconText, Article, VoteWidget } from '../common';
-import { questionService } from '../../services'
+import { questionService, userService } from '../../services'
 
 export default class QuestionViewer extends Component {
   constructor(props) {
@@ -64,6 +64,7 @@ export default class QuestionViewer extends Component {
       return <div />;
 
     let {title, content, tags, answers, votes} = question;
+    let {currentUser} = userService;
 
     return (
       <div className='container-fluid flex flex-verticle article-viewer flex-scroll'>
@@ -91,7 +92,7 @@ export default class QuestionViewer extends Component {
           options={[
             `${moment(question.createdOn).fromNow()}提问`
           ]}
-          />
+        />
         <div className='answers'>
           <h4>{answers.length}个回答</h4>
           {answers.map((answer, i) => <Article key={i}
@@ -101,9 +102,9 @@ export default class QuestionViewer extends Component {
               <Link to={`/know/q/u/${answer.author._id}`}>{(answer.author || { name: '匿名' }).name}</Link>,
               `${moment(answer.createdOn).fromNow()}回答`
             ]}
-            />)}
+          />)}
         </div>
-        <article>
+        {!answers.some(answer => answer.author._id == currentUser._id) && <article>
           <div className='article-viewer-column'></div>
           <form className='add-answer' onSubmit={this.addAnswer.bind(this)}>
             <h4>我要回答</h4>
@@ -112,7 +113,7 @@ export default class QuestionViewer extends Component {
             </div>
             <button className='btn btn-primary' type='submit'>提交</button>
           </form>
-        </article>
+        </article>}
       </div>
     );
   }

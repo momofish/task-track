@@ -102,9 +102,11 @@ module.exports = function (router) {
       Object.assign(value, {
         author: user
       });
-      question[field].push(value);
+
+      let sub = question[field];
+      sub.push(value);
       if (field == 'answers') {
-        question.answerNum = question[field].length;
+        question.answerNum = sub.length;
         question.answeredOn = new Date();
         question.answeredBy = user;
       }
