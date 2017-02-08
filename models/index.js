@@ -10,4 +10,5 @@ module.exports = {
   Question: require('./question'),
   Answer: require('./answer'),
   Tag: require('./tag'),
+  Blog: require('./blog'),
 }

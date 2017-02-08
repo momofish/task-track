@@ -3,18 +3,18 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import _ from 'lodash';
 
 import { FormItem } from '../common';
-import { questionService, tagService } from '../../services';
+import { blogService, tagService } from '../../services';
 import { select } from '../../utils';
 
 export default class extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = { question: { tags: [] }, tags: null };
+    this.state = { blog: { tags: [] }, tags: null };
   }
 
   componentDidMount() {
-    let {question, tags} = this.state;
+    let {blog, tags} = this.state;
 
     $('#tags').find('.form-control').focus(async input => {
       if (!tags) {
@@ -26,7 +26,7 @@ export default class extends Component {
         .map(pair => ({ name: pair[0], data: pair[1] }))
         .value();
 
-      select.selectData(input.target, question.tags,
+      select.selectData(input.target, blog.tags,
         selecting => {
           this.selectTags(selecting);
         }, { dataSources })
@@ -39,21 +39,21 @@ export default class extends Component {
   }
 
   selectTags(tags) {
-    let {question} = this.state;
-    question.tags = tags;
+    let {blog} = this.state;
+    blog.tags = tags;
     this.forceUpdate();
   }
 
   deleteTag(i) {
-    let {question} = this.state;
-    let {tags} = question;
+    let {blog} = this.state;
+    let {tags} = blog;
     tags.splice(i, 1);
     this.forceUpdate();
   }
 
   changeEntity(field, event) {
-    let {question} = this.state;
-    question[field] = event.target.value;
+    let {blog} = this.state;
+    blog[field] = event.target.value;
     this.forceUpdate();
   }
 
@@ -69,30 +69,30 @@ export default class extends Component {
   async handleSubmit(event) {
     event.preventDefault();
 
-    let {question} = this.state;
-    question.content = this.$content.value;
-    if (!question.content) {
+    let {blog} = this.state;
+    blog.content = this.$content.value;
+    if (!blog.content) {
       toastr.danger(`请输入内容`);
       return;
     }
-    await questionService.saveQuestion(question);
-    this.goto('/know/q/latest');
+    await blogService.saveBlog(blog);
+    this.goto('/know/b/latest');
   }
 
   render() {
-    let {question} = this.state;
-    let {title, content} = question;
+    let {blog} = this.state;
+    let {title, content} = blog;
 
     return (
       <form className='container-fluid flex flex-verticle' onSubmit={this.handleSubmit.bind(this)}>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-tasks' /> 提问
+            <i className='glyphicon glyphicon-tasks' /> 发表文章
           </h2>
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className='form-control' placeholder='标题，一句话说清问题' defaultValue={title}
+            <input className='form-control' placeholder='标题，言简意赅' defaultValue={title}
               onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
           <FormItem noLabel id='tags'>
@@ -105,7 +105,7 @@ export default class extends Component {
                 tagInput: '',
                 tagInputField: 'form-control'
               }}
-              tags={question.tags}
+              tags={blog.tags}
               handleAddition={() => { }}
               handleDelete={this.deleteTag.bind(this)}
             />
@@ -114,7 +114,7 @@ export default class extends Component {
             <textarea ref={text => this.$content = text} style={{ display: 'none' }} />
           </div>
           <FormItem noLabel>
-            <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布问题</button>
+            <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'
               onClick={this.goto.bind(this, null)}>舍弃</button>
           </FormItem>

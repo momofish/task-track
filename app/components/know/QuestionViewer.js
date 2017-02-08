@@ -9,7 +9,7 @@ import AuthorLink from './AuthorLink';
 import { IconText, Article, VoteWidget } from '../common';
 import { questionService, userService } from '../../services'
 
-export default class QuestionViewer extends Component {
+export default class extends Component {
   constructor(props) {
     super(props);
 
@@ -100,7 +100,7 @@ export default class QuestionViewer extends Component {
             `${moment(question.createdOn).fromNow()}提问`
           ]}
         />
-        <div className='answers'>
+        <div className='replies'>
           <h4>{answers.length}个回答</h4>
           {answers.map((answer, i) => <Article key={i}
             col={<VoteWidget
@@ -123,7 +123,7 @@ export default class QuestionViewer extends Component {
         <article>
           <div className='article-viewer-column'></div>
           {!answers.some(answer => answer.author._id == currentUser._id) ?
-            <form className='add-answer' onSubmit={this.saveAnswer.bind(this)}>
+            <form className='add-reply' onSubmit={this.saveAnswer.bind(this)}>
               <h4>我要回答</h4>
               <div className='form-group'>
                 <textarea ref={text => this._answerText = text} rows='10' className='form-control' />

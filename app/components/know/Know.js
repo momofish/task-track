@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 import Sidebar from '../Sidebar';
 import { select } from '../../utils';
 
-export default class Know extends Component {
+export default class extends Component {
   constructor(props) {
     super(props);
 
@@ -17,6 +17,14 @@ export default class Know extends Component {
           }
         },
         sections: [
+          {
+            header: { label: '头条' },
+            body: [
+              { label: '最新', icon: 'list', to: '/know/b/latest' },
+              { label: '热门', icon: 'list', to: '/know/b/hot' },
+              { label: '我的', icon: 'user', to: '/know/b/my' },
+            ]
+          },
           {
             header: { label: '问答' },
             body: [
@@ -39,6 +47,7 @@ export default class Know extends Component {
         align: 'right',
         style: { width: 120 },
         data: [
+          { to: '/know/b/add', name: '发表头条' },
           { to: '/know/q/add', name: '提问' },
         ]
       });

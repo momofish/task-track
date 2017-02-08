@@ -3,14 +3,14 @@ import { Link } from 'react-router';
 import moment from 'moment';
 
 import { PagedList } from '../common';
-import { questionService } from '../../services'
+import { blogService } from '../../services'
 
 const listLeadConfig = {
-  latest: { title: '最新问答' },
-  hot: { title: '热门问答' },
-  unanswered: { title: '未回答问答' },
+  latest: { title: '最新头条' },
+  hot: { title: '热门头条' },
+  unanswered: { title: '未回答头条' },
   t: {
-    title: t => `问答 - ${t.name}`,
+    title: t => `头条 - ${t.name}`,
     lead: t =>
       <div className='well well-sm'>
         <h4>{t.name}</h4>
@@ -18,7 +18,7 @@ const listLeadConfig = {
       </div>
   },
   u: {
-    title: t => `${t.name}的提问`,
+    title: t => `${t.name}的发布`,
     lead: t =>
       <div className='well well-sm'>
         <h4>{t.name}</h4>
@@ -48,13 +48,13 @@ export default class extends Component {
 
   async getData(params) {
     let {category, filter, pageNo} = params;
-    let pagedList = await questionService.getQuestions(category, filter, pageNo);
+    let pagedList = await blogService.getBlogs(category, filter, pageNo);
     this.transPagedList(pagedList)
     this.setState({ pagedList });
   }
 
   transPagedList(pagedList) {
-    pagedList.list = pagedList.list.map(questionService.mapItem);
+    pagedList.list = pagedList.list.map(blogService.mapItem);
   }
 
   render() {
@@ -70,13 +70,13 @@ export default class extends Component {
       <div className='container-fluid flex flex-verticle'>
         <div className='page-header'>
           <h2>
-            <i className='glyphicon glyphicon-list' /> {title || '问答'}
+            <i className='glyphicon glyphicon-list' /> {title || '头条'}
           </h2>
-          <Link type="button" className="btn btn-primary pull-right" to='/know/q/add'>提问</Link>
+          <Link type="button" className="btn btn-primary pull-right" to='/know/b/add'>撰写</Link>
         </div>
         {lead && lead(head)}
         <PagedList className='flex-scroll' data={pagedList}
-          toPage={`/know/q/${category}/${encodeURIComponent(filter || 'index')}`}
+          toPage={`/know/b/${category}/${encodeURIComponent(filter || 'index')}`}
         />
       </div>
     )

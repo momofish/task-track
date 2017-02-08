@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { PagedList, Button } from '../common';
 import { questionService } from '../../services'
 
-export default class MyQuestion extends Component {
+export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {

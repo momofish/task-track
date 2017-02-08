@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { userService } from '../../services';
 
-class componentName extends Component {
+export default class extends Component {
   render() {
     let {author} = this.props;
     let {currentUser} = userService;
@@ -15,5 +15,3 @@ class componentName extends Component {
     );
   }
 }
-
-export default componentName;

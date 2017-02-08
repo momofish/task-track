@@ -14,4 +14,5 @@ module.exports = function (app) {
 
   require('./questionController')(router);
   require('./tagController')(router);
+  require('./blogController')(router);
 }
