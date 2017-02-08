@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { assign } from 'lodash';
 import moment from 'moment';
 import Markdown from 'markdown-it'
 import highlight from 'highlight.js'
 
+import AuthorLink from './AuthorLink';
 import { IconText, Article, VoteWidget } from '../common';
 import { questionService, userService } from '../../services'
 
@@ -26,6 +28,11 @@ export default class QuestionViewer extends Component {
     });
   }
 
+  isOwner(author) {
+    let {currentUser} = userService;
+    return author && currentUser && author._id == currentUser._id;
+  }
+
   componentDidMount() {
     let {params} = this.props;
     this.loadData(params.id)
@@ -41,18 +48,18 @@ export default class QuestionViewer extends Component {
     this.setState({ question });
   }
 
-  async addAnswer(event) {
+  async saveAnswer(event) {
     event.preventDefault();
 
     let {params} = this.props;
     let answerContent = this._answerText.value;
 
     if (!answerContent) {
-      alert(`请输入内容`);
+      toastr.error(`请输入内容`);
       return;
     }
 
-    await questionService.addAnswer(params.id, { content: answerContent });
+    await questionService.saveAnswer(params.id, { content: answerContent });
     this._answerText.value = '';
     this.loadData(params.id);
   }
@@ -74,13 +81,13 @@ export default class QuestionViewer extends Component {
           </h2>
           {tags && <ul className='item-tags'>
             {tags.map((tag, k) => (
-              <li key={k} className={`tag tag-${tag.style}`} title={tag.name}>
+              <li key={k} className={`tag`} title={tag.name}>
                 <IconText text={tag.name} to={`/know/q/t/${tag.name}`} />
               </li>
             ))}
             <li>
               <span>
-                {question.author && <Link to={`/know/q/u/${question.author._id}`}>{(question.author || { name: '匿名' }).name}</Link>}
+                {question.author && <AuthorLink author={question.author} />}
                 {` - ${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
               </span>
             </li>
@@ -96,24 +103,37 @@ export default class QuestionViewer extends Component {
         <div className='answers'>
           <h4>{answers.length}个回答</h4>
           {answers.map((answer, i) => <Article key={i}
+            col={<VoteWidget
+              votes={votes}
+              accept={this.isOwner(answer.author) && {
+                accepted: answer.accepted,
+                onAccept: () => {
+                  questionService.saveAnswer(question._id, assign(answer, { accepted: !answer.accepted }));
+                  this.forceUpdate();
+                }
+              }} />
+            }
             content={this.md.render(answer.content || '无内容')}
-            col={<VoteWidget votes={votes} />}
             options={[
-              <Link to={`/know/q/u/${answer.author._id}`}>{(answer.author || { name: '匿名' }).name}</Link>,
-              `${moment(answer.createdOn).fromNow()}回答`
+              <AuthorLink author={answer.author} />,
+              ` - ${moment(answer.createdOn).fromNow()}回答`
             ]}
           />)}
         </div>
-        {!answers.some(answer => answer.author._id == currentUser._id) && <article>
+        <article>
           <div className='article-viewer-column'></div>
-          <form className='add-answer' onSubmit={this.addAnswer.bind(this)}>
-            <h4>我要回答</h4>
-            <div className='form-group'>
-              <textarea ref={text => this._answerText = text} rows='10' className='form-control' />
-            </div>
-            <button className='btn btn-primary' type='submit'>提交</button>
-          </form>
-        </article>}
+          {!answers.some(answer => answer.author._id == currentUser._id) ?
+            <form className='add-answer' onSubmit={this.saveAnswer.bind(this)}>
+              <h4>我要回答</h4>
+              <div className='form-group'>
+                <textarea ref={text => this._answerText = text} rows='10' className='form-control' />
+              </div>
+              <button className='btn btn-primary' type='submit'>提交</button>
+            </form> :
+            <div className='add-answer'>
+              <h4>此问题您已回答</h4>
+            </div>}
+        </article>
       </div>
     );
   }

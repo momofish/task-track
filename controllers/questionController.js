@@ -3,7 +3,7 @@ import moment from 'moment';
 import { assign } from 'lodash'
 
 import { api, route, paging } from '../utils';
-import { Question, Tag } from '../models';
+import { Question, Tag, User } from '../models';
 
 module.exports = function (router) {
   router.route('/questions/:category/:filter/:pageNo?')
@@ -13,6 +13,7 @@ module.exports = function (router) {
       pageNo = parseInt(pageNo);
 
       let params = {};
+      let head;
 
       if (category == 'latest') { // 最近：1个月内
         assign(params, {
@@ -31,9 +32,12 @@ module.exports = function (router) {
       else if (category == 't') { // 按tag
         let tag = await Tag.findOne({ name: filter });
         assign(params, { tags: { $in: [(tag || {})._id] } });
+        head = tag;
       }
       else if (category == 'u') { // 按用户
-        assign(params, { author: filter });
+        let u = await User.findOne({ loginId: filter });
+        assign(params, { author: u });
+        head = u;
       }
       else if (category == 'my') { // 我的问答
         if (filter == 'answered')
@@ -56,9 +60,9 @@ module.exports = function (router) {
         .skip((pageNo - 1) * pageSize)
         .limit(pageSize)
         .select('-answers -content')
-        .populate('author tags', 'name title');
+        .populate('author tags', 'name title loginId');
 
-      res.send({ pagination: { pageNo, pageSize, totalCount }, list: list });
+      res.send({ pagination: { pageNo, pageSize, totalCount }, list, head });
     }));
 
   router.route('/questions/:id')
@@ -66,7 +70,7 @@ module.exports = function (router) {
       let {id} = req.params;
 
       let question = await Question.findById(id)
-        .populate('author tags answers.author', 'id name title');
+        .populate('author tags answers.author', 'id name title loginId');
       await Question.update({ _id: id }, { $inc: { visits: 1 } })
 
       res.send(question);
@@ -109,6 +113,27 @@ module.exports = function (router) {
         question.answerNum = sub.length;
         question.answeredOn = new Date();
         question.answeredBy = user;
+      }
+
+      await question.save();
+
+      res.sendStatus(204);
+    }))
+    .post(route.wrap(async (req, res, next) => {
+      var user = req.user;
+      let {id, field} = req.params;
+      var question = await Question.findById(id);
+      if (!question)
+        throw new Error('问题不存在');
+
+      let value = req.body;
+
+      let sub = question[field];
+      if (field == 'answers') {
+        let answers = sub;
+        let answer = answers.find(answer => answer._id == value._id);
+        Object.assign(answer, value);
+        question.resolved = answers.some(answer => answer.accepted);
       }
 
       await question.save();

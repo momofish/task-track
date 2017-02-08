@@ -72,7 +72,7 @@ export default class QuestionEditor extends Component {
     let {question} = this.state;
     question.content = this.$content.value;
     if (!question.content) {
-      alert(`请输入内容`);
+      toastr.danger(`请输入内容`);
       return;
     }
     await questionService.saveQuestion(question);
