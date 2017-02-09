@@ -22,7 +22,7 @@ export default class extends Component {
           </div>
           <div className='lead'>
             <p>大牛在此</p>
-            <Link to='/know/b/latest' className='btn btn-info'>开始解惑</Link>
+            <Link to='/know/q/latest' className='btn btn-info'>开始解惑</Link>
           </div>
         </main>
       </div>

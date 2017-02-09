@@ -70,7 +70,7 @@ export default class extends Component {
     if (!question)
       return <div />;
 
-    let {title, content, tags, answers, votes} = question;
+    let {title, content, tags, answers, voteNum} = question;
     let {currentUser} = userService;
 
     return (
@@ -89,12 +89,13 @@ export default class extends Component {
               <span>
                 {question.author && <AuthorLink author={question.author} />}
                 {` - ${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
+                {` 浏览${question.visitNum || 0}`}
               </span>
             </li>
           </ul>}
         </div>
         <Article
-          col={<VoteWidget votes={votes} />}
+          col={<VoteWidget voteNum={voteNum} voteUri={`/api/questions/${question._id}/votes`} />}
           content={this.md.render(content || '无内容')}
           options={[
             `${moment(question.createdOn).fromNow()}提问`
@@ -104,7 +105,7 @@ export default class extends Component {
           <h4>{answers.length}个回答</h4>
           {answers.map((answer, i) => <Article key={i}
             col={<VoteWidget
-              votes={votes}
+              voteNum={answer.voteNum}
               accept={this.isOwner(answer.author) && {
                 accepted: answer.accepted,
                 onAccept: () => {

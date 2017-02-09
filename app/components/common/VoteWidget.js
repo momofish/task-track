@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
 import classsnames from 'classnames';
 
+import { questionService, apiService } from '../../services';
+
 class VoteWidget extends Component {
+  voteChange(voteNum) {
+    let {voteUri} = this.props;
+    if (!voteUri)
+      return;
+
+    apiService.save(voteUri, { voteNum });
+  }
+
   render() {
-    let {votes = 0, accept} = this.props;
+    let {voteNum = 0, accept} = this.props;
     let {accepted, onAccept} = accept || {};
 
     return (
       <div>
         <div className='vote-widget'>
-          <i className='glyphicon glyphicon-triangle-top' />
-          <span>{votes}</span>
-          <i className='glyphicon glyphicon-triangle-bottom' />
+          <i className='glyphicon glyphicon-triangle-top' onClick={this.voteChange.bind(this, 1)} />
+          <span>{voteNum}</span>
+          <i className='glyphicon glyphicon-triangle-bottom' onClick={this.voteChange.bind(this, -1)} />
         </div>
         {accept && <div onClick={onAccept} className={classsnames('accept-widget', { accepted })}>
           <i className='glyphicon glyphicon-ok-sign' />

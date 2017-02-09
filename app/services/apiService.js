@@ -60,3 +60,5 @@ export function remove(url, id) {
     })
   );
 }
+
+export default { get, put, post, save, remove }

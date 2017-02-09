@@ -70,7 +70,7 @@ export default class extends Component {
     if (!blog)
       return <div />;
 
-    let {title, content, tags, comments, votes} = blog;
+    let {title, content, tags, comments, voteNum} = blog;
     let {currentUser} = userService;
 
     return (
@@ -89,12 +89,13 @@ export default class extends Component {
               <span>
                 {blog.author && <AuthorLink author={blog.author} />}
                 {` - ${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '回答' : '提问'}`}
+                {` 浏览${blog.visitNum || 0}`}
               </span>
             </li>
           </ul>}
         </div>
         <Article
-          col={<VoteWidget votes={votes} />}
+          col={<VoteWidget voteNum={voteNum} />}
           content={this.md.render(content || '无内容')}
           options={[
             `${moment(blog.createdOn).fromNow()}提问`
@@ -103,7 +104,7 @@ export default class extends Component {
         <div className='replies'>
           <h4>{comments.length}个评论</h4>
           {comments.map((comment, i) => <Article key={i}
-            col={<VoteWidget votes={votes} />}
+            col={<VoteWidget voteNum={voteNum} />}
             content={this.md.render(comment.content || '无内容')}
             options={[
               <AuthorLink author={comment.author} />,

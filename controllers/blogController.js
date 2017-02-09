@@ -23,7 +23,7 @@ module.exports = function (router) {
       else if (category == 'hot') {  // 热门：3个月内浏览量超过10
         assign(params, {
           createdOn: { $gte: moment().add(-3, 'months').toDate() },
-          visits: { $gte: 10 }
+          visitNum: { $gte: 10 }
         });
       }
       else if (category == 't') { // 按tag
@@ -62,18 +62,16 @@ module.exports = function (router) {
       res.send({ pagination: { pageNo, pageSize, totalCount }, list, head });
     }));
 
-  router.route('/blogs/:id')
+  router.route('/blogs/:id?')
     .get(route.wrap(async (req, res, next) => {
       let {id} = req.params;
 
       let blog = await Blog.findById(id)
         .populate('author tags comments.author', 'id name title loginId');
-      await Blog.update({ _id: id }, { $inc: { visits: 1 } })
-
       res.send(blog);
-    }));
 
-  router.route('/blogs')
+      await Blog.update({ _id: id }, { $inc: { visitNum: 1 } })
+    }))
     .put(route.wrap(async (req, res, next) => {
       var user = req.user;
       var blog = new Blog(req.body);

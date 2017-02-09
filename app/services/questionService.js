@@ -40,7 +40,7 @@ export default {
           value: question.answerNum || 0, label: question.resolved ? <i className='glyphicon glyphicon-ok' /> : '回答',
           className: question.resolved ? 'complete' : question.answerNum ? 'success' : 'error'
         },
-        { value: question.visits || 0, label: '浏览' },
+        { value: question.visitNum || 0, label: '浏览' },
       ]
     };
   }

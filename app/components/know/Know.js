@@ -18,14 +18,6 @@ export default class extends Component {
         },
         sections: [
           {
-            header: { label: '头条' },
-            body: [
-              { label: '最新', icon: 'list', to: '/know/b/latest' },
-              { label: '热门', icon: 'list', to: '/know/b/hot' },
-              { label: '我的', icon: 'user', to: '/know/b/my' },
-            ]
-          },
-          {
             header: { label: '问答' },
             body: [
               { label: '最新问答', icon: 'list', to: '/know/q/latest' },
@@ -33,7 +25,15 @@ export default class extends Component {
               { label: '未回答问答', icon: 'list', to: '/know/q/unanswered' },
               { label: '我的问答', icon: 'user', to: '/know/q/my' },
             ]
-          }
+          },
+          {
+            header: { label: '头条' },
+            body: [
+              { label: '最新头条', icon: 'list', to: '/know/b/latest' },
+              { label: '热门头条', icon: 'list', to: '/know/b/hot' },
+              { label: '我的头条', icon: 'user', to: '/know/b/my' },
+            ]
+          },
         ]
       }
     };

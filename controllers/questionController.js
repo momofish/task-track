@@ -3,7 +3,26 @@ import moment from 'moment';
 import { assign } from 'lodash'
 
 import { api, route, paging } from '../utils';
-import { Question, Tag, User } from '../models';
+import { Question, Tag, User, VoteStat } from '../models';
+
+const voteEntity = async (entity, vote) => {
+  // load votestat
+  let voteStat = await VoteStat.findById(entity._id);
+  console.log(voteStat);
+  if (!voteStat)
+    voteStat = new VoteStat(Object.assign({}, entity));
+
+  // modify votestat
+  let oldVote = voteStat.votes.find(v => v.author._id == vote.author._id);
+  if (oldVote)
+    Object.assign(oldVote, vote);
+  else
+    voteStat.votes.push(vote);
+  voteStat.voteNum = voteStat.votes.reduce((acc, cur) => acc + cur.voteNum, 0);
+
+  await voteStat.save();
+  entity.voteNum = voteStat.voteNum;
+}
 
 module.exports = function (router) {
   router.route('/questions/:category/:filter/:pageNo?')
@@ -23,7 +42,7 @@ module.exports = function (router) {
       else if (category == 'hot') {  // 热门：3个月内浏览量超过10
         assign(params, {
           createdOn: { $gte: moment().add(-3, 'months').toDate() },
-          visits: { $gte: 10 }
+          visitNum: { $gte: 10 }
         });
       }
       else if (category == 'unanswered') {  // 未回答的
@@ -59,24 +78,24 @@ module.exports = function (router) {
         .sort('-createdOn')
         .skip((pageNo - 1) * pageSize)
         .limit(pageSize)
-        .select('-answers -content')
+        .select('-answers -votes -content')
         .populate('author tags', 'name title loginId');
 
       res.send({ pagination: { pageNo, pageSize, totalCount }, list, head });
     }));
 
-  router.route('/questions/:id')
+  router.route('/questions/:id?')
     .get(route.wrap(async (req, res, next) => {
+      let {user} = req;
       let {id} = req.params;
 
       let question = await Question.findById(id)
         .populate('author tags answers.author', 'id name title loginId');
-      await Question.update({ _id: id }, { $inc: { visits: 1 } })
 
       res.send(question);
-    }));
 
-  router.route('/questions')
+      await Question.update({ _id: id }, { $inc: { visitNum: 1 } });
+    }))
     .put(route.wrap(async (req, res, next) => {
       var user = req.user;
       var question = new Question(req.body);
@@ -100,19 +119,23 @@ module.exports = function (router) {
       let {id, field} = req.params;
       var question = await Question.findById(id);
       if (!question)
-        throw new Error('问题不存在');
+        throw new Error('question does not exist');
 
       let value = req.body;
       Object.assign(value, {
         author: user
       });
 
-      let sub = question[field];
-      sub.push(value);
+      let children = question[field];
+      if (children instanceof Array)
+        children.push(value);
       if (field == 'answers') {
-        question.answerNum = sub.length;
+        question.answerNum = children.length;
         question.answeredOn = new Date();
         question.answeredBy = user;
+      }
+      else if (field == 'votes') {
+        await voteEntity(question, value);
       }
 
       await question.save();
@@ -124,16 +147,18 @@ module.exports = function (router) {
       let {id, field} = req.params;
       var question = await Question.findById(id);
       if (!question)
-        throw new Error('问题不存在');
+        throw new Error('question does not exist');
 
       let value = req.body;
 
-      let sub = question[field];
+      let children = question[field];
+      let child = children.find(answer => answer._id == value._id);
+      Object.assign(child, value);
       if (field == 'answers') {
-        let answers = sub;
-        let answer = answers.find(answer => answer._id == value._id);
-        Object.assign(answer, value);
-        question.resolved = answers.some(answer => answer.accepted);
+        question.resolved = children.some(answer => answer.accepted);
+      }
+      else if (field == 'votes') {
+        sumVote(question);
       }
 
       await question.save();

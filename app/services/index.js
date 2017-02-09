@@ -1,3 +1,5 @@
+export { default as apiService } from './apiService';
+
 export { default as projectService } from './projectService';
 export { default as taskService } from './taskService';
 export { default as teamService } from './teamService';

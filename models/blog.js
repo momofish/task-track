@@ -7,11 +7,12 @@ var schema = new Schema({
   title: String,
   author: { type: Types.ObjectId, index: true, ref: 'User' },
   content: String,
-  comments: [Comment],
-  visits: { type: Number, default: 0 },
-  commentNum: { type: Number, default: 0 },
   tags: [{ type: Types.ObjectId, index: true, ref: 'Tag' }],
   createdOn: { type: Date, index: true, default: Date.now },
+
+  visitNum: { type: Number, default: 0 },
+  comments: [Comment],
+  commentNum: { type: Number, default: 0 },
   commentedOn: Date,
   commentedBy: { type: Types.ObjectId, index: true, ref: 'User' }
 });

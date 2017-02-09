@@ -11,4 +11,5 @@ module.exports = {
   Answer: require('./answer'),
   Tag: require('./tag'),
   Blog: require('./blog'),
+  VoteStat: require('./voteStat'),
 }
