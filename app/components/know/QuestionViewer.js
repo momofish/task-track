@@ -111,8 +111,8 @@ export default class extends Component {
                   questionService.saveAnswer(question._id, assign(answer, { accepted: !answer.accepted }));
                   this.forceUpdate();
                 }
-              }} />
-            }
+              }}
+            />}
             content={this.md.render(answer.content || '无内容')}
             options={[
               <AuthorLink author={answer.author} />,

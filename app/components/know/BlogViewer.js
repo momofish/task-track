@@ -94,6 +94,7 @@ export default class extends Component {
           </ul>}
         </div>
         <Article
+          col={<VoteWidget votes={votes} />}
           content={this.md.render(content || '无内容')}
           options={[
             `${moment(blog.createdOn).fromNow()}提问`
@@ -102,6 +103,7 @@ export default class extends Component {
         <div className='replies'>
           <h4>{comments.length}个评论</h4>
           {comments.map((comment, i) => <Article key={i}
+            col={<VoteWidget votes={votes} />}
             content={this.md.render(comment.content || '无内容')}
             options={[
               <AuthorLink author={comment.author} />,
@@ -110,6 +112,7 @@ export default class extends Component {
           />)}
         </div>
         <article>
+          <div className='article-viewer-column'></div>
           <form className='add-reply' onSubmit={this.saveComment.bind(this)}>
             <h4>我要评论</h4>
             <div className='form-group'>
