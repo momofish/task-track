@@ -2,8 +2,28 @@ import mongoose from 'mongoose';
 import moment from 'moment';
 import { assign } from 'lodash'
 
-import { api, route, paging } from '../utils';
-import { Blog, Tag, User } from '../models';
+import { api, route } from '../utils';
+import { Blog, Tag, User, VoteStat } from '../models';
+
+export const vote4Entity = async (entity, vote) => {
+  let {_id} = entity;
+  // load votestat
+  let voteStat = await VoteStat.findById(_id);
+  if (!voteStat)
+    voteStat = new VoteStat({ _id });
+
+  // modify votestat
+  let oldVote = voteStat.votes.find(v => v.author == vote.author._id);
+  if (oldVote)
+    Object.assign(oldVote, vote);
+  else
+    voteStat.votes.push(vote);
+  let voteNum = voteStat.voteNum = voteStat.votes.reduce((acc, cur) => acc + cur.voteNum, 0);
+
+  await voteStat.save();
+  entity.voteNum = voteNum;
+  return { voteNum };
+}
 
 module.exports = function (router) {
   router.route('/blogs/:category/:filter/:pageNo?')
@@ -89,50 +109,51 @@ module.exports = function (router) {
       res.sendStatus(204);
     }));
 
-  router.route('/blogs/:id/:field')
+  router.route('/blogs/:id/:field/:cid?/:cfield?')
     .put(route.wrap(async (req, res, next) => {
-      var user = req.user;
-      let {id, field} = req.params;
-      var blog = await Blog.findById(id);
+      let user = req.user;
+      let {id, field, cid, cfield} = req.params;
+      let result;
+
+      let blog = await Blog.findById(id);
       if (!blog)
-        throw new Error('问题不存在');
+        throw new Error('blog not found');
 
       let value = req.body;
       Object.assign(value, {
         author: user
       });
 
-      let sub = blog[field];
-      sub.push(value);
-      if (field == 'comments') {
-        blog.commentNum = sub.length;
-        blog.commentedOn = new Date();
-        blog.commentedBy = user;
+      let children = blog[field];
+      // 操作孙节点
+      if (cfield) {
+        let child = children.id(cid);
+        if (!child)
+          throw new Error(`${field} for ${cid} not found`);
+        if (cfield == 'votes') {
+          result = await vote4Entity(child, value);
+        }
+      }
+      else {
+        if (children instanceof Array)
+          children.push(value);
+        if (field == 'comments') {
+          blog.answerNum = children.length;
+          blog.answeredOn = new Date();
+          blog.answeredBy = user;
+        }
+        // virtual property
+        else if (field == 'votes') {
+          result = await vote4Entity(blog, value);
+        }
       }
 
       await blog.save();
 
-      res.sendStatus(204);
-    }))
-    .post(route.wrap(async (req, res, next) => {
-      var user = req.user;
-      let {id, field} = req.params;
-      var blog = await Blog.findById(id);
-      if (!blog)
-        throw new Error('问题不存在');
-
-      let value = req.body;
-
-      let sub = blog[field];
-      if (field == 'comments') {
-        let comments = sub;
-        let comment = comments.find(comment => comment._id == value._id);
-        Object.assign(comment, value);
-        blog.resolved = comments.some(comment => comment.accepted);
+      if (result != undefined) {
+        res.send(result);
+        return;
       }
-
-      await blog.save();
-
       res.sendStatus(204);
-    }))
+    }));
 }

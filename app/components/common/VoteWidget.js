@@ -4,16 +4,25 @@ import classsnames from 'classnames';
 import { questionService, apiService } from '../../services';
 
 class VoteWidget extends Component {
-  voteChange(voteNum) {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {};
+  }
+
+  async voteChange(voteNum) {
     let {voteUri} = this.props;
     if (!voteUri)
       return;
 
-    apiService.save(voteUri, { voteNum });
+    let result = await apiService.save(voteUri, { voteNum });
+    this.setState({ voteNum: result.voteNum });
   }
 
   render() {
     let {voteNum = 0, accept} = this.props;
+    if (this.state.voteNum != undefined)
+      voteNum = this.state.voteNum;
     let {accepted, onAccept} = accept || {};
 
     return (

@@ -105,6 +105,7 @@ export default class extends Component {
           <h4>{answers.length}个回答</h4>
           {answers.map((answer, i) => <Article key={i}
             col={<VoteWidget
+              voteUri={`/api/questions/${question._id}/answers/${answer._id}/votes`}
               voteNum={answer.voteNum}
               accept={this.isOwner(answer.author) && {
                 accepted: answer.accepted,
@@ -132,7 +133,7 @@ export default class extends Component {
               <button className='btn btn-primary' type='submit'>提交</button>
             </form> :
             <div className='add-answer'>
-              <h4>此问题您已回答</h4>
+              <p>此问题您已回答</p>
             </div>}
         </article>
       </div>

@@ -4,6 +4,7 @@ var Types = Schema.Types;
 var Vote = require('./vote');
 
 var schema = new Schema({
+  _id: String,
   voteNum: Number,
   votes: [Vote]
 });

@@ -2,26 +2,27 @@ import mongoose from 'mongoose';
 import moment from 'moment';
 import { assign } from 'lodash'
 
-import { api, route, paging } from '../utils';
+import { api, route } from '../utils';
 import { Question, Tag, User, VoteStat } from '../models';
 
-const voteEntity = async (entity, vote) => {
+export const vote4Entity = async (entity, vote) => {
+  let {_id} = entity;
   // load votestat
-  let voteStat = await VoteStat.findById(entity._id);
-  console.log(voteStat);
+  let voteStat = await VoteStat.findById(_id);
   if (!voteStat)
-    voteStat = new VoteStat(Object.assign({}, entity));
+    voteStat = new VoteStat({ _id });
 
   // modify votestat
-  let oldVote = voteStat.votes.find(v => v.author._id == vote.author._id);
+  let oldVote = voteStat.votes.find(v => v.author == vote.author._id);
   if (oldVote)
     Object.assign(oldVote, vote);
   else
     voteStat.votes.push(vote);
-  voteStat.voteNum = voteStat.votes.reduce((acc, cur) => acc + cur.voteNum, 0);
+  let voteNum = voteStat.voteNum = voteStat.votes.reduce((acc, cur) => acc + cur.voteNum, 0);
 
   await voteStat.save();
-  entity.voteNum = voteStat.voteNum;
+  entity.voteNum = voteNum;
+  return { voteNum };
 }
 
 module.exports = function (router) {
@@ -97,8 +98,8 @@ module.exports = function (router) {
       await Question.update({ _id: id }, { $inc: { visitNum: 1 } });
     }))
     .put(route.wrap(async (req, res, next) => {
-      var user = req.user;
-      var question = new Question(req.body);
+      let user = req.user;
+      let question = new Question(req.body);
 
       question.author = user;
 
@@ -107,19 +108,21 @@ module.exports = function (router) {
       res.sendStatus(204);
     }))
     .post(route.wrap(async (req, res, next) => {
-      var question = req.body;
+      let question = req.body;
       await Question.update({ _id: question._id }, question);
 
       res.sendStatus(204);
     }));
 
-  router.route('/questions/:id/:field')
+  router.route('/questions/:id/:field/:cid?/:cfield?')
     .put(route.wrap(async (req, res, next) => {
-      var user = req.user;
-      let {id, field} = req.params;
-      var question = await Question.findById(id);
+      let user = req.user;
+      let {id, field, cid, cfield} = req.params;
+      let result;
+
+      let question = await Question.findById(id);
       if (!question)
-        throw new Error('question does not exist');
+        throw new Error('question not found');
 
       let value = req.body;
       Object.assign(value, {
@@ -127,42 +130,35 @@ module.exports = function (router) {
       });
 
       let children = question[field];
-      if (children instanceof Array)
-        children.push(value);
-      if (field == 'answers') {
-        question.answerNum = children.length;
-        question.answeredOn = new Date();
-        question.answeredBy = user;
+      // 操作孙节点
+      if (cfield) {
+        let child = children.id(cid);
+        if (!child)
+          throw new Error(`${field} for ${cid} not found`);
+        if (cfield == 'votes') {
+          result = await vote4Entity(child, value);
+        }
       }
-      else if (field == 'votes') {
-        await voteEntity(question, value);
-      }
-
-      await question.save();
-
-      res.sendStatus(204);
-    }))
-    .post(route.wrap(async (req, res, next) => {
-      var user = req.user;
-      let {id, field} = req.params;
-      var question = await Question.findById(id);
-      if (!question)
-        throw new Error('question does not exist');
-
-      let value = req.body;
-
-      let children = question[field];
-      let child = children.find(answer => answer._id == value._id);
-      Object.assign(child, value);
-      if (field == 'answers') {
-        question.resolved = children.some(answer => answer.accepted);
-      }
-      else if (field == 'votes') {
-        sumVote(question);
+      else {
+        if (children instanceof Array)
+          children.push(value);
+        if (field == 'answers') {
+          question.answerNum = children.length;
+          question.answeredOn = new Date();
+          question.answeredBy = user;
+        }
+        // virtual property
+        else if (field == 'votes') {
+          result = await vote4Entity(question, value);
+        }
       }
 
       await question.save();
 
+      if (result != undefined) {
+        res.send(result);
+        return;
+      }
       res.sendStatus(204);
-    }))
+    }));
 }

@@ -95,7 +95,7 @@ export default class extends Component {
           </ul>}
         </div>
         <Article
-          col={<VoteWidget voteNum={voteNum} />}
+          col={<VoteWidget voteNum={voteNum} voteUri={`/api/blogs/${blog._id}/votes`} />}
           content={this.md.render(content || '无内容')}
           options={[
             `${moment(blog.createdOn).fromNow()}提问`
@@ -104,7 +104,7 @@ export default class extends Component {
         <div className='replies'>
           <h4>{comments.length}个评论</h4>
           {comments.map((comment, i) => <Article key={i}
-            col={<VoteWidget voteNum={voteNum} />}
+            col={<VoteWidget voteNum={voteNum} voteUri={`/api/blogs/${blog._id}/comments/${comment._id}/votes`} />}
             content={this.md.render(comment.content || '无内容')}
             options={[
               <AuthorLink author={comment.author} />,
