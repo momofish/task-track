@@ -1,4 +1,4 @@
-import React, { Component } from 'React';
+import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import moment from 'moment';
 import classnames from 'classnames';
