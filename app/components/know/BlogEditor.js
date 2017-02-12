@@ -72,7 +72,7 @@ export default class extends Component {
     let {blog} = this.state;
     blog.content = this.$content.value;
     if (!blog.content) {
-      toastr.danger(`请输入内容`);
+      toastr.error(`请输入内容`);
       return;
     }
     await blogService.saveBlog(blog);

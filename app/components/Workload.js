@@ -145,16 +145,16 @@ export default class Workload extends Component {
     let {workloads, needWorkloads, totalWorkloads} = worksheet;
 
     if (_.chain(totalWorkloads).toPairs().some(pair => pair[1] > needWorkloads[pair[0]]).value()) {
-      toastr.danger('超过工作量填报限制');
+      toastr.error('超过工作量填报限制');
       return;
     }
     if (_.chain(totalWorkloads).toPairs().some(pair => isNaN(pair[1])).value()) {
-      toastr.danger('无效工作量');
+      toastr.error('无效工作量');
       return;
     }
 
     if (!filled) {
-      toastr.danger('请填报工作量后提交');
+      toastr.error('请填报工作量后提交');
       return;
     }
 
@@ -343,7 +343,7 @@ class WorkloadApprove extends Component {
     let {approves, opinion} = this.state;
     approves = approves.filter(approve => approve.checked).map(approve => approve._id);
     if (!approves.length) {
-      toastr.danger('请选择待审批项');
+      toastr.error('请选择待审批项');
       return;
     }
     this.setState({ processing: true });
