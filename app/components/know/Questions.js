@@ -36,7 +36,7 @@ export default class extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     let {params} = this.props;
     this.getData(params);
   }
