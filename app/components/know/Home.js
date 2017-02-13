@@ -46,7 +46,7 @@ export default class extends Component {
           </div>
         </main>
         <div className='row'>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className="panel panel-default">
               <div className="panel-heading"><h3 className='panel-title'>最新问答</h3></div>
               <div className="panel-body">
@@ -54,7 +54,7 @@ export default class extends Component {
               </div>
             </div>
           </div>
-          <div className='col-sm-6'>
+          <div className='col-md-6'>
             <div className="panel panel-default">
               <div className="panel-heading"><h3 className='panel-title'>最新头条</h3></div>
               <div className="panel-body">

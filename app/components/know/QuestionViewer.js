@@ -65,7 +65,6 @@ export default class extends Component {
   }
 
   render() {
-
     let {question} = this.state;
     if (!question)
       return <div />;
@@ -107,7 +106,7 @@ export default class extends Component {
             col={<VoteWidget
               voteUri={`/api/questions/${question._id}/answers/${answer._id}/votes`}
               voteNum={answer.voteNum}
-              accept={this.isOwner(answer.author) && {
+              accept={this.isOwner(question.author) && {
                 accepted: answer.accepted,
                 onAccept: () => {
                   questionService.saveAnswer(question._id, assign(answer, { accepted: !answer.accepted }));

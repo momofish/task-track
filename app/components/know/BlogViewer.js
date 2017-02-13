@@ -65,7 +65,6 @@ export default class extends Component {
   }
 
   render() {
-
     let {blog} = this.state;
     if (!blog)
       return <div />;
@@ -104,7 +103,7 @@ export default class extends Component {
         <div className='replies'>
           <h4>{comments.length}个评论</h4>
           {comments.map((comment, i) => <Article key={i}
-            col={<VoteWidget voteNum={voteNum} voteUri={`/api/blogs/${blog._id}/comments/${comment._id}/votes`} />}
+            col={<VoteWidget voteNum={comment.voteNum} voteUri={`/api/blogs/${blog._id}/comments/${comment._id}/votes`} />}
             content={this.md.render(comment.content || '无内容')}
             options={[
               <AuthorLink author={comment.author} />,
