@@ -32,7 +32,7 @@ export default {
       tags: blog.tags.map(tag => ({ label: tag.name, style: 'primary', to: `/know/b/t/${encodeURIComponent(tag.name)}` })),
       sub:
       <h3 className='item-sub'>
-        <AuthorLink author={blog.author} /> - {`${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '回答' : '提问'}`}
+        <AuthorLink author={blog.author} /> - {`${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '评论' : '发布'}`}
       </h3>,
       indicators: [
         { value: blog.visitNum || 0, label: '浏览' },

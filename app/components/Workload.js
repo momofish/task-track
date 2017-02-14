@@ -7,7 +7,6 @@ import { Icon, IconText, Button, GroupButton, PopBox, GroupList } from './common
 import TaskDetail from './TaskDetail';
 import workloadService from '../services/workloadService';
 
-const WEEKDAYS = '日一二三四五六';
 const APPROVE_STATUS_CLASS = { 0: 'text-info', 1: 'text-warning', 2: 'text-success', 3: 'text-danger' };
 const APPROVE_STATUS_NAME = { 0: '填报中', 1: '审核中', 2: '已通过', 3: '已拒绝' };
 
@@ -229,7 +228,7 @@ export default class Workload extends Component {
                   <th style={{ width: 60 }}>开始</th>
                   <th style={{ width: 60 }}>结束</th>
                   {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 30 }}>
-                    {`${WEEKDAYS[moment(need[0]).weekday()]} ${moment(need[0]).format('MM/DD')}`}
+                    {`${moment(need[0]).format('dd MM/DD')}`}
                   </th>)}
                 </tr>
               </thead>

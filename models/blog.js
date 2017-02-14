@@ -14,7 +14,8 @@ var schema = new Schema({
   comments: [Comment],
   commentNum: { type: Number, default: 0 },
   commentedOn: Date,
-  commentedBy: { type: Types.ObjectId, index: true, ref: 'User' }
+  commentedBy: { type: Types.ObjectId, index: true, ref: 'User' },
+  voteNum: Number,
 });
 
 module.exports = mongoose.model('Blog', schema);

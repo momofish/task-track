@@ -12,6 +12,7 @@ module.exports = function (app) {
   require('./workloadController')(router);
   require('./articleController')(router);
 
+  require('./knowController')(router);
   require('./questionController')(router);
   require('./tagController')(router);
   require('./blogController')(router);

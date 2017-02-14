@@ -110,7 +110,10 @@ module.exports = function (router) {
     }));
 
   router.route('/blogs/:id/:field/:cid?/:cfield?')
-    .put(route.wrap(async (req, res, next) => {
+    .all(route.wrap(async (req, res, next) => {
+      let {method} = req;
+      if (method == 'GET')
+        throw new Error('invalid verb');
       let user = req.user;
       let {id, field, cid, cfield} = req.params;
       let result;
@@ -135,16 +138,25 @@ module.exports = function (router) {
         }
       }
       else {
-        if (children instanceof Array)
-          children.push(value);
-        if (field == 'comments') {
-          blog.answerNum = children.length;
-          blog.answeredOn = new Date();
-          blog.answeredBy = user;
+        if (method == 'PUT') {
+          if (children instanceof Array)
+            children.push(value);
+          if (field == 'comments') {
+            blog.answerNum = children.length;
+            blog.answeredOn = new Date();
+            blog.answeredBy = user;
+          }
+          // virtual property
+          else if (field == 'votes') {
+            result = await vote4Entity(blog, value);
+          }
         }
-        // virtual property
-        else if (field == 'votes') {
-          result = await vote4Entity(blog, value);
+        else {
+          let child = children.id(value._id);
+          Object.assign(child, value);
+          if (field == 'votes') {
+            result = await vote4Entity(blog, value);
+          }
         }
       }
 
