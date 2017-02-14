@@ -88,7 +88,8 @@ export default class extends Component {
               <span>
                 {blog.author && <AuthorLink author={blog.author} />}
                 {` - ${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '回答' : '提问'}`}
-                {` 浏览${blog.visitNum || 0}`}
+                {` 浏览 ${blog.visitNum || 0} `}
+                {this.isOwner(blog.author) && <Link to={`/know/b/e/${blog._id}`}>编辑</Link>}
               </span>
             </li>
           </ul>}
@@ -97,7 +98,7 @@ export default class extends Component {
           col={<VoteWidget voteNum={voteNum} voteUri={`/api/blogs/${blog._id}/votes`} />}
           content={this.md.render(content || '无内容')}
           options={[
-            `${moment(blog.createdOn).fromNow()}提问`
+            `${moment(blog.createdOn).fromNow()}发布`
           ]}
         />
         <div className='replies'>

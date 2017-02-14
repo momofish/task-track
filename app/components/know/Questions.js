@@ -72,7 +72,7 @@ export default class extends Component {
           <h2>
             <i className='glyphicon glyphicon-list' /> {title || '问答'}
           </h2>
-          <Link type="button" className="btn btn-primary pull-right" to='/know/q/add'>提问</Link>
+          <Link type="button" className="btn btn-primary pull-right" to='/know/q/e'>提问</Link>
         </div>
         {lead && lead(head)}
         <PagedList className='flex-scroll' data={pagedList}

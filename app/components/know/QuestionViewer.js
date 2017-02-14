@@ -88,7 +88,8 @@ export default class extends Component {
               <span>
                 {question.author && <AuthorLink author={question.author} />}
                 {` - ${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
-                {` 浏览${question.visitNum || 0}`}
+                {` 浏览 ${question.visitNum || 0} `}
+                {this.isOwner(question.author) && <Link to={`/know/q/e/${question._id}`}>编辑</Link>}
               </span>
             </li>
           </ul>}

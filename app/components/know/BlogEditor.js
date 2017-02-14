@@ -10,13 +10,13 @@ export default class extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = { blog: { tags: [] }, tags: null };
+    this.state = { blog: { title: '', tags: [] }, tags: null };
   }
 
-  componentDidMount() {
-    let {blog, tags} = this.state;
-
+  async componentDidMount() {
     $('#tags').find('.form-control').focus(async input => {
+      let {blog, tags} = this.state;
+
       if (!tags) {
         tags = await tagService.getTags();
       }
@@ -32,10 +32,21 @@ export default class extends Component {
         }, { dataSources })
     });
 
-    editormd('editormd', {
+    await this.getData(this.props.params);
+
+    this.editormd = editormd('editormd', {
       height: 640,
       path: '/editor.md/lib/'
     });
+  }
+
+  async getData(params) {
+    let {id} = params;
+    if (!id)
+      return;
+
+    let blog = await blogService.getBlog(id);
+    this.setState({ blog });
   }
 
   selectTags(tags) {
@@ -92,7 +103,7 @@ export default class extends Component {
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className='form-control' placeholder='标题，言简意赅' defaultValue={title}
+            <input className='form-control' placeholder='标题，言简意赅' value={title}
               onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
           <FormItem noLabel id='tags'>
@@ -111,7 +122,7 @@ export default class extends Component {
             />
           </FormItem>
           <div id='editormd'>
-            <textarea ref={text => this.$content = text} style={{ display: 'none' }} />
+            <textarea value={blog.content} ref={text => this.$content = text} style={{ display: 'none' }} />
           </div>
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>

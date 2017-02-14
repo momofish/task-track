@@ -10,13 +10,13 @@ export default class extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = { question: { tags: [] }, tags: null };
+    this.state = { question: { title: '', tags: [] }, tags: null };
   }
 
-  componentDidMount() {
-    let {question, tags} = this.state;
-
+  async componentDidMount() {
     $('#tags').find('.form-control').focus(async input => {
+      let {question, tags} = this.state;
+
       if (!tags) {
         tags = await tagService.getTags();
       }
@@ -32,10 +32,21 @@ export default class extends Component {
         }, { dataSources })
     });
 
-    editormd('editormd', {
+    await this.getData(this.props.params);
+
+    this.editormd = editormd('editormd', {
       height: 640,
       path: '/editor.md/lib/'
     });
+  }
+
+  async getData(params) {
+    let {id} = params;
+    if (!id)
+      return;
+
+    let question = await questionService.getQuestion(id);
+    this.setState({ question });
   }
 
   selectTags(tags) {
@@ -92,7 +103,7 @@ export default class extends Component {
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className='form-control' placeholder='标题，一句话说清问题' defaultValue={title}
+            <input type='text' className='form-control' placeholder='标题，一句话说清问题' value={title}
               onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
           <FormItem noLabel id='tags'>
@@ -111,10 +122,10 @@ export default class extends Component {
             />
           </FormItem>
           <div id='editormd'>
-            <textarea ref={text => this.$content = text} style={{ display: 'none' }} />
+            <textarea value={question.content} ref={text => this.$content = text} style={{ display: 'none' }} />
           </div>
           <FormItem noLabel>
-            <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布问题</button>
+            <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'
               onClick={this.goto.bind(this, null)}>舍弃</button>
           </FormItem>
