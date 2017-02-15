@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { assign } from 'lodash';
 import moment from 'moment';
-import Markdown from 'markdown-it'
-import highlight from 'highlight.js'
 
 import AuthorLink from './AuthorLink';
-import { IconText, Article, VoteWidget } from '../common';
+import { IconText, Article, VoteWidget, EditorMd } from '../common';
 import { questionService, userService } from '../../services'
 
 export default class extends Component {
@@ -14,18 +12,6 @@ export default class extends Component {
     super(props);
 
     this.state = {};
-
-    this.md = new Markdown({
-      highlight: (str, lang) => {
-        if (lang && highlight.getLanguage(lang)) {
-          try {
-            return highlight.highlight(lang, str).value;
-          } catch (__) { }
-        }
-
-        return '';
-      }
-    });
   }
 
   isOwner(author) {
@@ -33,9 +19,9 @@ export default class extends Component {
     return author && currentUser && author._id == currentUser._id;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     let {params} = this.props;
-    this.loadData(params.id)
+    await this.loadData(params.id);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,7 +38,8 @@ export default class extends Component {
     event.preventDefault();
 
     let {params} = this.props;
-    let answerContent = this._answerText.value;
+    let answerText = this.editor.text;
+    let answerContent = answerText.value;
 
     if (!answerContent) {
       toastr.error(`请输入内容`);
@@ -60,7 +47,7 @@ export default class extends Component {
     }
 
     await questionService.saveAnswer(params.id, { content: answerContent });
-    this._answerText.value = '';
+    answerText.value = '';
     this.loadData(params.id);
   }
 
@@ -96,7 +83,7 @@ export default class extends Component {
         </div>
         <Article
           col={<VoteWidget voteNum={voteNum} voteUri={`/api/questions/${question._id}/votes`} />}
-          content={this.md.render(content || '无内容')}
+          content={content}
           options={[
             `${moment(question.createdOn).fromNow()}提问`
           ]}
@@ -109,13 +96,18 @@ export default class extends Component {
               voteNum={answer.voteNum}
               accept={this.isOwner(question.author) && {
                 accepted: answer.accepted,
-                onAccept: () => {
-                  questionService.saveAnswer(question._id, assign(answer, { accepted: !answer.accepted }));
+                onAccept: async () => {
+                  await questionService.saveAnswer(question._id, assign(answer, { accepted: !answer.accepted }));
                   this.forceUpdate();
                 }
               }}
             />}
-            content={this.md.render(answer.content || '无内容')}
+            content={answer.content}
+            editable={this.isOwner(answer.author)}
+            onSubmit={async (content) => {
+              await questionService.saveAnswer(question._id, assign(answer, { content }));
+              this.forceUpdate();
+            }}
             options={[
               <AuthorLink author={answer.author} />,
               ` - ${moment(answer.createdOn).fromNow()}回答`
@@ -127,9 +119,7 @@ export default class extends Component {
           {!answers.some(answer => answer.author._id == currentUser._id) ?
             <form className='add-reply' onSubmit={this.saveAnswer.bind(this)}>
               <h4>我要回答</h4>
-              <div className='form-group'>
-                <textarea ref={text => this._answerText = text} rows='10' className='form-control' />
-              </div>
+              <EditorMd ref={editor => this.editor = editor} lazy />
               <button className='btn btn-primary' type='submit'>提交</button>
             </form> :
             <div className='add-answer'>

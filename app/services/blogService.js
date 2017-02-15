@@ -35,6 +35,7 @@ export default {
         <AuthorLink author={blog.author} /> - {`${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '评论' : '发布'}`}
       </h3>,
       indicators: [
+        { value: blog.voteNum || 0, label: '投票' },
         { value: blog.visitNum || 0, label: '浏览' },
       ]
     };

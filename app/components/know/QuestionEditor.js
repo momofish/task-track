@@ -40,6 +40,10 @@ export default class extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.editormd.editor.remove();
+  }
+
   async getData(params) {
     let {id} = params;
     if (!id)
