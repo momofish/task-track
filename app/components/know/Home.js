@@ -48,7 +48,10 @@ export default class extends Component {
         <div className='row'>
           <div className='col-md-6'>
             <div className="panel panel-default">
-              <div className="panel-heading"><h3 className='panel-title'>最新问答</h3></div>
+              <div className="panel-heading">
+                最新问答
+                <Link className="btn btn-primary btn-xs pull-right" to='/know/q/latest'>更多</Link>
+              </div>
               <div className="panel-body">
                 <PagedList data={{ list: questions }} />
               </div>
@@ -56,7 +59,10 @@ export default class extends Component {
           </div>
           <div className='col-md-6'>
             <div className="panel panel-default">
-              <div className="panel-heading"><h3 className='panel-title'>最新头条</h3></div>
+              <div className="panel-heading">
+                最新头条
+                <Link className="btn btn-info btn-xs pull-right" to='/know/b/latest'>更多</Link>
+              </div>
               <div className="panel-body">
                 <PagedList data={{ list: blogs }} />
               </div>

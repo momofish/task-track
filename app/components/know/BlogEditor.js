@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
 import _ from 'lodash';
 
-import { FormItem } from '../common';
+import { FormItem, EditorMd } from '../common';
 import { blogService, tagService } from '../../services';
 import { select } from '../../utils';
 
@@ -85,7 +85,7 @@ export default class extends Component {
     event.preventDefault();
 
     let {blog} = this.state;
-    blog.content = this.$content.value;
+    blog.content = this.editor.text.value;
     if (!blog.content) {
       toastr.error(`请输入内容`);
       return;
@@ -125,9 +125,7 @@ export default class extends Component {
               handleDelete={this.deleteTag.bind(this)}
             />
           </FormItem>
-          <div id='editormd'>
-            <textarea value={blog.content} ref={text => this.$content = text} style={{ display: 'none' }} />
-          </div>
+          <EditorMd value={content} ref={editor => this.editor = editor} />
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'
