@@ -33,15 +33,6 @@ export default class extends Component {
     });
 
     await this.getData(this.props.params);
-
-    this.editormd = editormd('editormd', {
-      height: 640,
-      path: '/editor.md/lib/'
-    });
-  }
-
-  componentWillUnmount() {
-    this.editormd.editor.remove();
   }
 
   async getData(params) {

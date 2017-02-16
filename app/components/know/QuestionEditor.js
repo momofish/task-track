@@ -6,6 +6,16 @@ import { FormItem, EditorMd } from '../common';
 import { questionService, tagService } from '../../services';
 import { select } from '../../utils';
 
+const placeholder = `1. 描述你的问题
+
+2. 贴上相关代码
+
+3. 贴上报错信息
+
+4. 贴上相关截图
+
+5. 已经尝试过哪些方法仍然没解决（附上相关链接）`;
+
 export default class extends Component {
   constructor(props, context) {
     super(props, context);
@@ -33,15 +43,6 @@ export default class extends Component {
     });
 
     await this.getData(this.props.params);
-
-    this.editormd = editormd('editormd', {
-      height: 640,
-      path: '/editor.md/lib/'
-    });
-  }
-
-  componentWillUnmount() {
-    this.editormd.editor.remove();
   }
 
   async getData(params) {
@@ -125,7 +126,7 @@ export default class extends Component {
               handleDelete={this.deleteTag.bind(this)}
             />
           </FormItem>
-          <EditorMd value={content} ref={editor => this.editor = editor} />
+          <EditorMd value={content} ref={editor => this.editor = editor} placeholder={placeholder} />
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'
