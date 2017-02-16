@@ -60,7 +60,7 @@ export default class extends Component {
     let {currentUser} = userService;
 
     return (
-      <div className='container-fluid flex flex-verticle article-viewer flex-scroll'>
+      <div className='container-fluid article-viewer flex-scroll'>
         <div className='page-header'>
           <h2>
             <i className='glyphicon glyphicon-align-justify' /> {title}

@@ -90,7 +90,7 @@ export default class extends Component {
     let {title, content} = blog;
 
     return (
-      <form className='container-fluid flex flex-verticle' onSubmit={this.handleSubmit.bind(this)}>
+      <form className='container-fluid flex flex-verticle flex-scroll' onSubmit={this.handleSubmit.bind(this)}>
         <div className='page-header'>
           <h2>
             <i className='glyphicon glyphicon-tasks' /> 发表文章
@@ -111,6 +111,7 @@ export default class extends Component {
                 tagInput: '',
                 tagInputField: 'form-control'
               }}
+              autofocus={false}
               tags={blog.tags}
               handleAddition={() => { }}
               handleDelete={this.deleteTag.bind(this)}

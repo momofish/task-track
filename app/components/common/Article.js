@@ -28,7 +28,7 @@ export default class Article extends Component {
         <div className='flex flex-verticle'>
           {mode == 'edit' ?
             <EditorMd value={content} ref={editor => this.editor = editor} /> :
-            <div className='content markdown-body' dangerouslySetInnerHTML={{ __html: shared.md.render(content || '') }} ></div>}
+            <div className='markdown-body content' dangerouslySetInnerHTML={{ __html: shared.md.render(content || '') }} ></div>}
           {options && <ul className='options'>
             {options.map((option, i) => <li key={i}>{option}</li>)}
             {editable && (mode != 'edit' ?
