@@ -14,7 +14,7 @@ class ListItem extends Component {
   }
 
   render() {
-    let {className, item, onCheck, onClick, onClickTag} = this.props;
+    let {className, item, onCheck, onClick, onClickTag, children} = this.props;
 
     return (
       <li className={classnames('list-item', className)} onClick={onClick} title={item.description}>
@@ -26,7 +26,8 @@ class ListItem extends Component {
           {item.sub}
           <h3 className={classnames('item-title', { completed: item.completed })}>
             {onCheck && <input type='checkbox' checked={item.checked} onChange={this.check.bind(this, item)} onClick={this.checkClick} />}
-            <IconText className='flex' text={item.label} to={item.to} />
+            {item.label && <IconText className='flex' text={item.label} to={item.to} />}
+            {children}
           </h3>
           {item.tags && <ul className='item-tags'>
             {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (

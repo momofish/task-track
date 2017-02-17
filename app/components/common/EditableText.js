@@ -7,7 +7,7 @@ import { Icon } from '.';
 class EditableText extends Component {
   constructor(props) {
     super(props);
-    this.state = { isEdit: false, value: props.value };
+    this.state = { isEdit: props.isEdit, value: props.value };
 
     this.md = new Markdown();
   }
@@ -21,8 +21,14 @@ class EditableText extends Component {
   }
 
   save() {
+    let {value} = this.state;
+    if (!value) {
+      alert('请输入内容');
+      return;
+    }
+
     let onChange = this.props.onChange;
-    onChange && onChange({ value: this.state.value });
+    onChange && onChange({ value });
     this.setState({ isEdit: false });
   }
 
@@ -72,7 +78,7 @@ class EditableText extends Component {
         {actionIcon && <Icon icon={actionIcon} onClick={event => {
           onAction && onAction(event);
           event.stopPropagation();
-        } } className='action-icon' />}
+        }} className='action-icon' />}
       </a>
   }
 }

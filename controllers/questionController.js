@@ -79,7 +79,7 @@ module.exports = function (router) {
         .sort('-createdOn')
         .skip((pageNo - 1) * pageSize)
         .limit(pageSize)
-        .select('-answers -votes -content')
+        .select('-answers -votes -content -replies')
         .populate('author tags', 'name title loginId');
 
       res.send({ pagination: { pageNo, pageSize, totalCount }, list, head });
@@ -91,7 +91,7 @@ module.exports = function (router) {
       let {id} = req.params;
 
       let question = await Question.findById(id)
-        .populate('author tags answers.author', 'id name title loginId');
+        .populate('author tags answers.author replies.author answers.replies.author', 'id name title loginId');
 
       res.send(question);
 

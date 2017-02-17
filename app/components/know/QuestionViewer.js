@@ -75,7 +75,7 @@ export default class extends Component {
               <span>
                 {question.author && <AuthorLink author={question.author} />}
                 {` - ${moment(question.answeredOn || question.createdOn).fromNow()}${question.answeredOn ? '回答' : '提问'}`}
-                {` 浏览 ${question.visitNum || 0} `}
+                {` ${question.visitNum || 0} 浏览 `}
                 {this.isOwner(question.author) && <Link to={`/know/q/e/${question._id}`}>编辑</Link>}
               </span>
             </li>
@@ -87,6 +87,10 @@ export default class extends Component {
           options={[
             `${moment(question.createdOn).fromNow()}提问`
           ]}
+          enableReply={true} replies={question.replies} onReply={async (value) => {
+            let reply = await questionService.saveChild(question._id, 'replies', { content: value });
+            question.replies.push(reply);
+          }}
         />
         <div className='replies'>
           <h4>{answers.length}个回答</h4>

@@ -46,7 +46,7 @@ class PadList extends Component {
   }
 
   componentDidUpdate() {
-    this.setSortable();
+    //this.setSortable();
   }
 
   render() {

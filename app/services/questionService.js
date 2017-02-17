@@ -24,6 +24,10 @@ export default {
     return save(`${resourceUrl}/${id}/answers`, answer);
   },
 
+  saveChild(id, field, child) {
+    return save(`${resourceUrl}/${id}/${field}`, child);
+  },
+
   mapItem(question) {
     return {
       data: question,

@@ -75,7 +75,7 @@ export default class extends Component {
               <span>
                 {blog.author && <AuthorLink author={blog.author} />}
                 {` - ${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '回复' : '发布'}`}
-                {` 浏览 ${blog.visitNum || 0} `}
+                {` ${blog.visitNum || 0} 浏览 `}
                 {this.isOwner(blog.author) && <Link to={`/know/b/e/${blog._id}`}>编辑</Link>}
               </span>
             </li>

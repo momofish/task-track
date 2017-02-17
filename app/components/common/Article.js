@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 
-import { IconText, Button, EditorMd } from '.';
+import { IconText, Button, EditorMd, PagedList, EditableText } from '.';
+import { AuthorLink } from '../know';
 import { shared } from '../../utils'
 
 export default class Article extends Component {
@@ -18,9 +20,18 @@ export default class Article extends Component {
     this.setState({ mode: undefined });
   }
 
+  mapReply(reply) {
+    return {
+      content: <span>
+        {reply.content} {reply.author && <AuthorLink author={reply.author} />}
+        {` - ${moment(reply.createdOn).fromNow()}回复`}
+      </span>,
+    }
+  }
+
   render() {
-    let {editable, content, col, options} = this.props;
-    let {mode = this.props.mode} = this.state;
+    let {editable, content, col, options, enableReply, replies = [], onReply} = this.props;
+    let {mode = this.props.mode, repling} = this.state;
 
     return (
       <article>
@@ -31,6 +42,7 @@ export default class Article extends Component {
             <div className='markdown-body content' dangerouslySetInnerHTML={{ __html: shared.md.render(content || '') }} ></div>}
           {options && <ul className='options'>
             {options.map((option, i) => <li key={i}>{option}</li>)}
+            {enableReply && <IconText>{`${replies.length} 回复`}</IconText>}
             {editable && (mode != 'edit' ?
               <IconText onClick={() => { this.setState({ mode: 'edit' }) }}>编辑</IconText> :
               <span>
@@ -38,6 +50,16 @@ export default class Article extends Component {
                 <Button className='btn-link btn-xs' onClick={() => { this.setState({ mode: undefined }) }}>取消</Button>
               </span>)}
           </ul>}
+          {enableReply && <PagedList data={{ list: replies.map(this.mapReply) }}>
+            {repling ?
+              <EditableText isEdit={true} value='' placeholder='这里输入回复内容'
+                onChange={async (value) => {
+                  await onReply && onReply(value);
+                  this.setState({ repling: false });
+                }}
+              /> :
+              <Button className='btn-link' onClick={() => this.setState({ repling: true })}>我要回复</Button>}
+          </PagedList>}
         </div>
       </article>
     );
