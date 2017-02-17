@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
 import _ from 'lodash';
 
-import { FormItem } from '../common';
+import { FormItem, EditorMd } from '../common';
 import { blogService, tagService } from '../../services';
 import { select } from '../../utils';
 
@@ -33,11 +33,6 @@ export default class extends Component {
     });
 
     await this.getData(this.props.params);
-
-    this.editormd = editormd('editormd', {
-      height: 640,
-      path: '/editor.md/lib/'
-    });
   }
 
   async getData(params) {
@@ -81,7 +76,7 @@ export default class extends Component {
     event.preventDefault();
 
     let {blog} = this.state;
-    blog.content = this.$content.value;
+    blog.content = this.editor.text.value;
     if (!blog.content) {
       toastr.error(`请输入内容`);
       return;
@@ -95,7 +90,7 @@ export default class extends Component {
     let {title, content} = blog;
 
     return (
-      <form className='container-fluid flex flex-verticle' onSubmit={this.handleSubmit.bind(this)}>
+      <form className='container-fluid flex flex-verticle flex-scroll' onSubmit={this.handleSubmit.bind(this)}>
         <div className='page-header'>
           <h2>
             <i className='glyphicon glyphicon-tasks' /> 发表文章
@@ -116,14 +111,13 @@ export default class extends Component {
                 tagInput: '',
                 tagInputField: 'form-control'
               }}
+              autofocus={false}
               tags={blog.tags}
               handleAddition={() => { }}
               handleDelete={this.deleteTag.bind(this)}
             />
           </FormItem>
-          <div id='editormd'>
-            <textarea value={blog.content} ref={text => this.$content = text} style={{ display: 'none' }} />
-          </div>
+          <EditorMd lazy value={content} ref={editor => this.editor = editor} />
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'

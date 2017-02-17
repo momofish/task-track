@@ -1,5 +1,9 @@
 module.exports = function (app) {
   var router = require("express").Router();
+  router.use(function controllCache(req, res, next) {
+    res.setHeader('Cache-Control', 'no-cache');
+    next();
+  });
   app.use('/api', router);
 
   require('./systemController')(router);

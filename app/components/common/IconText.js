@@ -21,7 +21,7 @@ class IconText extends Component {
 
     return (
       <span
-        className={classnames('icon-text', className, { pointer: onClick })}
+        className={classnames('icon-text', className, { pointer: onClick || to })}
         onClick={this.click.bind(this)}>
         {icon && <Icon icon={icon} tooltip={tooltip} className={iconClassName} />}
         {text}

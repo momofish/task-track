@@ -155,8 +155,16 @@ article img {
   max-width: 100%;
 }
 .article-viewer article {
-    display: -webkit-box;
+    display: block;
     margin-bottom: 20px;
+}
+.article-viewer article > .article-viewer-column {
+  float: left;
+}
+.article-viewer article:after {
+  display: block;
+  content: '';
+  clear: both;
 }
 .article-viewer article .content {
   margin-bottom: 15px;

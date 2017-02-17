@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { assign } from 'lodash';
 import moment from 'moment';
-import Markdown from 'markdown-it'
-import highlight from 'highlight.js'
 
 import AuthorLink from './AuthorLink';
-import { IconText, Article, VoteWidget } from '../common';
+import { IconText, Article, VoteWidget, EditorMd } from '../common';
 import { blogService, userService } from '../../services'
 
 export default class extends Component {
@@ -14,28 +12,16 @@ export default class extends Component {
     super(props);
 
     this.state = {};
-
-    this.md = new Markdown({
-      highlight: (str, lang) => {
-        if (lang && highlight.getLanguage(lang)) {
-          try {
-            return highlight.highlight(lang, str).value;
-          } catch (__) { }
-        }
-
-        return '';
-      }
-    });
-  }
+  } 
 
   isOwner(author) {
     let {currentUser} = userService;
     return author && currentUser && author._id == currentUser._id;
   }
 
-  componentDidMount() {
+  async componentDidMount() { 
     let {params} = this.props;
-    this.loadData(params.id)
+    await this.loadData(params.id)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,7 +38,8 @@ export default class extends Component {
     event.preventDefault();
 
     let {params} = this.props;
-    let commentContent = this._commentText.value;
+    let commentText = this.editor.text;
+    let commentContent = commentText.value;
 
     if (!commentContent) {
       toastr.error(`请输入内容`);
@@ -60,7 +47,7 @@ export default class extends Component {
     }
 
     await blogService.saveComment(params.id, { content: commentContent });
-    this._commentText.value = '';
+    commentText.value = '';
     this.loadData(params.id);
   }
 
@@ -73,7 +60,7 @@ export default class extends Component {
     let {currentUser} = userService;
 
     return (
-      <div className='container-fluid flex flex-verticle article-viewer flex-scroll'>
+      <div className='container-fluid article-viewer flex-scroll'>
         <div className='page-header'>
           <h2>
             <i className='glyphicon glyphicon-align-justify' /> {title}
@@ -87,7 +74,7 @@ export default class extends Component {
             <li>
               <span>
                 {blog.author && <AuthorLink author={blog.author} />}
-                {` - ${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '回答' : '提问'}`}
+                {` - ${moment(blog.commentedOn || blog.createdOn).fromNow()}${blog.commentedOn ? '回复' : '发布'}`}
                 {` 浏览 ${blog.visitNum || 0} `}
                 {this.isOwner(blog.author) && <Link to={`/know/b/e/${blog._id}`}>编辑</Link>}
               </span>
@@ -96,7 +83,7 @@ export default class extends Component {
         </div>
         <Article
           col={<VoteWidget voteNum={voteNum} voteUri={`/api/blogs/${blog._id}/votes`} />}
-          content={this.md.render(content || '无内容')}
+          content={content}
           options={[
             `${moment(blog.createdOn).fromNow()}发布`
           ]}
@@ -105,7 +92,12 @@ export default class extends Component {
           <h4>{comments.length}个评论</h4>
           {comments.map((comment, i) => <Article key={i}
             col={<VoteWidget voteNum={comment.voteNum} voteUri={`/api/blogs/${blog._id}/comments/${comment._id}/votes`} />}
-            content={this.md.render(comment.content || '无内容')}
+            content={comment.content}
+            editable={this.isOwner(comment.author)}
+            onSubmit={async (content) => {
+              await blogService.saveComment(blog._id, assign(comment, { content }));
+              this.forceUpdate();
+            }}
             options={[
               <AuthorLink author={comment.author} />,
               ` - ${moment(comment.createdOn).fromNow()}评论`
@@ -116,9 +108,7 @@ export default class extends Component {
           <div className='article-viewer-column'></div>
           <form className='add-reply' onSubmit={this.saveComment.bind(this)}>
             <h4>我要评论</h4>
-            <div className='form-group'>
-              <textarea ref={text => this._commentText = text} rows='10' className='form-control' />
-            </div>
+              <EditorMd ref={editor => this.editor = editor} lazy />
             <button className='btn btn-primary' type='submit'>提交</button>
           </form>
         </article>
