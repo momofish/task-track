@@ -117,7 +117,7 @@ export default class extends Component {
               handleDelete={this.deleteTag.bind(this)}
             />
           </FormItem>
-          <EditorMd value={content} ref={editor => this.editor = editor} />
+          <EditorMd lazy value={content} ref={editor => this.editor = editor} />
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'

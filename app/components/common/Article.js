@@ -33,7 +33,10 @@ export default class Article extends Component {
             {options.map((option, i) => <li key={i}>{option}</li>)}
             {editable && (mode != 'edit' ?
               <IconText onClick={() => { this.setState({ mode: 'edit' }) }}>编辑</IconText> :
-              <Button className='btn-primary btn-xs' onClick={this.submit.bind(this)}>保存</Button>)}
+              <span>
+                <Button className='btn-primary btn-xs' onClick={this.submit.bind(this)}>保存</Button>
+                <Button className='btn-link btn-xs' onClick={() => { this.setState({ mode: undefined }) }}>取消</Button>
+              </span>)}
           </ul>}
         </div>
       </article>

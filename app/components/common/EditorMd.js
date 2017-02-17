@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 const id_default = 'editormd';
+const toolbarIcons = editormd.toolbarModes.full;
+toolbarIcons.pop();
+toolbarIcons.splice(30, 1);
 
 export default class EditorMd extends Component {
   componentDidMount() {
@@ -23,13 +26,8 @@ export default class EditorMd extends Component {
       height,
       path: '/editor.md/lib/',
       placeholder,
-      toolbarIcons: editormd.toolbarModes.full,
+      toolbarIcons,
       autoFocus: autofocus,
-      emoji: true,
-      onload() {
-        $(`#${id} .fa[name=info]`).closest('li').remove();
-        editor.watch();
-      }
     });
   }
 
