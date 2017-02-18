@@ -20,21 +20,17 @@ class EditableText extends Component {
     this.setState({ value: event.target.value });
   }
 
-  save() {
+  submit(event) {
+    event.preventDefault();
     let {value} = this.state;
     if (!value) {
       alert('请输入内容');
       return;
     }
 
-    let onChange = this.props.onChange;
-    onChange && onChange({ value });
+    let {onSubmit} = this.props;
+    onSubmit && onSubmit({ value });
     this.setState({ isEdit: false });
-  }
-
-  submit(event) {
-    event.preventDefault();
-    this.save();
   }
 
   keyDown(event) {
@@ -44,7 +40,7 @@ class EditableText extends Component {
   }
 
   render() {
-    let {multiline, placeholder, className, editClassName, style, actionIcon, onAction} = this.props;
+    let {multiline, placeholder, className, editClassName, style, actionIcon, onAction, onCancel} = this.props;
     let {value, isEdit} = this.state;
 
     return isEdit ?
@@ -62,11 +58,14 @@ class EditableText extends Component {
           }
         </div>
         <button type='button' className='btn btn-info btn-sm'
-          onClick={this.save.bind(this)}>
+          onClick={this.submit.bind(this)}>
           确定
         </button>
         <button type='button' className='btn btn-link btn-sm'
-          onClick={() => this.setState({ isEdit: false })}>
+          onClick={() => {
+            onCancel && onCancel(value);
+            this.setState({ isEdit: false });
+          }}>
           取消
         </button>
       </div> :

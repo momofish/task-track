@@ -121,7 +121,6 @@ module.exports = function (router) {
         throw new Error('invalid verb');
       let user = req.user;
       let {id, field, cid, cfield} = req.params;
-      let result;
 
       let question = await Question.findById(id);
       if (!question)
@@ -131,6 +130,7 @@ module.exports = function (router) {
       Object.assign(value, {
         author: user
       });
+      let result = value;
 
       let children = question[field];
       // 操作孙节点
@@ -138,6 +138,9 @@ module.exports = function (router) {
         let child = children.id(cid);
         if (!child)
           throw new Error(`${field} for ${cid} not found`);
+        let childChildren = child[cfield];
+        if (childChildren instanceof Array)
+          childChildren.push(value);
         if (cfield == 'votes') {
           result = await vote4Entity(child, value);
         }

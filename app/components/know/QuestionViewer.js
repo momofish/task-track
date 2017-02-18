@@ -87,9 +87,10 @@ export default class extends Component {
           options={[
             `${moment(question.createdOn).fromNow()}提问`
           ]}
-          enableReply={true} replies={question.replies} onReply={async (value) => {
-            let reply = await questionService.saveChild(question._id, 'replies', { content: value });
+          enableReply={true} replies={question.replies} onReply={async (content) => {
+            let reply = await questionService.saveChild(question._id, 'replies', { content: content.value });
             question.replies.push(reply);
+            this.forceUpdate();
           }}
         />
         <div className='replies'>
@@ -109,13 +110,18 @@ export default class extends Component {
             content={answer.content}
             editable={this.isOwner(answer.author)}
             onSubmit={async (content) => {
-              await questionService.saveAnswer(question._id, assign(answer, { content }));
+              await questionService.saveAnswer(question._id, assign(answer, { content: content }));
               this.forceUpdate();
             }}
             options={[
               <AuthorLink author={answer.author} />,
               ` - ${moment(answer.createdOn).fromNow()}回答`
             ]}
+            enableReply={true} replies={answer.replies} onReply={async (content) => {
+              let reply = await questionService.saveChild(question._id, `answers/${answer._id}/replies`, { content: content.value });
+              answer.replies.push(reply);
+              this.forceUpdate();
+            }}
           />)}
         </div>
         <article>

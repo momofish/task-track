@@ -32,11 +32,13 @@ export default class EditorMd extends Component {
   }
 
   render() {
-    let {id = id_default, value = ''} = this.props;
+    let {id = id_default, value = '', placeholder} = this.props;
 
     return (
       <div id={id} className='form-group'>
-        <textarea value={value} onChange={() => { }} ref={text => this.text = text} rows='10' className='form-control' />
+        <textarea placeholder={placeholder} value={value}
+          onChange={() => { }} ref={text => this.text = text}
+          rows='10' className='form-control' />
       </div>
     );
   }

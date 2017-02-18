@@ -8,6 +8,7 @@ class TaskDetailStore {
     
     this.task = null;
     this.updated = null;
+    this.quick = {title: ''};
   }
   
   getTaskSuccess(task) {
@@ -18,6 +19,7 @@ class TaskDetailStore {
   updateTaskSuccess(task) {
     this.updated = true;
     assign(this.task, task);
+    this.quick.title = '';
   }
 
   deleteTaskSuccess(task) {

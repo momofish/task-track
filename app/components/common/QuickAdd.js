@@ -5,11 +5,7 @@ import { assign, find } from 'lodash';
 class QuickAdd extends Component {
   constructor(props) {
     super(props);
-    this.state = props.data || {};
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.state = nextProps.data || {};
+    this.state = props.data;
   }
 
   handleChange(event) {
