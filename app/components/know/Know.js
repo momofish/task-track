@@ -47,8 +47,8 @@ export default class extends Component {
         align: 'right',
         style: { width: 120 },
         data: [
-          { to: '/know/b/add', name: '发表头条' },
-          { to: '/know/q/add', name: '提问' },
+          { to: '/know/b/e', name: '发表头条' },
+          { to: '/know/q/e', name: '提问' },
         ]
       });
   }

@@ -77,7 +77,7 @@ class TeamSetting extends Component {
         </FormItem>
         <FormItem>
           <EditableText multiline='true' value={team.description} placeholder='添加描述'
-            onChange={this.change.bind(this, 'description')} />
+            onSubmit={this.change.bind(this, 'description')} />
         </FormItem>
         <FormItem label='成员'>
           <div>

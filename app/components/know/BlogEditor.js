@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
 import _ from 'lodash';
 
-import { FormItem } from '../common';
+import { FormItem, EditorMd } from '../common';
 import { blogService, tagService } from '../../services';
 import { select } from '../../utils';
 
@@ -10,13 +10,13 @@ export default class extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = { blog: { tags: [] }, tags: null };
+    this.state = { blog: { title: '', tags: [] }, tags: null };
   }
 
-  componentDidMount() {
-    let {blog, tags} = this.state;
-
+  async componentDidMount() {
     $('#tags').find('.form-control').focus(async input => {
+      let {blog, tags} = this.state;
+
       if (!tags) {
         tags = await tagService.getTags();
       }
@@ -32,10 +32,16 @@ export default class extends Component {
         }, { dataSources })
     });
 
-    editormd('editormd', {
-      height: 640,
-      path: '/editor.md/lib/'
-    });
+    await this.getData(this.props.params);
+  }
+
+  async getData(params) {
+    let {id} = params;
+    if (!id)
+      return;
+
+    let blog = await blogService.getBlog(id);
+    this.setState({ blog });
   }
 
   selectTags(tags) {
@@ -70,7 +76,7 @@ export default class extends Component {
     event.preventDefault();
 
     let {blog} = this.state;
-    blog.content = this.$content.value;
+    blog.content = this.editor.text.value;
     if (!blog.content) {
       toastr.error(`请输入内容`);
       return;
@@ -84,7 +90,7 @@ export default class extends Component {
     let {title, content} = blog;
 
     return (
-      <form className='container-fluid flex flex-verticle' onSubmit={this.handleSubmit.bind(this)}>
+      <form className='container-fluid flex flex-verticle flex-scroll' onSubmit={this.handleSubmit.bind(this)}>
         <div className='page-header'>
           <h2>
             <i className='glyphicon glyphicon-tasks' /> 发表文章
@@ -92,7 +98,7 @@ export default class extends Component {
         </div>
         <div className='smart-form'>
           <FormItem noLabel>
-            <input className='form-control' placeholder='标题，言简意赅' defaultValue={title}
+            <input className='form-control' placeholder='标题，言简意赅' value={title}
               onChange={this.changeEntity.bind(this, 'title')} />
           </FormItem>
           <FormItem noLabel id='tags'>
@@ -105,14 +111,13 @@ export default class extends Component {
                 tagInput: '',
                 tagInputField: 'form-control'
               }}
+              autofocus={false}
               tags={blog.tags}
               handleAddition={() => { }}
               handleDelete={this.deleteTag.bind(this)}
             />
           </FormItem>
-          <div id='editormd'>
-            <textarea ref={text => this.$content = text} style={{ display: 'none' }} />
-          </div>
+          <EditorMd lazy value={content} ref={editor => this.editor = editor} />
           <FormItem noLabel>
             <button type='submit' disabled={!title} className='btn btn-primary btn-sm'>发布</button>
             <button type='button' className='btn btn-link btn-sm'

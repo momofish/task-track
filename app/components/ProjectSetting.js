@@ -136,7 +136,7 @@ class ProjectSetting extends Component {
                 {project.packets.map((packet, i) =>
                   <ListItem key={i} item={{
                     label: <EditableText className='flex' style={{ flex: 1 }} value={packet.name}
-                      onChange={this.editPacket.bind(this, text => packet.name = text.value)} />,
+                      onSubmit={this.editPacket.bind(this, text => packet.name = text.value)} />,
                     checked: !packet.active, completed: !packet.active
                   }} onCheck={this.editPacket.bind(this, () => packet.active = !packet.active)} />
                 )}

@@ -154,7 +154,7 @@ class TaskDetail extends Component {
                 <input type='checkbox' checked={completed} onChange={this.completeTask.bind(this)} />
               </div>}>
               <EditableText className={className} value={task.title}
-                onChange={text => this.updateTask({ _id: task._id, title: text.value })} />
+                onSubmit={text => this.updateTask({ _id: task._id, title: text.value })} />
             </FormItem>
             <FormItem content={[
               <IconText icon='user' text={owner.name}
@@ -165,7 +165,7 @@ class TaskDetail extends Component {
             ]} />
             <FormItem>
               <EditableText multiline='true' value={task.description} placeholder='添加描述'
-                onChange={text => this.updateTask({ _id: task._id, description: text.value })} />
+                onSubmit={text => this.updateTask({ _id: task._id, description: text.value })} />
             </FormItem>
             <FormItem label='参与'>
               <div>
@@ -191,12 +191,12 @@ class TaskDetail extends Component {
                         label: <EditableText value={subTask.name}
                           actionIcon='trash'
                           onAction={this.editSubTask.bind(this, text => task.subTasks.splice(i, 1))}
-                          onChange={this.editSubTask.bind(this, text => subTask.name = text.value)} />,
+                          onSubmit={this.editSubTask.bind(this, text => subTask.name = text.value)} />,
                         checked: subTask.completed, completed: subTask.completed
                       }} onCheck={this.editSubTask.bind(this, () => subTask.completed = !subTask.completed)} />
                     )}
                   </ul>
-                  <QuickAdd placeHolder='添加检查点' onSubmit={this.addSubTask.bind(this)} />
+                  <QuickAdd placeHolder='添加检查点' data={this.state.quick} onSubmit={this.addSubTask.bind(this)} />
                 </div>
               </FormItem>}
           </div>}>

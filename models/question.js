@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Types = Schema.Types;
 var Answer = require('./answer');
+var Reply = require('./reply');
 
 var schema = new Schema({
   title: String,
@@ -17,6 +18,7 @@ var schema = new Schema({
   answeredOn: Date,
   answeredBy: { type: Types.ObjectId, index: true, ref: 'User' },
   voteNum: Number,
+  replies: [Reply],
 
   resolved: { type: Boolean, default: false },
 });

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Comment = require('./comment');
+var Reply = require('./reply');
 var Schema = mongoose.Schema;
 var Types = Schema.Types;
 
@@ -16,6 +17,7 @@ var schema = new Schema({
   commentedOn: Date,
   commentedBy: { type: Types.ObjectId, index: true, ref: 'User' },
   voteNum: Number,
+  replies: [Reply],
 });
 
 module.exports = mongoose.model('Blog', schema);

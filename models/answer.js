@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Types = Schema.Types;
+var Reply = require('./reply');
 
 module.exports = new Schema({
   author: { type: Types.ObjectId, index: true, ref: 'User' },
@@ -8,4 +9,6 @@ module.exports = new Schema({
   createdOn: { type: Date, index: true, default: Date.now },
   voteNum: Number,
   accepted: Boolean,
+
+  replies: [Reply],
 });
