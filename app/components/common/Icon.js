@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-class Icon extends Component {
+export default class Icon extends Component {
   render() {
     let {icon, tooltip, onClick, className} = this.props;
 
@@ -11,5 +11,3 @@ class Icon extends Component {
     );
   }
 }
-
-export default Icon;
