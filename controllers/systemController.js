@@ -40,7 +40,7 @@ module.exports = function (router) {
       let user = users[userId];
       let localUser = localUsers[user.id] = localUsers[user.id] || new User();
       Object.assign(localUser, {
-        id: user.id, name: user.name, enabled: true, loginId: user.loginId, password: '1',
+        id: user.id, name: user.name, enabled: true, loginId: user.loginId.trim().toLowerCase(), password: '1',
         dept: (localDepts[user.dept] || {})._id
       });
       await localUser.save();

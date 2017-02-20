@@ -42,7 +42,7 @@ export default class Article extends Component {
             <div className='markdown-body content' dangerouslySetInnerHTML={{ __html: shared.md.render(content || '') }} ></div>}
           {options && <ul className='options'>
             {options.map((option, i) => <li key={i}>{option}</li>)}
-            {enableReply && <IconText>{`${replies.length} 评论`}</IconText>}
+            {enableReply && <IconText>{`${replies.length} 回复`}</IconText>}
             {editable && (mode != 'edit' ?
               <IconText onClick={() => { this.setState({ mode: 'edit' }) }}>编辑</IconText> :
               <span>
@@ -50,16 +50,16 @@ export default class Article extends Component {
                 <Button className='btn-link btn-xs' onClick={() => { this.setState({ mode: undefined }) }}>取消</Button>
               </span>)}
           </ul>}
-          {enableReply && <PagedList data={{ list: replies.map(this.mapReply) }}>
+          {enableReply && <PagedList className='replies' data={{ list: replies.map(this.mapReply) }}>
             {repling ?
-              <EditableText isEdit={true} value='' placeholder='这里输入评论内容'
+              <EditableText isEdit={true} value='' placeholder='这里输入回复内容'
                 onSubmit={async (value) => {
                   await onReply && onReply(value);
                   this.setState({ repling: false });
                 }}
                 onCancel={() => this.setState({ repling: false })}
               /> :
-              <IconText onClick={() => this.setState({ repling: true })}>我要评论</IconText>}
+              <IconText onClick={() => this.setState({ repling: true })}>我要回复</IconText>}
           </PagedList>}
         </div>
       </article>

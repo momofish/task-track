@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import classnames from 'classnames';
 
 import { IconText } from '.';
@@ -24,9 +25,9 @@ class ListItem extends Component {
           )}</ul>}
         <span className='item-content'>
           {item.sub}
-          <h3 className={classnames('item-title', { completed: item.completed })}>
+          <h3 className={classnames('item-title', { completed: item.completed, pointer: item.to })} onClick={() => item.to && browserHistory.push(item.to)}>
             {onCheck && <input type='checkbox' checked={item.checked} onChange={this.check.bind(this, item)} onClick={this.checkClick} />}
-            {item.label && <IconText className='flex' text={item.label} to={item.to} />}
+            {item.label}
             {children}
           </h3>
           {item.tags && <ul className='item-tags'>

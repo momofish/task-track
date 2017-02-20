@@ -1,7 +1,6 @@
 /* listitem */
 .list-item {
   padding: 2px;
-  cursor: pointer;
   border-left: solid 2px transparent;
 }
 .list-item:hover {
@@ -87,7 +86,7 @@
   padding: 2px 4px;
   font-size: 11px;
   white-space: nowrap;
-  margin-left: 6px;
+  margin-right: 6px;
   color: #fff !important;
   background-color: #7266bb;
   max-width: 100px;
@@ -100,8 +99,8 @@
 .tag a {
   color: #fff;
 }
-.tag:first-of-type {
-  margin-left: 0;
+.tag:last-of-type {
+  margin-right: 0;
 }
 .tag.tag-success {
   background-color: #76b480;
@@ -129,6 +128,7 @@
 .editable .form-control-static {
   flex: 1;
   padding: 0;
+  padding-right: 20px;
   min-height: auto;
 }
 
@@ -154,7 +154,6 @@
   padding: 8px;
   border-bottom: solid 1px #e6e6e6;
   border-left: solid 2px #fff;
-  cursor: pointer;
 }
 .group-list .list-item > input {
   margin: 0 5px;
@@ -214,7 +213,6 @@
   padding: 8px;
   border-bottom: solid 1px #e6e6e6;
   border-left: solid 2px #fff;
-  cursor: default;
 }
 .common-list .list-item > input {
   margin: 0 5px;
@@ -228,4 +226,10 @@
 }
 .common-list .list-item .tag {
   overflow: visible;
+}
+.common-list .item-title {
+  margin-right: 10px;
+}
+.replies .item-title {
+  font-size: 12px;
 }
