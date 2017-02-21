@@ -8,6 +8,7 @@ class ProjectSetting extends Component {
   constructor(props) {
     super(props);
     this.state = { project: props.project || { members: [] } };
+    this.quick = { title: '' };
   }
 
   componentDidMount() {
@@ -80,6 +81,7 @@ class ProjectSetting extends Component {
   addPacket(quick) {
     let {packets} = this.state.project;
     packets.push({ name: quick.title, active: true });
+    this.quick.title = '';
     this.forceUpdate();
   }
 
@@ -141,7 +143,7 @@ class ProjectSetting extends Component {
                   }} onCheck={this.editPacket.bind(this, () => packet.active = !packet.active)} />
                 )}
               </ul>
-              <QuickAdd placeHolder='添加工作包' onSubmit={this.addPacket.bind(this)} />
+              <QuickAdd placeHolder='添加工作包' onSubmit={this.addPacket.bind(this)} data={this.quick} />
             </div>
           </FormItem>}
         <FormItem>
