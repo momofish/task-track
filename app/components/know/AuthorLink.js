@@ -6,6 +6,8 @@ import { userService } from '../../services';
 export default class extends Component {
   render() {
     let {author} = this.props;
+    if (!author)
+      return null;
     let {currentUser} = userService;
 
     return (

@@ -54,7 +54,7 @@ class QuickAdd extends Component {
             onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} />
           <span className='input-group-btn'>
             {selectors.map((selector, i) => (
-              <button key={i} type="button" className="btn btn-Default" onClick={this.select.bind(this, selector)}>
+              <button key={i} type="button" className="btn btn-default" onClick={this.select.bind(this, selector)}>
                 {this.state[selector.key] && selector.nameGetter(this.state[selector.key]) || selector.label} <i className="caret" />
               </button>
             ))}
