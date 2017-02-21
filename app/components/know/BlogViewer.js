@@ -54,7 +54,7 @@ export default class extends Component {
   render() {
     let {blog} = this.state;
     if (!blog)
-      return <div />;
+      return null;
 
     let {title, content, tags, comments, voteNum} = blog;
     let {currentUser} = userService;

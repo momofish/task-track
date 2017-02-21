@@ -54,7 +54,7 @@ export default class extends Component {
   render() {
     let {question} = this.state;
     if (!question)
-      return <div />;
+      return null;
 
     let {title, content, tags, answers, voteNum} = question;
     let {currentUser} = userService;
