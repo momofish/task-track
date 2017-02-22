@@ -7,6 +7,7 @@ module.exports = function (app) {
   app.use('/api', router);
 
   require('./systemController')(router);
+  require('./assetController')(router);
 
   require('./projectController')(router);
   require('./taskController')(router);

@@ -28,6 +28,9 @@ export default class EditorMd extends Component {
       placeholder,
       toolbarIcons,
       autoFocus: autofocus,
+      imageUpload: true,
+      imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+      imageUploadURL: "/api/assets/img",
     });
   }
 
