@@ -41,7 +41,7 @@ mongoose.connection.on('error', function (err) {
 // passport
 passport.use(new LocalStrategy(
   function (loginId, password, done) {
-    models.User.findOne({ loginId: loginId }, function (err, user) {
+    models.User.findOne({ loginId: loginId.trim().toLowerCase() }, function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false, { msg: 'user not found' }); }
       if (user.password != password) { return done(null, false, { msg: 'invalid password' }); }
@@ -71,9 +71,9 @@ passport.deserializeUser(function (req, authUser, done) {
     return;
   }
 
-  models.User.findOne({ loginId: new RegExp(`^${authUser.loginId}$`, 'i') }, function (err, user) {
+  models.User.findOne({ loginId: authUser.loginId.trim().toLowerCase() }, function (err, user) {
     if (err) { return done(err); }
-    if(!user) return done(new Error(`用户${authUser.loginId}不存在`)); 
+    if (!user) return done(new Error(`用户${authUser.loginId}不存在`));
 
     req.session.user = user;
     done(null, user);
@@ -99,7 +99,8 @@ app.use(session({
 }));
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'bower_components')));
+app.use(express.static(path.join(__dirname, 'bower_components'), { etag: false, maxAge: 3600000 }));
+app.use('/assets', express.static(path.join(__dirname, 'assets'), { etag: false, maxAge: -1 }));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());

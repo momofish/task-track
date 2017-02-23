@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Router, Link, browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import classnames from 'classnames';
 
-import Icon from './Icon';
+import { Icon } from './';
 
 class IconText extends Component {
   click(event) {
@@ -24,7 +24,7 @@ class IconText extends Component {
         className={classnames('icon-text', className, { pointer: onClick || to })}
         onClick={this.click.bind(this)}>
         {icon && <Icon icon={icon} tooltip={tooltip} className={iconClassName} />}
-        {text}
+        {text && <span className='text'>{text}</span>}
         {children}
       </span>
     );

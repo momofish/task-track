@@ -54,7 +54,7 @@ export default class extends Component {
   render() {
     let {question} = this.state;
     if (!question)
-      return <div />;
+      return null;
 
     let {title, content, tags, answers, voteNum} = question;
     let {currentUser} = userService;
@@ -102,7 +102,8 @@ export default class extends Component {
               accept={this.isOwner(question.author) && {
                 accepted: answer.accepted,
                 onAccept: async () => {
-                  await questionService.saveAnswer(question._id, assign(answer, { accepted: !answer.accepted }));
+                  let saved = await questionService.saveAnswer(question._id, assign({ _id: answer._id }, { accepted: !answer.accepted }));
+                  assign(answer, saved);
                   this.forceUpdate();
                 }
               }}

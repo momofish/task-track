@@ -12,9 +12,11 @@ const parsePeriod = (mode, date) => {
   let startDate = mDate.startOf('isoWeek').format('L');
   let endDate = mDate.endOf('isoWeek').format('L');
   if (mode == 1) {
-    let month = (mDate.date() >= 24 ? mDate.add(1, 'M') : mDate).startOf('month');
-    startDate = month.add(-1, 'M').add(23, 'd').format('L');
-    endDate = month.add(1, 'M').add(-1, 'd').format('L');
+    mDate = moment(date);
+    if (mDate.date() >= 24) mDate.add(1, 'M');
+    mDate.startOf('month');
+    startDate = mDate.add(-1, 'M').add(23, 'd').format('L');
+    endDate = mDate.add(1, 'M').add(-1, 'd').format('L');
   }
 
   return ({ startDate, endDate });

@@ -252,9 +252,9 @@ a:hover .action-icon {
   background-color: #f4f4f4;
   border-left-color: #7266bb;
 }
-.selector-list > li span,
-.selector-list > li span:hover,
-.selector-list > li span:active {
+.selector-list > li > span,
+.selector-list > li > span:hover,
+.selector-list > li > span:active {
   cursor: pointer;
   display: block;
   padding: 10px 10px;
@@ -273,6 +273,12 @@ a:hover .action-icon {
 .icon-text {
   display: inline-block;
   margin-right: 10px;
+}
+.icon-text > .text {
+  display: inline;
+}
+.icon-text > .text:before {
+  content: ' ';
 }
 
 .calendar {
