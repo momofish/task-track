@@ -1,3 +1,4 @@
+import fs from 'fs';
 import multer from 'multer';
 import crypto from 'crypto';
 import { Transform } from 'stream'
@@ -6,51 +7,33 @@ import { api, route } from '../utils';
 import * as config from '../config';
 
 const baseUri = '/assets';
-
-class FilterTransform extends Transform {
-  constructor(onData, onEnd) {
-    super();
-    this.onData = onData;
-    this.onEnd = onEnd;
-  }
-
-  _transform(chunk, encoding, callback) {
-    this.onData && this.onData(...arguments);
-    this.push(chunk);
-    callback();
-  }
-
-  _flush(callback) {
-    this.onEnd && this.onEnd(...arguments);
-    callback();
-  }
-}
+const {assetRoot} = config;
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: `${assetRoot}/tmp`,
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    }
+  })
+})
 
 module.exports = function (router) {
-  function genFileName(file) {
-    return file.originalname;
-  }
+  router.app.route(`${baseUri}/img`).post(upload.any(), route.wrap(async function (req, res, next) {
+    let file = req.files[0];
+    let md5 = crypto.createHash('md5');
+    fs.createReadStream(`${assetRoot}/tmp/${file.filename}`).on('data', (chunk) => {
+      md5.update(chunk);
+    }).on('end', () => {
+      let fileMd5 = md5.digest('hex');
+      let filename = `${fileMd5}.${file.originalname.split('.').pop()}`;
+      fs.rename(`${assetRoot}/tmp/${file.filename}`, `${assetRoot}/img/${filename}`, (err) => {
+        if (err) return next(err);
 
-  let upload = multer({
-    storage: multer.diskStorage({
-      destination: 'assets/img',
-      filename: (req, file, cb) => {
-        let md5 = crypto.createHash('md5');
-        file.stream.pipe(new FilterTransform((chunk) => {
-          md5.update(chunk);
-        }, () => {
-          let fileMd5 = md5.digest('hex');
-          cb(null, `${fileMd5}.${file.originalname.split('.').pop()}`);
-        }));
-      }
-    })
-  })
-
-  router.route(`${baseUri}/img`).post(upload.single('editormd-image-file'), route.wrap(async function (req, res, next) {
-    let {file} = req;
-    res.send({
-      success: 1,
-      url: `/assets/img/${file.filename}`,
+        res.send({
+          success: 1,
+          url: `${baseUri}/img/${filename}`,
+        });
+      })
     });
   }));
 }

@@ -1,5 +1,6 @@
 module.exports = function (app) {
   var router = require("express").Router();
+  router.app = app;
   router.use(function controllCache(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
