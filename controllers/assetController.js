@@ -25,15 +25,20 @@ module.exports = function (router) {
       md5.update(chunk);
     }).on('end', () => {
       let fileMd5 = md5.digest('hex');
-      let filename = `${fileMd5}.${file.originalname.split('.').pop()}`;
-      fs.rename(`${assetRoot}/tmp/${file.filename}`, `${assetRoot}/img/${filename}`, (err) => {
+      let path = `img/${fileMd5.substr(0, 2)}`;
+      fs.mkdir(`${assetRoot}/${path}`, (err) => {
         if (err) return next(err);
 
-        res.send({
-          success: 1,
-          url: `${baseUri}/img/${filename}`,
-        });
-      })
+        let filename = `${fileMd5}.${file.originalname.split('.').pop()}`;
+        fs.rename(`${assetRoot}/tmp/${file.filename}`, `${assetRoot}/${path}/${filename}`, (err) => {
+          if (err) return next(err);
+
+          res.send({
+            success: 1,
+            url: `${baseUri}/${path}/${filename}`,
+          });
+        })
+      });
     });
   }));
 }
