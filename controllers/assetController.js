@@ -27,7 +27,7 @@ module.exports = function (router) {
       let fileMd5 = md5.digest('hex');
       let path = `img/${fileMd5.substr(0, 2)}`;
       fs.mkdir(`${assetRoot}/${path}`, (err) => {
-        if (err) return next(err);
+        if (err && err.code != 'EEXIST') return next(err);
 
         let filename = `${fileMd5}.${file.originalname.split('.').pop()}`;
         fs.rename(`${assetRoot}/tmp/${file.filename}`, `${assetRoot}/${path}/${filename}`, (err) => {
