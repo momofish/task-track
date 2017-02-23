@@ -75,11 +75,12 @@ module.exports = function (router) {
       if (!localDepts[project.DeptUID]) continue;
 
       let localProjects2 = localProjectsById[project.ProjectID] || [];
-      if (!localProjects2.length) localProjects2.push(new Project());
+      if (!localProjects2.length) localProjects2.push(new Project({
+        name: project.ProjectName,
+      }));
       for (let localProject of localProjects2) {
         Object.assign(localProject, {
           id: project.ProjectID,
-          name: project.ProjectName,
           owner: localUsers[project.PMUID],
           members: (localDepts[project.DeptUID].users || []).map(u => u._id),
         });
