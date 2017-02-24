@@ -97,10 +97,12 @@ app.use(session({
     autoReconnect: true
   })
 }));
+
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'bower_components'), { etag: false, maxAge: 3600000 }));
-app.use('/assets', express.static(path.join(__dirname, 'assets'), { etag: false, maxAge: -1 }));
+app.use(express.static('public'));
+app.use(express.static('bower_components', { etag: false, maxAge: 3600000 }));
+app.use('/assets', express.static(config.assetRoot, { etag: false, maxAge: -1 }));
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());

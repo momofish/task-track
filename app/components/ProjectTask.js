@@ -74,6 +74,10 @@ class ProjectTask extends Component {
 
   checkTask(item, event) {
     let task = item.data;
+
+    if (!task.completed && !confirm('确定标记任务为"已完成"'))
+      return;
+
     Actions.updateTask({ _id: task._id, completed: !task.completed });
   }
 
@@ -138,7 +142,7 @@ class ProjectTask extends Component {
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           Actions.selectTask();
           updated && Actions.getTasks();
-        } } />}
+        }} />}
       </div>
     );
   }

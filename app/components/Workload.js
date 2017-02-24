@@ -290,7 +290,8 @@ export default class Workload extends Component {
             <div className="well">
               <p style={{ whiteSpace: 'normal' }}>1. 已在task track创建了项目（包括实施、部门和产品项目），可填报任务起止时间内的工作量，否则请该项目的项目经理在此系统创建项目，具体指引参考首页新手入门指引</p>
               <p style={{ whiteSpace: 'normal' }}>2. 工作量审批后最终将进入工作量系统
-              （<a href='https://eim.bingosoft.net/EIMWeb/Modules/ProjectManage/WorkSheet/WorkLoadList.aspx' target='_blank' className='btn btn-xs btn-info'>查看未填报工作量</a>）
+              （查看 <a href='https://eim.bingosoft.net/EIMWeb/Modules/ProjectManage/WorkSheet/WorkLoadList.aspx' target='_blank' className='btn btn-xs btn-info'>未填工作量</a>&nbsp;
+                <a href='https://eim.bingosoft.net/EIMWeb/Modules/ProjectManage/WorkSheet/WorkSheetList.aspx' target='_blank' className='btn btn-xs btn-info'>已填工作量</a>）
               和假勤系统（<a href='https://erp.bingosoft.net/BingoService/' target='_blank' className='btn btn-xs btn-info'>查看考勤</a>）</p>
               <p style={{whiteSpace: 'normal'}}>3. 工作量填报状态图例（鼠标移到工作量单元格可查看审核状态）：<br />
                 <span className="text-success">7.5</span> 已审核 <span className="text-warning">7.5</span> 审核中 <span className="text-danger">7.5</span> 已拒绝

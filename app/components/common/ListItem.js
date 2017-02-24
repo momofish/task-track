@@ -31,7 +31,7 @@ class ListItem extends Component {
             {children}
           </h3>
           {item.tags && <ul className='item-tags'>
-            {item.tags.filter(tag => tag.label || tag.icon).map((tag, k) => (
+            {item.tags.filter(tag => tag && (tag.label || tag.icon)).map((tag, k) => (
               <li key={k} className={`tag tag-${tag.style}`} title={tag.label}
                 onClick={event => onClickTag && onClickTag(item, tag, event)}>
                 <IconText icon={tag.icon} text={tag.label} to={tag.to} />
