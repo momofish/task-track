@@ -90,9 +90,9 @@ if (!production) app.use(require('morgan')('dev'));
 
 // static
 app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png'), { maxAge: 36000000 }));
-app.use('/public', express.static('public', { fallthrough: false, etag: false }));
-app.use('/lib', express.static('bower_components', { fallthrough: false, etag: false, maxAge: 36000000 }));
-app.use('/assets', express.static(config.assetRoot, { fallthrough: false, etag: false, maxAge: 36000000 }));
+app.use('/public', express.static('public', { fallthrough: false, lastModified: false }));
+app.use('/lib', express.static('bower_components', { fallthrough: false, lastModified: false, maxAge: 36000000 }));
+app.use('/assets', express.static(config.assetRoot, { fallthrough: false, lastModified: false, maxAge: 36000000 }));
 
 app.use(require('cookie-parser')());
 app.use(bodyParser.json());
