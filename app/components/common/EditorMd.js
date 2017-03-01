@@ -24,7 +24,7 @@ export default class EditorMd extends Component {
 
     let editor = this.editormd = editormd(id, {
       height,
-      path: '/editor.md/lib/',
+      path: '/lib/editor.md/lib/',
       placeholder,
       toolbarIcons,
       autoFocus: autofocus,

@@ -1,11 +1,12 @@
 module.exports = function (app) {
   var router = require("express").Router();
   router.app = app;
-  router.use(function controllCache(req, res, next) {
+  app.use('/api', function controllCache(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
+  }, router, function (req, res, next) {
+    res.status(404).send({message: 'invalid api'});
   });
-  app.use('/api', router);
 
   require('./systemController')(router);
   require('./assetController')(router);

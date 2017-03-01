@@ -23,7 +23,7 @@ class Navbar extends Component {
       <nav className='navbar navbar-vertical-left'>
         <div className='navbar-header'>
           <Link to='/' className='navbar-brand'>
-            <img src='/favicon.png' width='30' />
+            <img src='/public/favicon.png' width='30' />
           </Link>
         </div>
         <div className='navbar-content'>

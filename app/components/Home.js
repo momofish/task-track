@@ -29,7 +29,7 @@ class Home extends Component {
         </div>
         <main className='welcome-masthead'>
           <div className='logo'>
-            <img src='/favicon.png' />
+            <img src='/public/favicon.png' />
           </div>
           <div className='lead'>
             <p>更简单的任务管理</p>
@@ -43,17 +43,17 @@ class Home extends Component {
             <div className='col-sm-4'>
               <h4>新手入门</h4>
               <p>了解Task Track基本概念和任务管理基本流程，快速应用于学习和工作</p>
-              <p><a className="btn btn-default" onClick={this.viewArticle.bind(this, '新手入门', 'quick-start')}>立即学习</a></p>
+              <p><a className="btn btn-default" onClick={this.viewArticle.bind(this, '新手入门', 'public/quick-start')}>立即学习</a></p>
             </div>
             <div className='col-sm-4'>
               <h4>进阶使用</h4>
               <p>掌握Task Track使用技巧，让其更加顺手</p>
-              <p><a className="btn btn-default" onClick={this.viewArticle.bind(this, '进阶使用', 'futher-use')}>进去看看</a></p>
+              <p><a className="btn btn-default" onClick={this.viewArticle.bind(this, '进阶使用', 'public/futher-use')}>进去看看</a></p>
             </div>
             <div className='col-sm-4'>
               <h4>常见问题</h4>
               <p>一些常见问题汇总，都在这里咯</p>
-              <p><a className="btn btn-default" onClick={this.viewArticle.bind(this, '常见问题', 'faq')}>看了就知道</a></p>
+              <p><a className="btn btn-default" onClick={this.viewArticle.bind(this, '常见问题', 'public/faq')}>看了就知道</a></p>
             </div>
           </div>
         </div>

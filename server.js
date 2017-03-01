@@ -87,6 +87,13 @@ if (!production) swig.setDefaults({ cache: false });
 app.engine('html', swig.renderFile);
 app.use(require('compression')());
 if (!production) app.use(require('morgan')('dev'));
+
+// static
+app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png'), { maxAge: 36000000 }));
+app.use('/public', express.static('public', { fallthrough: false, etag: false }));
+app.use('/lib', express.static('bower_components', { fallthrough: false, etag: false, maxAge: 36000000 }));
+app.use('/assets', express.static(config.assetRoot, { fallthrough: false, etag: false, maxAge: 36000000 }));
+
 app.use(require('cookie-parser')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -98,19 +105,9 @@ app.use(session({
   })
 }));
 
-app.use(require('serve-favicon')(path.join(__dirname, 'public', 'favicon.png')));
-app.use(express.static('public'));
-app.use(express.static('bower_components', { etag: false, maxAge: 3600000 }));
-app.use('/assets', express.static(config.assetRoot, { etag: false, maxAge: -1 }));
-
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-
-// router
-require('babel-register');
-require("babel-polyfill");
-require('./controllers')(app);
 
 app.get('/login', function (req, res) {
   res.render('login', { error: req.flash('error') });
@@ -131,6 +128,17 @@ app.get('/auth/oauth', passport.authenticate('bingo'));
 app.get('/auth/oauth/callback', passport.authenticate('bingo', {
   successRedirect: '/', failureRedirect: '/auth/oauth'
 }));
+
+// router
+require('babel-register');
+require("babel-polyfill");
+require('./controllers')(app);
+
+app.use(function (err, req, res, next) {
+  console.log(err.stack.red);
+  res.status(err.status || 500);
+  res.send({ message: err.message });
+});
 
 app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginPath }), function (req, res) {
   if (config.disableServerRender) {
@@ -154,12 +162,6 @@ app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginPath }), function 
       res.status(404).send('Page Not Found')
     }
   });
-});
-
-app.use(function (err, req, res, next) {
-  console.log(err.stack.red);
-  res.status(err.status || 500);
-  res.send({ message: err.message });
 });
 
 var server = require('http').createServer(app);

@@ -38,7 +38,7 @@ export default class extends Component {
         </div>
         <main className='welcome-masthead know'>
           <div className='logo'>
-            <img src='/icon/know.png' />
+            <img src='/public/icon/know.png' />
           </div>
           <div className='lead'>
             <p>大牛在此</p>
