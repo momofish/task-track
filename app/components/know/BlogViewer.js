@@ -12,14 +12,14 @@ export default class extends Component {
     super(props);
 
     this.state = {};
-  } 
+  }
 
   isOwner(author) {
     let {currentUser} = userService;
     return author && currentUser && author._id == currentUser._id;
   }
 
-  async componentDidMount() { 
+  async componentDidMount() {
     let {params} = this.props;
     await this.loadData(params.id)
   }
@@ -95,7 +95,8 @@ export default class extends Component {
             content={comment.content}
             editable={this.isOwner(comment.author)}
             onSubmit={async (content) => {
-              await blogService.saveComment(blog._id, assign(comment, { content }));
+              await blogService.saveComment(blog._id, { _id: comment._id, content });
+              assign(comment, { content });
               this.forceUpdate();
             }}
             options={[
@@ -108,7 +109,7 @@ export default class extends Component {
           <div className='article-viewer-column'></div>
           <form className='add-reply' onSubmit={this.saveComment.bind(this)}>
             <h4>我要评论</h4>
-              <EditorMd ref={editor => this.editor = editor} lazy />
+            <EditorMd ref={editor => this.editor = editor} lazy />
             <button className='btn btn-primary' type='submit'>提交</button>
           </form>
         </article>

@@ -23,7 +23,7 @@ export default class extends Component {
       let dataSources = _.chain(tags)
         .groupBy(tag => tag.category)
         .toPairs()
-        .map(pair => ({ name: pair[0], data: pair[1] }))
+        .map(pair => ({ name: pair[0], data: pair[1], searchable: true }))
         .value();
 
       select.selectData(input.target, blog.tags,
@@ -81,7 +81,8 @@ export default class extends Component {
       toastr.error(`请输入内容`);
       return;
     }
-    await blogService.saveBlog(blog);
+    let {_id, title, tags, content} = blog;
+    await blogService.saveBlog({ _id, title, tags, content });
     this.goto('/know/b/latest');
   }
 

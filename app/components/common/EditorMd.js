@@ -30,7 +30,7 @@ export default class EditorMd extends Component {
       autoFocus: autofocus,
       imageUpload: true,
       imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-      imageUploadURL: "/assets/img",
+      imageUploadURL: "/api/assets/img",
       onload() {
         setTimeout(() => {
           editor.watch();

@@ -18,7 +18,7 @@ const upload = multer({
 })
 
 module.exports = function (router) {
-  router.app.route(`${baseUri}/img`).post(upload.any(), route.wrap(async function (req, res, next) {
+  router.route(`${baseUri}/img`).post(upload.any(), route.wrap(async function (req, res, next) {
     let file = req.files[0];
     let md5 = crypto.createHash('md5');
     fs.createReadStream(`${assetRoot}/tmp/${file.filename}`).on('data', (chunk) => {
@@ -33,7 +33,7 @@ module.exports = function (router) {
         fs.rename(`${assetRoot}/tmp/${file.filename}`, `${assetRoot}/${path}/${filename}`, (err) => {
           if (err) return next(err);
 
-          res.send({
+          res.set({ 'Content-Type': 'text/html' }).send({
             success: 1,
             url: `${baseUri}/${path}/${filename}`,
           });

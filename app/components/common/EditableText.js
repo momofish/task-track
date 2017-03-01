@@ -23,10 +23,6 @@ class EditableText extends Component {
   submit(event) {
     event.preventDefault();
     let {value} = this.state;
-    if (!value) {
-      alert('请输入内容');
-      return;
-    }
 
     let {onSubmit} = this.props;
     onSubmit && onSubmit({ value });

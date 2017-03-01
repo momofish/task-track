@@ -33,7 +33,7 @@ export default class extends Component {
       let dataSources = _.chain(tags)
         .groupBy(tag => tag.category)
         .toPairs()
-        .map(pair => ({ name: pair[0], data: pair[1] }))
+        .map(pair => ({ name: pair[0], data: pair[1], searchable: true }))
         .value();
 
       select.selectData(input.target, question.tags,
@@ -83,6 +83,8 @@ export default class extends Component {
   }
 
   async handleSubmit(event) {
+    if (event.target != event.currentTarget)
+      return;
     event.preventDefault();
 
     let {question} = this.state;
@@ -91,7 +93,8 @@ export default class extends Component {
       toastr.error(`请输入内容`);
       return;
     }
-    await questionService.saveQuestion(question);
+    let {_id, title, tags, content} = question;
+    await questionService.saveQuestion({ _id, title, tags, content });
     this.goto('/know/q/latest');
   }
 

@@ -122,7 +122,7 @@ class Selector extends Component {
         {dataSources.length > 1 ?
           <ul ref='tabs' className='nav nav-tabs flat'>
             {dataSources.map((dataSource, i) =>
-              <li key={i} data-toggle="tab"
+              <li key={i} data-toggle='tab'
                 className={dataSourceIndex == i ? 'active' : null}>
                 <a href='#' onClick={() => this.changeTab(i)}>{dataSource.name}</a>
               </li>
@@ -131,8 +131,8 @@ class Selector extends Component {
         }
         {searchable ?
           <div className='selector-search'>
-            <input type="text" className="form-control" placeholder="请输入关键字"
-              onChange={this.changeTerm} />
+            <input type='text' className='form-control' placeholder='请输入关键字'
+              onChange={this.changeTerm} value='' />
           </div> : null
         }
         <div className='tab-pane active'>

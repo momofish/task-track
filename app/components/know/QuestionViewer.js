@@ -102,7 +102,7 @@ export default class extends Component {
               accept={this.isOwner(question.author) && {
                 accepted: answer.accepted,
                 onAccept: async () => {
-                  let saved = await questionService.saveAnswer(question._id, assign({ _id: answer._id }, { accepted: !answer.accepted }));
+                  let saved = await questionService.saveAnswer(question._id, { _id: answer._id, accepted: !answer.accepted });
                   assign(answer, saved);
                   this.forceUpdate();
                 }
@@ -111,7 +111,8 @@ export default class extends Component {
             content={answer.content}
             editable={this.isOwner(answer.author)}
             onSubmit={async (content) => {
-              await questionService.saveAnswer(question._id, assign(answer, { content: content }));
+              await questionService.saveAnswer(question._id, { _id: answer._id, content: content });
+              assign(answer, { content });
               this.forceUpdate();
             }}
             options={[
