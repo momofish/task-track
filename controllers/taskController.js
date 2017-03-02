@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import moment from 'moment';
 
 import { api, route } from '../utils';
-import { Task, Workload } from '../models';
+import { Task, Workload, Project } from '../models';
 
 module.exports = function (router) {
   router.route('/tasks/:category/:filter').get(function (req, res, next) {
@@ -47,7 +47,7 @@ module.exports = function (router) {
       res.send(task);
     });
   }).delete(route.wrap(async (req, res, next) => {
-    let {id} = req.params;
+    let { id } = req.params;
 
     // check for workload
     let workload = await Workload.findOne({ task: id });
@@ -62,9 +62,18 @@ module.exports = function (router) {
   }));
 
   router.route('/tasks')
-    .put(function (req, res, next) {
+    .put(route.wrap(async function (req, res, next) {
       var user = req.user;
       var task = new Task(req.body);
+      let project = task.project;
+      if (!project._id)
+        project = await Project.findById(project, 'name owner');
+      // 除了部门经理
+      if (project.owner != user._id) {
+        // 不能帮别人创建任务
+        if (task.owner && user._id != (task.owner._id || task.owner))
+          throw new Error('想帮队友创建任务？找项目经理吧');
+      }
 
       if (!task.owner)
         task.owner = user._id;
@@ -74,10 +83,21 @@ module.exports = function (router) {
 
         res.sendStatus(204);
       });
-    })
-    .post(async function (req, res, next) {
+    }))
+    .post(route.wrap(async function (req, res, next) {
+      var user = req.user;
       let task = req.body;
-      let oldTask = await Task.findById(task._id);
+      let oldTask = await Task.findById(task._id).populate('project', 'owner');
+      // 除了部门经理
+      if (user._id != oldTask.project.owner) {
+        // 不能修改别人的任务
+        if (user._id != oldTask.owner)
+          throw new Error('想帮队友完成任务？找项目经理变更任务所有者吧');
+        // 自己不能把任务转给别人
+        if (task.owner && user._id != (task.owner || {})._id)
+          throw new Error('想请队友帮忙完成任务？找项目经理变更任务吧');
+      }
+
       // 设置为现在做时记录开始日期
       if (task.treat == 10 && oldTask.treat != task.treat && !task.startDate) {
         task.startDate = moment().startOf('day');
@@ -96,5 +116,5 @@ module.exports = function (router) {
         res.send(task);
       });
       return;
-    });
+    }));
 }

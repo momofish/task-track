@@ -12,7 +12,7 @@ moment.locale('zh-cn');
 toastr.options = {
   "showDuration": "100",
   "hideDuration": "100",
-  "timeOut": "1000",
+  "timeOut": "2000",
   "extendedTimeOut": "1000",
 }
 
