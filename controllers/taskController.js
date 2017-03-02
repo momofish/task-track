@@ -67,9 +67,9 @@ module.exports = function (router) {
       var task = new Task(req.body);
       let project = task.project;
       if (!project._id)
-        project = await Project.findById(project, 'name owner');
+        project = await Project.findById(project, 'id name owner');
       // 除了部门经理
-      if (project.owner != user._id) {
+      if (project.id && project.owner != user._id) {
         // 不能帮别人创建任务
         if (task.owner && user._id != (task.owner._id || task.owner))
           throw new Error('想帮队友创建任务？找项目经理吧');
@@ -87,13 +87,13 @@ module.exports = function (router) {
     .post(route.wrap(async function (req, res, next) {
       var user = req.user;
       let task = req.body;
-      let oldTask = await Task.findById(task._id).populate('project', 'owner');
+      let oldTask = await Task.findById(task._id).populate('project', 'id owner');
       // 除了部门经理
-      if (user._id != oldTask.project.owner) {
+      if (oldTask.project.id && user._id != oldTask.project.owner) {
         // 不能修改别人的任务
         if (user._id != oldTask.owner)
           throw new Error('想帮队友完成任务？找项目经理变更任务所有者吧');
-        // 自己不能把任务转给别人
+        // 公司项目，自己不能把任务转给别人
         if (task.owner && user._id != (task.owner || {})._id)
           throw new Error('想请队友帮忙完成任务？找项目经理变更任务吧');
       }
