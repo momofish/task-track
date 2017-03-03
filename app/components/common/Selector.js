@@ -132,7 +132,7 @@ class Selector extends Component {
         {searchable ?
           <div className='selector-search'>
             <input type='text' className='form-control' placeholder='请输入关键字'
-              onChange={this.changeTerm} value='' />
+              onChange={this.changeTerm} />
           </div> : null
         }
         <div className='tab-pane active'>
