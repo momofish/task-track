@@ -11,7 +11,7 @@ export default {
         {
           name: '项目',
           data: () => projectService.getMyPartProjects()
-            .then(projects => projects.map(project => extend({display: projectService.formatProjectName(project) }, project))),
+            .then(projects => projects.map(project => extend({ display: projectService.formatProjectName(project) }, project))),
           nameField: 'display',
           searchable: true
         }
@@ -47,7 +47,7 @@ export default {
     Selector.open(extend({
       target,
       dataSources: [
-        {
+        options.team && {
           name: '团队',
           data: () => teamService.getTeam((options.team || {})._id)
             .then(team => (team || {}).members || []),
@@ -58,7 +58,7 @@ export default {
           data: userService.getUser,
           searchable: true
         }
-      ],
+      ].filter(dataSource => dataSource),
       selected,
       onSelect
     }, options));
