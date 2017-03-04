@@ -27,6 +27,7 @@ var dependencies = [
   'react-date-range',
   'lodash',
   'moment',
+  'moment/locale/zh-cn',
   'markdown-it',
   'highlight.js',
   'classnames',
