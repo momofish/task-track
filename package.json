@@ -11,7 +11,7 @@
     "start": "node server.js",
     "watch": "nodemon --inspect server.js",
     "dev": "gulp & nodemon --inspect server.js",
-    "postinstall": "bower install && gulp build"
+    "postinstall": "bower install"
   },
   "babel": {
     "presets": [
