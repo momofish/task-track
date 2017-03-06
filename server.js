@@ -66,7 +66,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (req, authUser, done) {
   var user = req.session.user;
-  if (user && user.loginId == authUser.loginId) {
+  if (user && user.loginId.trim().toLowerCase() == authUser.loginId.trim().toLowerCase()) {
     done(null, req.session.user);
     return;
   }
