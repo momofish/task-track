@@ -68,7 +68,7 @@ module.exports = function (router) {
     localDepts = _.zipObject(_.map(localDepts, 'id'), localDepts);
 
     // 对比本地项目，同步项目名称、所有者、成员
-    let localProjects = await Project.find({ id: RegExp('^BSD', 'i') });
+    let localProjects = await Project.find({ id: RegExp('^BSDEPT', 'i') });
     let localProjectsById = _.groupBy(localProjects, 'id');
     for (let project of projects) {
       if (!project.PMUID) continue;
