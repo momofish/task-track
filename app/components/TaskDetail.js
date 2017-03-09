@@ -156,17 +156,13 @@ class TaskDetail extends Component {
               <EditableText className={className} value={task.title}
                 onSubmit={text => this.updateTask({ _id: task._id, title: text.value })} />
             </FormItem>
-            <FormItem content={[
+            <FormItem label='负责' content={[
               <IconText icon='user' text={owner.name}
                 onClick={this.selectMember.bind(this, task.owner, 'owner')} />,
               <IconText text={task.dueDate ? moment(task.dueDate).format('L') + ' 截止' : '截止日期'}
                 icon='calendar' onClick={this.selectDate.bind(this, 'dueDate')}
                 />
             ]} />
-            <FormItem>
-              <EditableText multiline='true' value={task.description} placeholder='添加描述'
-                onSubmit={text => this.updateTask({ _id: task._id, description: text.value })} />
-            </FormItem>
             <FormItem label='参与'>
               <div>
                 {members.map((member, i) =>
@@ -174,6 +170,10 @@ class TaskDetail extends Component {
                 )}
                 <IconText icon='plus' onClick={this.selectMember.bind(this, members, 'members')} />
               </div>
+            </FormItem>
+            <FormItem>
+              <EditableText multiline='true' value={task.description} placeholder='添加描述'
+                onSubmit={text => this.updateTask({ _id: task._id, description: text.value })} />
             </FormItem>
             <FormItem label='实际' content={[
               <IconText text={task.startDate ? moment(task.startDate).format('L') + ' 开始' : '开始日期'}
