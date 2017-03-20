@@ -30,7 +30,7 @@ module.exports = function (router) {
       params.completed = true;
 
     Task.find(complex ? { $and: [complex, params] } : params)
-      .sort('-dueDate')
+      .sort('dueDate')
       .select('completed project owner title treat dueDate startDate endDate')
       .populate('owner project', 'id name').exec(function (err, tasks) {
         if (err) return next(err);
