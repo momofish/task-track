@@ -28,11 +28,17 @@ class PopBoxContainer extends Component {
     );
 
     if (options) {
-      let rect = options.target.getClientRects()[0];
+      let rect = options.target.getBoundingClientRect();
       let style = options.style = options.style || {};
-      style.top = rect.bottom + 5;
-      if (options.align == 'right')
-        style.right = document.documentElement.scrollWidth - rect.right;
+      let { clientWidth, clientHeight } = document.documentElement
+      // 底部不够空间，则向上弹出
+      if (clientHeight - rect.bottom < 200)
+        style.bottom = (clientHeight - rect.top) + 5;
+      else
+        style.top = rect.bottom + 5;
+      // 右部不够空间或强制靠右，则靠右对齐
+      if (options.align == 'right' || clientWidth - rect.right < 200)
+        style.right = clientWidth - rect.right;
       else
         style.left = rect.left;
     }

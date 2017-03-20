@@ -30,6 +30,7 @@ module.exports = function (router) {
       params.completed = true;
 
     Task.find(complex ? { $and: [complex, params] } : params)
+      .sort('-dueDate')
       .select('completed project owner title treat dueDate startDate endDate')
       .populate('owner project', 'id name').exec(function (err, tasks) {
         if (err) return next(err);
@@ -89,7 +90,7 @@ module.exports = function (router) {
       let task = req.body;
       let oldTask = await Task.findById(task._id).populate('project', 'id owner');
       // 除了部门经理
-      if (oldTask.project.id && user._id != oldTask.project.owner) {
+      if (oldTask.project && oldTask.project.id && user._id != oldTask.project.owner) {
         // 不能修改别人的任务
         if (user._id != oldTask.owner)
           throw new Error('想帮队友完成任务？找项目经理变更任务所有者吧');
