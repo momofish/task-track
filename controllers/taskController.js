@@ -89,6 +89,7 @@ module.exports = function (router) {
       var user = req.user;
       let task = req.body;
       let oldTask = await Task.findById(task._id).populate('project', 'id owner');
+
       // 除了部门经理
       if (oldTask.project && oldTask.project.id && user._id != oldTask.project.owner) {
         // 不能修改别人的任务
@@ -97,20 +98,38 @@ module.exports = function (router) {
         // 公司项目，自己不能把任务转给别人
         if (task.owner && user._id != (task.owner || {})._id)
           throw new Error('想请队友帮忙完成任务？找项目经理变更任务吧');
+        // 不能修改截止日期
+        if (task.dueDate)
+          throw new Error('想变更截止日期？找项目经理变更任务吧');
       }
 
       // 设置为现在做时记录开始日期
+      let today = moment().startOf('day');
       if (task.treat == 10 && oldTask.treat != task.treat && !task.startDate) {
-        task.startDate = moment().startOf('day');
+        task.startDate = today.isAfter(oldTask.dueDate) ? oldTask.dueDate : today;
       }
-      // 设置完成时，或所有检查点标记完成记录结束日期
+
+      // 设置完成时或所有检查点标记完成记录结束日期(截止日期)
       if (task.completed && oldTask.completed != task.completed ||
         task.subTasks && task.subTasks.length && !task.subTasks.some(s => !s.completed) && oldTask.subTasks.some(s => !s.completed)) {
         task.completed = true;
-        task.endDate = moment().startOf('day');
+        task.endDate = oldTask.dueDate;
         if (!oldTask.startDate)
-          task.startDate = moment().startOf('day');
+          task.startDate = today.isAfter(task.endDate) ? task.endDate : today; // 不能晚于今天
       }
+
+      // 结束日期不能晚于截止日期
+      if (task.endDate && moment(task.endDate).isAfter(moment(oldTask.dueDate)))
+        throw new Error('结束日期不能晚于截止日期');
+
+      // 开始日期不能晚于结束日期
+      if (task.startDate || task.endDate) {
+        let startDate = task.startDate || oldTask.startDate;
+        let endDate = task.endDate || oldTask.endDate;
+        if (startDate && endDate && moment(startDate).isAfter(moment(endDate)))
+          throw new Error('结束日期不能晚于开始日期');
+      }
+
       Task.update({ _id: task._id }, task, function (err) {
         if (err) return next(err);
 
