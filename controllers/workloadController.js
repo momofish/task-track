@@ -27,7 +27,7 @@ module.exports = function (router) {
   router.route(`${baseUri}/todos`)
     // 获取待办数
     .get(route.wrap(async (req, res) => {
-      let {user} = req;
+      let { user } = req;
       // 待审批数：所管理项目的工作量待审批记录数
       let projects = await Project.find({ owner: user._id }).select('_id');
       let approve = await Workload.find({ project: { $in: projects.map(p => p._id) }, status: 1 }).count();
@@ -38,8 +38,8 @@ module.exports = function (router) {
   router.route(`${baseUri}/todos/:category`)
     // 获取待办
     .get(route.wrap(async (req, res) => {
-      let {user} = req;
-      let {category} = req.params;
+      let { user } = req;
+      let { category } = req.params;
       let todos;
       if (category == 'approve') {
         // 待审批数：所管理项目的工作量待审批记录数
@@ -53,9 +53,9 @@ module.exports = function (router) {
     }))
     // 提交审批
     .post(route.wrap(async (req, res) => {
-      let {user} = req;
-      let {category} = req.params;
-      let {approves, agree, opinion} = req.body;
+      let { user } = req;
+      let { category } = req.params;
+      let { approves, agree, opinion } = req.body;
 
       if (agree) {
         // 按人、日期同步工作量（当前待审批工作量及相关人员日期已审批工作量）
@@ -96,9 +96,9 @@ module.exports = function (router) {
   router.route(`${baseUri}/:mode/:date`)
     // 待填报任务
     .get(route.wrap(async (req, res) => {
-      let {user} = req;
-      let {mode, date} = req.params;
-      let {startDate, endDate} = parsePeriod(mode, date);
+      let { user } = req;
+      let { mode, date } = req.params;
+      let { startDate, endDate } = parsePeriod(mode, date);
 
       let listWorkloadUri = `${workloadServiceBaseUri}/ListWorkload?userId=${user.id}&startDate=${startDate}&endDate=${endDate}`;
       let worksheet = await api.fetch(listWorkloadUri);
@@ -123,9 +123,7 @@ module.exports = function (router) {
         $or: [{
           $and: [
             { $or: [{ owner: user._id }, { members: { $in: [user._id] } }] },
-            { $or: [{ startDate: { $lte: moment(endDate) } }, { startDate: { $exists: false } }] },
-            { $or: [{ endDate: { $gte: moment(startDate) } }, { endDate: { $exists: false } }] },
-            { $or: [{ startDate: { $exists: true } }, { endDate: { $exists: true } }] },
+            { startDate: { $lte: moment(endDate) }, endDate: { $gte: moment(startDate) } },
             { project: { $exists: true } }
           ]
         }, { _id: { $in: _.keys(worksheet.workloads) } }],
@@ -138,9 +136,9 @@ module.exports = function (router) {
     }))
     // 提交审批
     .post(route.wrap(async (req, res) => {
-      let {user} = req;
+      let { user } = req;
       let owner = user._id;
-      let {workloads} = req.body;
+      let { workloads } = req.body;
 
       for (let task in workloads) {
         let workloadsByDay = workloads[task];
@@ -174,7 +172,7 @@ module.exports = function (router) {
 
   router.route(`${baseUri}/myProjects`)
     .get(route.wrap(async (req, res) => {
-      let {user} = req;
+      let { user } = req;
       let listProjectUri = `${workloadServiceBaseUri}/ListMyProject?loginId=${user.loginId}`;
       let projects = await api.fetch(listProjectUri);
 

@@ -227,7 +227,7 @@ export default class Workload extends Component {
                   <th style={{ width: 150 }}>任务</th>
                   <th style={{ width: 60 }}>开始</th>
                   <th style={{ width: 60 }}>结束</th>
-                  {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 30 }}>
+                  {needWorkloadsPair.map(need => <th key={need[0]} style={{ width: 30, color: !need[1] && '#aaa' }}>
                     {`${moment(need[0]).format('dd MM/DD')}`}
                   </th>)}
                 </tr>
