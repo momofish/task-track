@@ -19,6 +19,7 @@ var models = require('./models');
 var authenticate = require('./middlewares/authenticate');
 var OAuth2Strategy = require('./libs/passport-bingo').Strategy;
 var moment = require('moment');
+var crypto = require('./utils/crypto');
 
 // global config
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -44,7 +45,7 @@ passport.use(new LocalStrategy(
     models.User.findOne({ loginId: loginId.trim().toLowerCase() }, function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false, { msg: 'user not found' }); }
-      if (user.password != password) { return done(null, false, { msg: 'invalid password' }); }
+      if (!crypto.hashMatch(undefined, password, user.password)) { return done(null, false, { msg: 'invalid password' }); }
 
       return done(null, user);
     });

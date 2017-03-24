@@ -9,14 +9,14 @@ import * as config from '../config';
 const baseUri = '/workload';
 const parsePeriod = (mode, date) => {
   let mDate = moment(date);
-  let startDate = mDate.startOf('isoWeek').format('L');
-  let endDate = mDate.endOf('isoWeek').format('L');
+  let startDate = mDate.startOf('isoWeek').format('YYYY-MM-DD');
+  let endDate = mDate.endOf('isoWeek').format('YYYY-MM-DD');
   if (mode == 1) {
     mDate = moment(date);
     if (mDate.date() >= 24) mDate.add(1, 'M');
     mDate.startOf('month');
-    startDate = mDate.add(-1, 'M').add(23, 'd').format('L');
-    endDate = mDate.add(1, 'M').add(-1, 'd').format('L');
+    startDate = mDate.add(-1, 'M').add(23, 'd').format('YYYY-MM-DD');
+    endDate = mDate.add(1, 'M').add(-1, 'd').format('YYYY-MM-DD');
   }
 
   return ({ startDate, endDate });

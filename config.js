@@ -9,6 +9,7 @@ module.exports = {
   enableHttps: process.env.ENABLE_HTTPS == "true",
 
   loginPath: process.env.LOGIN_PATH || '/login',
+  defaultPassword: process.env.DEFAULT_PASSWORD || '1',
 
   evmSiteUrl: process.env.EVM_SITE_URL || 'http://tproject.bingosoft.net:88/Portal',
 

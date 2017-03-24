@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import _ from 'lodash';
 
 import { User, Dept, Project } from '../models';
-import { api, route } from '../utils';
+import { api, route, crypto } from '../utils';
 import * as config from '../config';
 
 const baseUri = '/system';
@@ -39,8 +39,9 @@ module.exports = function (router) {
     for (let userId in users) {
       let user = users[userId];
       let localUser = localUsers[user.id] = localUsers[user.id] || new User();
+
       Object.assign(localUser, {
-        id: user.id, name: user.name, enabled: true, loginId: user.loginId.trim().toLowerCase(), password: '1',
+        id: user.id, name: user.name, enabled: true, loginId: user.loginId.trim().toLowerCase(), password: crypto.hash(undefined, config.defaultPassword),
         dept: (localDepts[user.dept] || {})._id
       });
       await localUser.save();
