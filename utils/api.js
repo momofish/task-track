@@ -1,6 +1,6 @@
-import nodeFetch from 'node-fetch';
+const nodeFetch = require('node-fetch');
 
-export async function fetch(url, opts) {
+module.exports.fetch = async function fetch(url, opts) {
   let options = Object.assign({headers: { 'Content-Type': 'application/json' }}, opts);
   console.log(`${options.method || 'GET'} ${url}`);
   let result = await nodeFetch(url, options);

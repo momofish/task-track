@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
-import moment from 'moment';
-import { assign } from 'lodash'
+const mongoose = require('mongoose');
+const moment = require('moment');
+const { assign } = require('lodash');
 
-import { api, route, paging } from '../utils';
-import { Tag } from '../models';
+const { api, route, paging } = require('../utils');
+const { Tag } = require('../models');
 
 module.exports = function (router) {
   router.route('/tags/:category?/:filter?')

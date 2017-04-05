@@ -1,5 +1,5 @@
-import * as api from './api';
-import * as route from './route';
-import * as crypto from './crypto';
+const api = require('./api');
+const route = require('./route');
+const crypto = require('./crypto');
 
-export { api, route, crypto };
+module.exports = { api, route, crypto };

@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
-import moment from 'moment';
-import { assign } from 'lodash'
+const mongoose = require('mongoose');
+const moment = require('moment');
+const { assign } = require('lodash');
 
-import { api, route } from '../utils';
-import { Question, Blog } from '../models';
+const { api, route } = require('../utils');
+const { Question, Blog } = require('../models');
 
 module.exports = function (router) {
   router.route('/know/:category')

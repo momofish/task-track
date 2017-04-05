@@ -1,10 +1,10 @@
-import fs from 'fs';
-import multer from 'multer';
-import crypto from 'crypto';
-import { Transform } from 'stream'
+const fs = require('fs');
+const multer = require('multer');
+const crypto = require('crypto');
+const { Transform } = require('stream')
 
-import { api, route } from '../utils';
-import * as config from '../config';
+const { api, route } = require('../utils');
+const config = require('../config');
 
 const baseUri = '/assets';
 const {assetRoot} = config;

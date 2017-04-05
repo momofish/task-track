@@ -131,8 +131,6 @@ app.get('/auth/oauth/callback', passport.authenticate('bingo', {
 }));
 
 // router
-require('babel-register');
-require("babel-polyfill");
 require('./controllers')(app);
 
 app.use(function (err, req, res, next) {
@@ -148,6 +146,8 @@ app.use(authenticate.ensureLoggedIn({ redirectTo: config.loginPath }), function 
   }
 
   // Babel ES6/JSX Compiler
+  require('babel-register');
+  require("babel-polyfill");
   var routes = require('./app/routes');
 
   Router.match({ routes: routes.default, location: req.url }, function (err, redirectLocation, renderProps) {

@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import moment from 'moment';
-import { assign } from 'lodash'
+const mongoose = require('mongoose');
+const moment = require('moment');
+const { assign } = require('lodash');
 
-import { api, route } from '../utils';
-import { Question, Tag, User, VoteStat } from '../models';
+const { api, route } = require('../utils');
+const { Question, Tag, User, VoteStat } = require('../models');
 
-export const vote4Entity = async (entity, vote) => {
+const vote4Entity = async (entity, vote) => {
   let {_id} = entity;
   // load votestat
   let voteStat = await VoteStat.findById(_id);

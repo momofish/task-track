@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
-import _ from 'lodash';
+const mongoose = require('mongoose');
+const _ = require('lodash');
 
-import { User, Dept, Project } from '../models';
-import { api, route, crypto } from '../utils';
-import * as config from '../config';
+const { User, Dept, Project } = require('../models');
+const { api, route, crypto } = require('../utils');
+const config = require('../config');
 
 const baseUri = '/system';
 const workloadServiceBaseUri = `${config.evmSiteUrl}/Services/WorkloadService`;

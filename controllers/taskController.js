@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
-import moment from 'moment';
+const mongoose = require('mongoose');
+const moment = require('moment');
 
-import { api, route } from '../utils';
-import { Task, Workload, Project } from '../models';
+const { api, route } = require('../utils');
+const { Task, Workload, Project } = require('../models');
 
 module.exports = function (router) {
   router.route('/tasks/:category/:filter').get(function (req, res, next) {

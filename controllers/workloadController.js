@@ -1,10 +1,10 @@
-import moment from 'moment';
-import mongoose from 'mongoose';
-import _ from 'lodash';
+const moment = require('moment');
+const mongoose = require('mongoose');
+const _ = require('lodash');
 
-import { Task, Workload, Project } from '../models';
-import { api, route } from '../utils';
-import * as config from '../config';
+const { Task, Workload, Project } = require('../models');
+const { api, route } = require('../utils');
+const config = require('../config');
 
 const baseUri = '/workload';
 const parsePeriod = (mode, date) => {

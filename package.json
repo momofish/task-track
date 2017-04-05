@@ -8,9 +8,9 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "watch": "nodemon --inspect server.js",
-    "dev": "gulp & nodemon --inspect server.js",
+    "start": "node --harmony-async-await server.js",
+    "watch": "nodemon --harmony-async-await --inspect server.js",
+    "dev": "gulp & nodemon --harmony-async-await --inspect server.js",
     "postinstall": "bower install"
   },
   "babel": {
