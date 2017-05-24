@@ -1,4 +1,4 @@
-import { get, save } from './apiService';
+import { get, save, remove } from './apiService';
 
 const resourceUrl = '/api/projects';
 
@@ -19,8 +19,12 @@ export default {
     return save(resourceUrl, project);
   },
 
+  deleteProject(id) {
+    return remove(resourceUrl, id);
+  },
+
   formatProjectName(project) {
-    if(!project)
+    if (!project)
       return null;
     let projectName = `[${project.id || '个人'}]${project.name}`;
     return projectName;

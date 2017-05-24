@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
-var Project = require("../models").Project;
-var Team = require("../models").Team;
+const mongoose = require("mongoose");
+const { Project, Team, Task } = require("../models");
+const { api, route } = require('../utils');
 
 module.exports = function (router) {
   router.route('/projects/my').get(function (req, res, next) {
@@ -31,6 +31,10 @@ module.exports = function (router) {
     Project.findById(id).populate('owner members', 'name').exec(function (err, project) {
       if (err) return next(err);
 
+      if (!project) {
+        return res.send(project);
+      }
+
       if (project.team) {
         Team.findById(project.team).populate('members', 'name').exec(function (err, team) {
           if (err) return next(err);
@@ -42,7 +46,21 @@ module.exports = function (router) {
       else
         res.send(project);
     });
-  });
+  }).delete(route.wrap(async (req, res, next) => {
+    let { id } = req.params;
+
+    // check task
+    let project = await Project.findById(id);
+    if (project.id) {
+      let task = await Task.findOne({ project: id });
+      if (task)
+        throw new Error('该项目存在，无法删除');
+    }
+
+    await Task.remove({project: project.id});
+    await Project.findByIdAndRemove(id);
+    res.sendStatus(204);
+  }));
 
   router.route('/projects').put(function (req, res, next) {
     var user = req.user;

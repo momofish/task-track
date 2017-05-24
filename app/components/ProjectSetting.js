@@ -12,7 +12,7 @@ class ProjectSetting extends Component {
   }
 
   componentDidMount() {
-    let {project} = this.props;
+    let { project } = this.props;
 
     if (project)
       projectService.getProject(project._id)
@@ -24,26 +24,37 @@ class ProjectSetting extends Component {
   }
 
   changeEntity(field, event) {
-    let {project} = this.state;
+    let { project } = this.state;
     project[field] = event.target.value;
     this.forceUpdate();
   }
 
   saveEntity() {
-    let {project} = this.state;
+    let { project } = this.state;
     this.props.state.updated = true;
     projectService.saveProject(project)
       .then(this.dismiss);
   }
 
+  async deleteProject() {
+    if (!confirm('删除后将无法恢复，确认删除？'))
+      return;
+    
+    let { project } = this.state;
+    await projectService.deleteProject(project._id);
+
+    this.props.state.updated = true;
+    this.dismiss();
+  }
+
   handleSubmit(event) {
-    let {project} = this.state;
+    let { project } = this.state;
     event.preventDefault();
     this.saveEntity(project);
   }
 
   selectTeam(event) {
-    let {project} = this.state;
+    let { project } = this.state;
 
     select.selectTeam(event.currentTarget, project.team, selecting => {
       project.team = selecting;
@@ -52,7 +63,7 @@ class ProjectSetting extends Component {
   }
 
   selectUser(field, event) {
-    let {project} = this.state;
+    let { project } = this.state;
     let selected = project[field];
     select.select4ProjectMember(event.currentTarget, selected, selecting => {
       project[field] = selecting;
@@ -61,7 +72,7 @@ class ProjectSetting extends Component {
   }
 
   selectProject(field, event) {
-    let {project} = this.state;
+    let { project } = this.state;
     let selected = project[field];
     select.selectMenu(event.currentTarget, selected, selecting => {
       project[field] = selecting.id;
@@ -79,25 +90,25 @@ class ProjectSetting extends Component {
   }
 
   addPacket(quick) {
-    let {packets} = this.state.project;
+    let { packets } = this.state.project;
     packets.push({ name: quick.title, active: true });
     this.quick.title = '';
     this.forceUpdate();
   }
 
   editPacket(updator, input) {
-    let {packets} = this.state.project;
+    let { packets } = this.state.project;
     updator(input);
     this.forceUpdate();
   }
 
   render() {
     let pProject = this.props.project || {};
-    let {project} = this.state;
+    let { project } = this.state;
     let owner = project.owner || { name: '无所有者' };
     let members = project.members || [];
     let team = project.team || { name: '未指派团队' };
-    let {currentUser} = userService;
+    let { currentUser } = userService;
 
     return (
       <form className='smart-form' onSubmit={this.handleSubmit.bind(this)}>
@@ -151,6 +162,8 @@ class ProjectSetting extends Component {
             <button type='submit' className='btn btn-primary btn-sm'
               disabled={pProject.owner && pProject.owner._id != currentUser._id}>确定</button>
             <button type='button' className='btn btn-link btn-sm' onClick={this.dismiss}>取消</button>
+            {pProject.owner && pProject.owner._id == currentUser._id &&
+              <button type='button' className='btn btn-danger btn-sm pull-right' onClick={this.deleteProject.bind(this)}>删除项目</button>}
           </div>
         </FormItem>
       </form>
