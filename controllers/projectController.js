@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const { Project, Team, Task } = require("../models");
 const { api, route } = require('../utils');
+const config = require('../config');
+
+const workloadServiceBaseUri = `${config.evmSiteUrl}/Services/WorkloadService`;
 
 module.exports = function (router) {
   router.route('/projects/my').get(function (req, res, next) {
@@ -24,6 +27,15 @@ module.exports = function (router) {
 
       res.send(projects);
     });
+  });
+
+  router.route('/projects/managed').get(async (req, res, next) => {
+    let { user } = req;
+
+    let managed = await api.fetch(`${workloadServiceBaseUri}/ListMyProject?loginId=${user.loginId}`);
+    let projects = await Project.find({ id: { $in: managed.map(project => project.ProjectID) } }).populate('owner team', 'name');
+
+    res.send(projects);
   });
 
   router.route('/projects/:id').get(function (req, res, next) {
@@ -57,7 +69,7 @@ module.exports = function (router) {
         throw new Error('该项目存在，无法删除');
     }
 
-    await Task.remove({project: project.id});
+    await Task.remove({ project: project._id });
     await Project.findByIdAndRemove(id);
     res.sendStatus(204);
   }));

@@ -15,6 +15,10 @@ export default {
     return get(resourceUrl, 'part');
   },
 
+  getManagedProjects() {
+    return get(resourceUrl, 'managed');
+  },
+
   saveProject(project) {
     return save(resourceUrl, project);
   },

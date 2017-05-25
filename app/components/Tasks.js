@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {assign} from 'lodash';
+
 import Sidebar from './Sidebar';
 import {Modal} from './common';
 import ProjectSetting from './ProjectSetting';
@@ -7,7 +9,6 @@ import TeamSetting from './TeamSetting';
 import TasksStore from '../stores/TasksStore'
 import TasksActions from '../actions/TasksActions';
 import {select} from '../utils';
-import {assign} from 'lodash';
 
 class Tasks extends Component {
   constructor(props) {

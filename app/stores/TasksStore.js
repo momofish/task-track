@@ -24,7 +24,8 @@ class TasksStore {
             { label: '我的任务', icon: 'tasks', to: '/tasks/my' },
             { label: '我参与的任务', icon: 'briefcase', to: '/tasks/part' },
             { label: '任务日历', icon: 'calendar', to: '/tasks/calendar' },
-            { label: '填工作量(含审批)', icon: 'lock', to: '/tasks/workload' },
+            { label: '我的项目', icon: 'list-alt', to: '/tasks/myproject' },
+            { label: '工作量填报审批', icon: 'lock', to: '/tasks/workload' },
           ]
         }, ...sectionsAll
       ]

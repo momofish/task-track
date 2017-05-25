@@ -7,6 +7,7 @@ import Tasks from './components/Tasks';
 import MyTask from './components/MyTask';
 import Calendar from './components/Calendar';
 import Workload from './components/Workload';
+import MyProject from './components/MyProject';
 import ProjectTask from './components/ProjectTask';
 
 import * as k from './components/know';
@@ -18,6 +19,7 @@ export default (
       <IndexRoute component={Home} />
       <Route path='calendar' component={Calendar} />
       <Route path='workload' component={Workload} />
+      <Route path='myproject' component={MyProject} />
       <Route path=':category' component={MyTask} />
       <Route path='projects/:id' component={ProjectTask} />
     </Route>
