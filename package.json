@@ -9,7 +9,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "nodemon --inspect server.js",
+    "server": "node server.dist.js",
+    "build": "gulp build",
     "dev": "gulp & nodemon --inspect server.js",
     "postinstall": "bower install"
   },
