@@ -1,0 +1,21 @@
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: task-track
+    environment:
+      MONGO_URI: mongodb://10.200.95.9/task-track
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 250M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:4000"
+    networks:
+      - webnet
+networks:
+  webnet:
