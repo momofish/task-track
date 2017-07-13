@@ -33,7 +33,7 @@ export default class Workload extends Component {
   }
 
   async loadData() {
-    let {mode, date} = this.state;
+    let { mode, date } = this.state;
     let worksheet = await workloadService.getWorkSheet(mode, date);
     this.state.worksheet = worksheet;
     this.state.filled = false;
@@ -43,9 +43,9 @@ export default class Workload extends Component {
   }
 
   makeTotal() {
-    let {worksheet} = this.state;
-    let {workloads} = worksheet;
-    let {needWorkloads, otherWorkloads} = worksheet;
+    let { worksheet } = this.state;
+    let { workloads } = worksheet;
+    let { needWorkloads, otherWorkloads } = worksheet;
     let totalWorkloads = _.mapValues(needWorkloads, v => 0);
     for (let taskId in workloads) {
       let workloadsByDate = workloads[taskId];
@@ -61,13 +61,13 @@ export default class Workload extends Component {
   }
 
   changeMode(button) {
-    let {mode} = button;
+    let { mode } = button;
     this.state.mode = mode;
     this.loadData();
   }
 
   changeDate(button, event) {
-    let {date, mode} = this.state
+    let { date, mode } = this.state
     if (button.direction) {
       this.state.date = moment(date).add(button.direction, mode == 1 ? 'Month' : 'Week');
       this.loadData();
@@ -86,7 +86,7 @@ export default class Workload extends Component {
 
   changeWorkload(task, day, event) {
     let filled = event.target.value;
-    let {workloads} = this.state.worksheet;
+    let { workloads } = this.state.worksheet;
     let workloadsByTask = workloads[task._id] = workloads[task._id] || {};
     let workload = workloadsByTask[day] = workloadsByTask[day] || {};
 
@@ -99,8 +99,8 @@ export default class Workload extends Component {
   }
 
   autoFill() {
-    let {worksheet} = this.state;
-    let {workloads, needWorkloads, otherWorkloads, tasks} = worksheet;
+    let { worksheet } = this.state;
+    let { workloads, needWorkloads, otherWorkloads, tasks } = worksheet;
 
     // 自动按天填充未填的工作量
     for (let day in needWorkloads) {
@@ -140,8 +140,8 @@ export default class Workload extends Component {
   }
 
   async submit() {
-    let {mode, date, worksheet, filled} = this.state;
-    let {workloads, needWorkloads, totalWorkloads} = worksheet;
+    let { mode, date, worksheet, filled } = this.state;
+    let { workloads, needWorkloads, totalWorkloads } = worksheet;
 
     if (_.chain(totalWorkloads).toPairs().some(pair => pair[1] > needWorkloads[pair[0]]).value()) {
       toastr.error('超过工作量填报限制');
@@ -181,9 +181,9 @@ export default class Workload extends Component {
   }
 
   render() {
-    let {mode, date, worksheet, selectedTask, todos, processing} = this.state;
-    let {workloads} = worksheet;
-    let {needWorkloads, otherWorkloads, tasks, totalWorkloads} = worksheet;
+    let { mode, date, worksheet, selectedTask, todos, processing } = this.state;
+    let { workloads } = worksheet;
+    let { needWorkloads, otherWorkloads, tasks, totalWorkloads } = worksheet;
     let needWorkloadsPair = _.toPairs(needWorkloads);
 
     return (
@@ -293,7 +293,7 @@ export default class Workload extends Component {
               （查看 <a href='https://eim.bingosoft.net/EIMWeb/Modules/ProjectManage/WorkSheet/WorkLoadList.aspx' target='_blank' className='btn btn-xs btn-info'>未填工作量</a>&nbsp;
                 <a href='https://eim.bingosoft.net/EIMWeb/Modules/ProjectManage/WorkSheet/WorkSheetList.aspx' target='_blank' className='btn btn-xs btn-info'>已填工作量</a>）
               和假勤系统（<a href='https://erp.bingosoft.net/BingoService/' target='_blank' className='btn btn-xs btn-info'>查看考勤</a>）</p>
-              <p style={{whiteSpace: 'normal'}}>3. 工作量填报状态图例（鼠标移到工作量单元格可查看审核状态）：<br />
+              <p style={{ whiteSpace: 'normal' }}>3. 工作量填报状态图例（鼠标移到工作量单元格可查看审核状态）：<br />
                 <span className="text-success">7.5</span> 已审核 <span className="text-warning">7.5</span> 审核中 <span className="text-danger">7.5</span> 已拒绝
               </p>
             </div>
@@ -302,7 +302,7 @@ export default class Workload extends Component {
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           this.setState({ selectedTask: null });
           updated && this.loadData();
-        } } />}
+        }} />}
       </div>
     );
   }
@@ -340,7 +340,7 @@ class WorkloadApprove extends Component {
   }
 
   async approve(agree) {
-    let {approves, opinion} = this.state;
+    let { approves, opinion } = this.state;
     approves = approves.filter(approve => approve.checked).map(approve => approve._id);
     if (!approves.length) {
       toastr.error('请选择待审批项');
@@ -364,12 +364,18 @@ class WorkloadApprove extends Component {
     this.forceUpdate();
   }
 
+  checkAll(group) {
+    let { header } = group;
+    header.checked = !header.checked;
+    this.forceUpdate();
+  }
+
   select(workload) {
     this.setState({ selectedTask: workload.task });
   }
 
   render() {
-    let {approveGroups, selectedTask, opinion, processing} = this.state;
+    let { approveGroups, selectedTask, opinion, processing } = this.state;
     return (
       <div className='container-fluid' style={{ paddingTop: 20 }}>
         <nav className='navbar navbar-default'>
@@ -382,11 +388,12 @@ class WorkloadApprove extends Component {
         {approveGroups.length ?
           <GroupList data={approveGroups} style={{ maxHeight: 400 }}
             onCheck={this.check.bind(this)}
+            onCheckAll={this.checkAll.bind(this)}
             onSelect={this.select.bind(this)}
-            /> : <div className="alert alert-info">无待审批项</div>}
+          /> : <div className="alert alert-info">无待审批项</div>}
         {selectedTask && <TaskDetail task={selectedTask} onHidden={updated => {
           this.setState({ selectedTask: null });
-        } } />}
+        }} />}
       </div>
     );
   }

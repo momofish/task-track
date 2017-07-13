@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 
 import ListItem from './ListItem';
@@ -9,12 +9,12 @@ class GroupList extends Component {
   }
 
   handleSelect() {
-    let {onSelect} = this.props;
+    let { onSelect } = this.props;
     onSelect && onSelect(...arguments);
   }
 
   handleClickTag() {
-    let {onClickTag} = this.props;
+    let { onClickTag } = this.props;
     onClickTag && onClickTag(...arguments);
   }
 
@@ -27,27 +27,29 @@ class GroupList extends Component {
 
   render() {
     let groups = this.props.data;
-    let {className, style} = this.props;
+    let { className, style, onCheck, onCheckAll } = this.props;
 
     return (
-      <div className={classnames('flex-scroll', className) } style={style}>
+      <div className={classnames('flex-scroll', className)} style={style}>
         {groups.map((group, i) => (
           <div className='group-list' key={i}>
             <a className='list-header' data-toggle='collapse'
-              onClick={this.handleCollapse.bind(this, group) }
+              onClick={this.handleCollapse.bind(this, group)}
               href={`.group-list:nth-child(${i + 1}) > .list-body`}>
-              <i className={`glyphicon glyphicon-triangle-${group.collapsed ? 'right' : 'bottom'}`} /> {group.header.label + ` (${group.body.length})`}
+              <i className={`glyphicon glyphicon-triangle-${group.collapsed ? 'right' : 'bottom'}`} />&nbsp;
+              {onCheckAll && <input type='checkbox' checked={group.header.checked} onChange={onCheckAll.bind(this, group)} />}
+              {`${group.header.label} (${group.body.length})`}
             </a>
             <ul className={`list-body collapse ${!group.collapsed ? 'in' : ''}`}>
               {group.body.map((item, j) => (
                 <ListItem item={item} key={j}
-                  onCheck={this.props.onCheck}
-                  onClick={this.handleSelect.bind(this, item.data) }
-                  onClickTag={this.handleClickTag.bind(this) } />
-              )) }
+                  onCheck={onCheck}
+                  onClick={this.handleSelect.bind(this, item.data)}
+                  onClickTag={this.handleClickTag.bind(this)} />
+              ))}
             </ul>
           </div>
-        )) }
+        ))}
       </div>
     );
   }
